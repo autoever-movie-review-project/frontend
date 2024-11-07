@@ -1,0 +1,18 @@
+echo "🔍 commit 이전에 lint 규칙을 적용합니다...\n"
+
+npx lint-staged
+lint_exit_code=$?
+
+if [ $lint_exit_code -ne 0 ]; then
+  echo "❌ lint 규칙 검사에서 오류가 발생했습니다."
+  exit 1
+fi
+
+if npx eslint . | grep -q "warning"; then
+  echo "\n🟡 lint 규칙 검사에서 경고가 발생했습니다."
+  echo "경고 내용을 확인하려면 'npx eslint .' 명령어를 실행하세요.\n"
+else
+  echo "✅ 모든 lint 규칙이 성공적으로 적용되었습니다."
+fi
+
+exit 0
