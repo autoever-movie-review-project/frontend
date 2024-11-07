@@ -1,3 +1,4 @@
+import Header from 'components/header/Header';
 import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
 
 function App() {
@@ -5,7 +6,7 @@ function App() {
     {
       element: (
         <>
-          {/* 여기에 헤더를 넣어주세요 */}
+          <Header />
           <Outlet />
         </>
       ),
