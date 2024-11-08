@@ -1,3 +1,5 @@
+import LoginPage from 'pages/login/LoginPage';
+import RegisterPage from 'pages/register/RegisterPage';
 import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
 
 function App() {
@@ -13,6 +15,14 @@ function App() {
         {
           path: '/',
           element: <></> /* 메인페이지를 넣어주세요 */,
+        },
+        {
+          path: '/login',
+          element: <LoginPage />,
+        },
+        {
+          path: '/register',
+          element: <RegisterPage />,
         },
       ],
     },
