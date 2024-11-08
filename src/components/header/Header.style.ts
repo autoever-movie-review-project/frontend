@@ -7,6 +7,7 @@ export const HeaderWrapper = styled.header`
   left: 0;
   width: 100%;
   height: 80px;
+  z-index: 9999;
 `;
 
 export const HeaderContainer = styled.div`
@@ -22,7 +23,7 @@ export const HeaderLogo = styled.img`
   display: flex;
   align-items: center;
   width: 80px;
-  height: 60px;
+  height: 80px;
   cursor: pointer;
 `;
 
