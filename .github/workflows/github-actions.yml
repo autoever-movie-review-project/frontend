@@ -32,7 +32,7 @@ jobs:
 
       - name: Deploy to S3
         run: |
-          aws s3 sync ./build s3://${{ secrets.AWS_S3_BUCKET }}
+          aws s3 sync ./dist s3://${{ secrets.AWS_S3_BUCKET }}
       
       - name: CloudFront Invalidation
         run: |
