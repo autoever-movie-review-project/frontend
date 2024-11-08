@@ -1,7 +1,7 @@
 import React from 'react';
 import * as S from './Header.style';
 import logo from 'assets/logo.png';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 function Header() {
   const navigate = useNavigate();
@@ -17,6 +17,7 @@ function Header() {
 
   const handleLoginButtonClick = () => {
     //로그인페이지로
+    navigate('/login');
   };
 
   return (

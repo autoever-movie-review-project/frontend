@@ -6,10 +6,14 @@ import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 
 import KakaoImg from 'assets/kakao_login_large_wide.png';
+import Input from 'components/Input';
 
 const Background = styled.div`
+  display: flex;
+  justify-content: center;
   background-color: #000;
   width: 100%;
+  height: 100vh;
   min-height: 100vh;
 `;
 
@@ -25,7 +29,6 @@ const LoginSection = styled.div`
   justify-content: center;
   align-items: center;
   color: ${theme.colors.neutral100};
-  margin-top: 100px;
 
   h1 {
     text-align: center;
@@ -38,15 +41,14 @@ const LoginSection = styled.div`
     display: flex;
     justify-content: center;
     flex-direction: column;
-    padding: 30px 0 30px 0;
-    gap: 10px;
+    padding: 40px 0 40px 0;
+    gap: 30px;
   }
 `;
 
-const LoginInput = styled.input`
+const LoginInput = styled(Input)`
   width: 300px;
   height: 40px;
-  border-radius: ${theme.borderRadius.xs};
   outline: none;
 `;
 
@@ -59,25 +61,26 @@ const UnableToLoginSection = styled.div`
 `;
 
 const StyledLink = styled(Link)`
-  color: inherit; /* 기본 색을 상속받거나 원하는 색으로 설정 */
-  text-decoration: none; /* 링크 밑줄을 없애려면 이 속성 추가 */
+  color: inherit;
+  text-decoration: none; // 링크 밑줄 제거
 
   &:focus,
   &:active {
-    color: inherit; /* 클릭 후에도 색이 변하지 않도록 설정 */
-    outline: none; /* 포커스 시 나타나는 테두리 없애기 */
+    color: inherit;
+    outline: none;
   }
 `;
 
 const KakaoButton = styled.img`
   width: 300px;
   border-radius: 10px;
+  cursor: pointer;
 `;
 
 const ButtonSection = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 20px;
 `;
 
 const ErrorMessage = styled.p`
@@ -112,8 +115,7 @@ function LoginPage() {
           <h1>Logo</h1>
           <form>
             <LoginInput
-              type="email"
-              placeholder="이메일을 입력해주세요."
+              title="이메일"
               {...register('email', {
                 required: '이메일을 입력해주세요.',
                 pattern: {
@@ -124,8 +126,7 @@ function LoginPage() {
             />
             {isSubmitted && errors.email && <ErrorMessage>{errors.email.message}</ErrorMessage>}
             <LoginInput
-              type="password"
-              placeholder="비밀번호를 입력해주세요."
+              title="비밀번호"
               {...register('password', {
                 required: '비밀번호를 입력해주세요.',
                 minLength: {
@@ -139,16 +140,16 @@ function LoginPage() {
               })}
             />
             {isSubmitted && errors.password && <ErrorMessage>{errors.password.message}</ErrorMessage>}
+            <UnableToLoginSection>
+              <StyledLink to="/register">회원가입</StyledLink>
+              <span> | </span>
+              <p>비밀번호 재설정</p>
+            </UnableToLoginSection>
+            <ButtonSection>
+              <Button text="로그인" width="300px" btnClick={handleSubmit(onSubmit)} />
+              <KakaoButton src={KakaoImg} onClick={() => {}}></KakaoButton>
+            </ButtonSection>
           </form>
-          <UnableToLoginSection>
-            <StyledLink to="/register">회원가입하기</StyledLink>
-            <span> | </span>
-            <p>비밀번호 재설정</p>
-          </UnableToLoginSection>
-          <ButtonSection>
-            <Button text="로그인" width="300px" btnClick={handleSubmit(onSubmit)} />
-            <KakaoButton src={KakaoImg} onClick={() => {}}></KakaoButton>
-          </ButtonSection>
         </LoginSection>
       </Layout>
     </Background>

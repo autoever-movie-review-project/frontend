@@ -3,17 +3,20 @@ import styled from 'styled-components';
 import { theme } from 'styles/theme';
 
 const StyledInput = styled.input`
+  color: white;
+  font-size: ${theme.fontSize.md};
   width: ${(props) => props.width || '300px'};
   height: ${(props) => props.height || '40px'};
   border: none;
-  border-bottom: 2px solid ${theme.colors.neutral400};
+  border-bottom: 1.5px solid ${theme.colors.neutral400};
   outline: none;
   background-color: transparent;
-  caret-color: ${theme.colors.primaryLight};
   font-weight: ${theme.fontWeight.regular};
+  transition: border-color 0.3s ease;
+  caret-color: transparent;
 
-  :focus {
-    border-bottom-color: 2px solid ${theme.colors.primary} !important;
+  &:focus {
+    border-bottom-color: ${theme.colors.primary};
   }
 `;
 
@@ -21,12 +24,15 @@ interface InputProps {
   width?: string;
   height?: string;
   placeholder?: string;
+  title?: string;
+  type?: string;
 }
 
-function Input({ width, height, placeholder }: InputProps) {
+function Input({ width, height, placeholder, title, ...props }: InputProps) {
   return (
     <div>
-      <StyledInput width={width} height={height} placeholder={placeholder} />
+      <p>{title}</p>
+      <StyledInput width={width} height={height} placeholder={placeholder} {...props} />
     </div>
   );
 }
