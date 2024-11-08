@@ -6,26 +6,37 @@ const loadingComp = <div style={{ height: '1000px', backgroundColor: 'red' } as 
 const Main = lazy(() => import('pages/main/MainPage'));
 
 function App() {
-  const router = createBrowserRouter([
+  const router = createBrowserRouter(
+    [
+      {
+        element: (
+          <Suspense fallback={loadingComp}>
+            <Header />
+            <Outlet />
+          </Suspense>
+        ),
+        children: [
+          {
+            path: '/',
+            element: (
+              <>
+                <Main />
+              </>
+            ),
+          },
+        ],
+      },
+    ],
     {
-      element: (
-        <Suspense fallback={loadingComp}>
-          <Header />
-          <Outlet />
-        </Suspense>
-      ),
-      children: [
-        {
-          path: '/',
-          element: (
-            <>
-              <Main />
-            </>
-          ),
-        },
-      ],
-    },
-  ]);
+      future: {
+        v7_relativeSplatPath: true,
+        v7_fetcherPersist: true,
+        v7_normalizeFormMethod: true,
+        v7_partialHydration: true,
+        v7_skipActionErrorRevalidation: true,
+      },
+    }
+  );
   return (
     <RouterProvider
       future={{

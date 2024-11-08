@@ -15,6 +15,10 @@ function Header() {
     return location.pathname === path;
   };
 
+  const handleLoginButtonClick = () => {
+    //로그인페이지로
+  };
+
   return (
     <S.HeaderWrapper>
       <S.HeaderContainer>
@@ -31,7 +35,7 @@ function Header() {
               Game
             </S.MenuButton>
           </S.MenuContainer>
-          <S.MenuLogin>로그인</S.MenuLogin>
+          <S.MenuLogin onClick={() => handleLoginButtonClick()}>로그인</S.MenuLogin>
         </S.MenuWrapper>
       </S.HeaderContainer>
     </S.HeaderWrapper>

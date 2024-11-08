@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components';
+import { theme } from 'styles/theme';
 
 export const HeaderWrapper = styled.header`
   position: fixed;
@@ -46,24 +47,34 @@ export const MenuButton = styled.button<{ $active: boolean }>`
   align-items: center;
   cursor: pointer;
   font-size: 18px;
-  color: #84868d;
+  color: ${theme.colors.grayLight};
   height: 50px;
-
-  ${({ $active }) =>
-    $active &&
-    css`
-      border-bottom: 2px solid white;
-      color: #ececec;
-      font-weight: bold;
-    `}
+  position: relative;
 
   &:hover {
-    border-bottom: 2px solid #84868d;
-    color: #84868d;
+    color: ${theme.colors.grayLight};
   }
-  &:hover::after {
-    width: 5px;
-  }
+
+  ${({ $active }) =>
+    $active
+      ? css`
+          border-bottom: 2px solid white;
+          color: #ececec;
+          font-weight: bold;
+          transition: transform 0.3s;
+        `
+      : css`
+          &:hover::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50%;
+            border-bottom: 2px solid #84868d;
+            transition: width 0.3s ease;
+          }
+        `}
 `;
 
 export const MenuLogin = styled.button`
@@ -81,6 +92,6 @@ export const MenuLogin = styled.button`
   justify-self: end;
 
   &:hover {
-    background-color: #84868d;
+    background-color: ${theme.colors.grayLight};
   }
 `;
