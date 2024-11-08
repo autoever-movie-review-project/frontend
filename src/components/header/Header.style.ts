@@ -46,18 +46,23 @@ export const MenuButton = styled.button<{ $active: boolean }>`
   align-items: center;
   cursor: pointer;
   font-size: 18px;
-  color: #ececec;
+  color: #84868d;
+  height: 50px;
 
   ${({ $active }) =>
     $active &&
     css`
       border-bottom: 2px solid white;
-      color: white;
+      color: #ececec;
+      font-weight: bold;
     `}
 
   &:hover {
-    transform: translateY(-3px);
-    color: white;
+    border-bottom: 2px solid #84868d;
+    color: #84868d;
+  }
+  &:hover::after {
+    width: 5px;
   }
 `;
 
@@ -76,7 +81,6 @@ export const MenuLogin = styled.button`
   justify-self: end;
 
   &:hover {
-    transform: translateY(-3px);
-    color: white;
+    background-color: #84868d;
   }
 `;

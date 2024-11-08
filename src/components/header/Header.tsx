@@ -12,7 +12,7 @@ function Header() {
   };
 
   const isCurrentPath = (path: string) => {
-    return location.pathname === '/' + path;
+    return location.pathname === path;
   };
 
   return (
@@ -21,13 +21,13 @@ function Header() {
         <S.HeaderLogo src={logo} onClick={() => handleNavMenuClick('/')} />
         <S.MenuWrapper>
           <S.MenuContainer>
-            <S.MenuButton $active={isCurrentPath('home')} onClick={() => handleNavMenuClick('home')}>
+            <S.MenuButton $active={isCurrentPath('/')} onClick={() => handleNavMenuClick('/')}>
               Home
             </S.MenuButton>
-            <S.MenuButton $active={isCurrentPath('movies')} onClick={() => handleNavMenuClick('movies')}>
+            <S.MenuButton $active={isCurrentPath('/movies')} onClick={() => handleNavMenuClick('/movies')}>
               Movies
             </S.MenuButton>
-            <S.MenuButton $active={isCurrentPath('game')} onClick={() => handleNavMenuClick('game')}>
+            <S.MenuButton $active={isCurrentPath('/game')} onClick={() => handleNavMenuClick('/game')}>
               Game
             </S.MenuButton>
           </S.MenuContainer>
