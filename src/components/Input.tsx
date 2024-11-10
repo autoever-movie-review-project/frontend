@@ -25,7 +25,7 @@ const StyledInput = styled.input<StyledInputProps>`
   }
 `;
 
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   type?: string;
   width?: string;
   height?: string;

@@ -1,5 +1,5 @@
-import LoginPage from 'pages/login/LoginPage';
-import RegisterPage from 'pages/register/RegisterPage';
+import LoginPage from 'pages/auth/LoginPage';
+import RegisterPage from 'pages/auth/RegisterPage';
 import Header from 'components/header/Header';
 import { lazy, Suspense } from 'react';
 import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
