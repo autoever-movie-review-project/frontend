@@ -4,16 +4,12 @@ import { theme } from 'styles/theme';
 import Button from 'components/Button';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
-
 import KakaoImg from 'assets/kakao_login_large_wide.png';
 import Input from 'components/Input';
 
 const Background = styled.div`
-  display: flex;
-  justify-content: center;
   background-color: #000;
   width: 100%;
-  height: 100vh;
   min-height: 100vh;
 `;
 
@@ -29,6 +25,7 @@ const LoginSection = styled.div`
   justify-content: center;
   align-items: center;
   color: ${theme.colors.neutral100};
+  margin-top: 100px;
 
   h1 {
     text-align: center;
@@ -41,8 +38,8 @@ const LoginSection = styled.div`
     display: flex;
     justify-content: center;
     flex-direction: column;
-    padding: 40px 0 40px 0;
-    gap: 30px;
+    padding: 30px 0 30px 0;
+    gap: 20px;
   }
 `;
 
@@ -62,7 +59,7 @@ const UnableToLoginSection = styled.div`
 
 const StyledLink = styled(Link)`
   color: inherit;
-  text-decoration: none; // 링크 밑줄 제거
+  text-decoration: none;
 
   &:focus,
   &:active {
@@ -74,13 +71,12 @@ const StyledLink = styled(Link)`
 const KakaoButton = styled.img`
   width: 300px;
   border-radius: 10px;
-  cursor: pointer;
 `;
 
 const ButtonSection = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 10px;
 `;
 
 const ErrorMessage = styled.p`
@@ -97,15 +93,12 @@ function LoginPage() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitted },
-  } = useForm<FormData>({
-    mode: 'onSubmit', // 폼이 submit될 때만 validation
-    reValidateMode: 'onSubmit', // 재검증도 submit될 때만
-  });
+    formState: { errors },
+  } = useForm<FormData>();
 
   const onSubmit = (data: FormData) => {
     console.log(data);
-    // 로그인 로직 추가해야 함
+    // API 호출로 로그인 처리
   };
 
   return (
@@ -115,6 +108,7 @@ function LoginPage() {
           <h1>Logo</h1>
           <form>
             <LoginInput
+              type="email"
               title="이메일"
               {...register('email', {
                 required: '이메일을 입력해주세요.',
@@ -124,8 +118,9 @@ function LoginPage() {
                 },
               })}
             />
-            {isSubmitted && errors.email && <ErrorMessage>{errors.email.message}</ErrorMessage>}
+            {errors.email && <ErrorMessage>{errors.email.message}</ErrorMessage>}
             <LoginInput
+              type="password"
               title="비밀번호"
               {...register('password', {
                 required: '비밀번호를 입력해주세요.',
@@ -139,17 +134,17 @@ function LoginPage() {
                 },
               })}
             />
-            {isSubmitted && errors.password && <ErrorMessage>{errors.password.message}</ErrorMessage>}
-            <UnableToLoginSection>
-              <StyledLink to="/register">회원가입</StyledLink>
-              <span> | </span>
-              <p>비밀번호 재설정</p>
-            </UnableToLoginSection>
-            <ButtonSection>
-              <Button text="로그인" width="300px" btnClick={handleSubmit(onSubmit)} />
-              <KakaoButton src={KakaoImg} onClick={() => {}}></KakaoButton>
-            </ButtonSection>
+            {errors.password && <ErrorMessage>{errors.password.message}</ErrorMessage>}
           </form>
+          <UnableToLoginSection>
+            <StyledLink to="/register">회원가입하기</StyledLink>
+            <span> | </span>
+            <p>비밀번호 재설정</p>
+          </UnableToLoginSection>
+          <ButtonSection>
+            <Button text="로그인" width="300px" btnClick={handleSubmit(onSubmit)} />
+            <KakaoButton src={KakaoImg} onClick={() => {}}></KakaoButton>
+          </ButtonSection>
         </LoginSection>
       </Layout>
     </Background>

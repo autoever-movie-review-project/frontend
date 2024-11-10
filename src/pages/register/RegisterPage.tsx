@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Input from '../../components/Input';
 import Button from 'components/Button';
 import { theme } from 'styles/theme';
+import { useForm } from 'react-hook-form';
 
 const Background = styled.div`
   display: flex;
@@ -26,48 +27,146 @@ const Layout = styled.div`
     padding-bottom: 30px;
   }
 
-  p {
-    font-weight: bold;
-    padding-top: 20px;
-    padding-bottom: 10px;
-  }
-
   form {
     display: flex;
     flex-direction: column;
     padding-bottom: 50px;
     margin-left: 60px;
   }
+
+  p {
+    margin-bottom: 7px;
+  }
+`;
+
+const StyledInput = styled(Input)`
+  margin-bottom: 10px;
+
+  p {
+    padding-top: 20px;
+    padding-bottom: 10px;
+  }
 `;
 
 const VerificationSection = styled.div`
   display: flex;
   position: relative;
-  gap: 10px;
 `;
 
-const StyledButton = styled(Button)`
+const VerificationButton = styled(Button)`
   position: relative;
-  right: 60px;
-  top: 43px;
+  right: 52px;
+  top: 22px;
 `;
+
+const ErrorMessage = styled.p`
+  color: ${theme.colors.error};
+  font-size: 12px;
+`;
+
+interface FormData {
+  email: string;
+  code: string;
+  password: string;
+  passwordConfirm: string;
+  nickname: string;
+}
 
 function RegisterPage() {
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    trigger,
+    formState: { errors },
+  } = useForm<FormData>({
+    mode: 'onChange',
+  });
+
+  const onSubmit = (data: FormData) => {
+    console.log(data);
+    // API 호출로 DB에 데이터 전달 후 회원가입 처리
+  };
+
+  const onCodeSubmit = async () => {
+    const isCodeValid = await trigger('code');
+
+    if (isCodeValid) {
+      const codeValue = getValues('code');
+      console.log({ code: codeValue });
+      // API 호출로 DB에 인증코드 체크
+    }
+  };
+
   return (
     <Background>
       <Layout>
         <h1>환영합니다! 회원가입을 위해 정보를 입력해주세요.</h1>
-        <form>
-          <Input title="이메일"></Input>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <StyledInput
+            title="이메일"
+            {...register('email', {
+              required: { value: true, message: '이메일을 입력해주세요.' },
+              pattern: {
+                value: /^\S+@\S+$/i,
+                message: '이메일 형식이 올바르지 않습니다',
+              },
+            })}
+          />
+          {errors.email && <ErrorMessage>{errors.email.message}</ErrorMessage>}
           <VerificationSection>
-            <Input title="인증번호"></Input>
-            <StyledButton text="인증" width="50px" fontSize="17px" btnClick={() => {}}></StyledButton>
+            <StyledInput
+              title="인증번호"
+              {...register('code', {
+                required: '인증번호를 입력해주세요.',
+                pattern: {
+                  value: /^[0-9]{6}$/,
+                  message: '6자리 인증번호를 입력해주세요.',
+                },
+              })}
+            />
+            <VerificationButton text="인증" width="50px" fontSize="17px" btnClick={onCodeSubmit} />
           </VerificationSection>
-          <Input title="비밀번호"></Input>
-          <Input title="비밀번호 재입력"></Input>
-          <Input title="닉네임"></Input>
+          {errors.code && <ErrorMessage>{errors.code.message}</ErrorMessage>}
+          <StyledInput
+            title="비밀번호"
+            type="password"
+            {...register('password', {
+              required: { value: true, message: '비밀번호를 입력해주세요.' },
+              pattern: {
+                value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{6,18}$/,
+                message: '비밀번호는 영문, 숫자, 특수문자를 포함해야 해요.',
+              },
+            })}
+          />
+          {errors.password && <ErrorMessage>{errors.password.message}</ErrorMessage>}
+          <StyledInput
+            title="비밀번호 재입력"
+            type="password"
+            {...register('passwordConfirm', {
+              required: '비밀번호를 입력해주세요.',
+              validate: (value) => value === getValues('password') || '비밀번호를 확인해주세요.',
+            })}
+          />
+          {errors.passwordConfirm && <ErrorMessage>{errors.passwordConfirm.message}</ErrorMessage>}
+          <StyledInput
+            title="닉네임"
+            type="nickname"
+            {...register('nickname', {
+              required: '닉네임을 입력해주세요.',
+              maxLength: {
+                value: 12,
+                message: '닉네임은 최대 12글자예요.',
+              },
+              pattern: {
+                value: /^[가-힣a-zA-Z0-9]{1,12}$/,
+                message: '닉네임은 한글, 영문, 숫자만 사용 가능해요.',
+              },
+            })}
+          />
+          {errors.nickname && <ErrorMessage>{errors.nickname.message}</ErrorMessage>}
         </form>
-        <Button text="회원가입" width="300px" btnClick={() => {}}></Button>
+        <Button text="회원가입" width="300px" btnClick={handleSubmit(onSubmit)} />
       </Layout>
     </Background>
   );
