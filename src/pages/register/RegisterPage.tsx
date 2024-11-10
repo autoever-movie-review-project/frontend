@@ -4,6 +4,7 @@ import Input from '../../components/Input';
 import Button from 'components/Button';
 import { theme } from 'styles/theme';
 import { useForm } from 'react-hook-form';
+import { registerMember } from 'api/registerApi';
 
 const Background = styled.div`
   display: flex;
@@ -83,11 +84,38 @@ function RegisterPage() {
     mode: 'onChange',
   });
 
-  const onSubmit = (data: FormData) => {
-    console.log(data);
-    // API 호출로 DB에 데이터 전달 후 회원가입 처리
+  /**
+   * 회원가입 양식을 제출할 때 실행되는 함수입니다.
+   * @param data 사용자가 입력한 회원가입 정보
+   */
+  const onSubmit = async (data: FormData) => {
+    try {
+      // 필요한 데이터만 선택하여 API 호출
+      const registerData = {
+        email: data.email,
+        password: data.password,
+        nickname: data.nickname,
+      };
+
+      const response = await registerMember(registerData);
+
+      if (response.success) {
+        // 회원가입 성공 처리 (예: 로그인 페이지로 이동)
+        console.log('회원가입 성공:', response);
+      } else {
+        // 회원가입 실패 처리
+        console.error('회원가입 실패:', response.message);
+      }
+    } catch (error) {
+      // 에러 처리
+      console.error('회원가입 에러:', error);
+    }
   };
 
+  /**
+   * 이메일 인증번호를 확인하는 함수입니다.
+   * 인증번호 유효성을 검사한 후, 올바른 형식이면 서버로 확인 요청을 보냅니다.
+   */
   const onCodeSubmit = async () => {
     const isCodeValid = await trigger('code');
 

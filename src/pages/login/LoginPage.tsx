@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import KakaoImg from 'assets/kakao_login_large_wide.png';
 import Input from 'components/Input';
+import { getKakaoLoginLink } from 'api/kakaoApi';
 
 const Background = styled.div`
   background-color: #000;
@@ -89,6 +90,8 @@ interface FormData {
   password: string;
 }
 
+const link = getKakaoLoginLink();
+
 function LoginPage() {
   const {
     register,
@@ -96,9 +99,20 @@ function LoginPage() {
     formState: { errors },
   } = useForm<FormData>();
 
+  /**
+   * Form 제출 시 callback되는 함수입니다.
+   * @param {FormData} data 폼에 전달되는 데이터입니다.
+   */
   const onSubmit = (data: FormData) => {
     console.log(data);
     // API 호출로 로그인 처리
+  };
+
+  /**
+   * 카카오 로그인 버튼을 클릭하면 실행되는 함수입니다.
+   */
+  const handleKakaoLogin = () => {
+    window.location.href = link;
   };
 
   return (
@@ -143,7 +157,7 @@ function LoginPage() {
           </UnableToLoginSection>
           <ButtonSection>
             <Button text="로그인" width="300px" btnClick={handleSubmit(onSubmit)} />
-            <KakaoButton src={KakaoImg} onClick={() => {}}></KakaoButton>
+            <KakaoButton src={KakaoImg} onClick={handleKakaoLogin}></KakaoButton>
           </ButtonSection>
         </LoginSection>
       </Layout>
