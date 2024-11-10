@@ -2,6 +2,7 @@ import React from 'react';
 import * as S from './Header.style';
 import logo from 'assets/logo.png';
 import { useLocation, useNavigate } from 'react-router-dom';
+import SearchBar from 'components/searchbar/SearchBar';
 
 function Header() {
   const navigate = useNavigate();
@@ -35,7 +36,10 @@ function Header() {
               Game
             </S.MenuButton>
           </S.MenuContainer>
-          <S.MenuLogin onClick={() => handleLoginButtonClick()}>로그인</S.MenuLogin>
+          <S.RightMenu>
+            <SearchBar />
+            <S.MenuLogin onClick={() => handleLoginButtonClick()}>로그인</S.MenuLogin>
+          </S.RightMenu>
         </S.MenuWrapper>
       </S.HeaderContainer>
     </S.HeaderWrapper>

@@ -2,7 +2,49 @@ import styled from 'styled-components';
 import { Pagination, Navigation, Autoplay } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.css';
-import temp from 'assets/temp.svg';
+import { useRef } from 'react';
+import { theme } from 'styles/theme';
+import { Swiper as SwiperType } from 'swiper';
+import { NavigationOptions } from 'swiper/types';
+
+const SwiperContainer = styled.div`
+  position: relative;
+  width: 100%;
+  height: 300px;
+
+  .swiper-button-prev.swiper-button-disabled {
+    color: black;
+  }
+  .swiper-button-next.swiper-button-disabled {
+    color: black;
+  }
+
+  .swiper-button-prev,
+  .swiper-button-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    color: ${theme.colors.neutral500};
+    cursor: pointer;
+    background-color: black;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .swiper-button-prev {
+    left: -40px;
+  }
+
+  .swiper-button-next {
+    right: -40px;
+  }
+
+  &:hover .swiper-button-prev,
+  &:hover .swiper-button-next {
+    opacity: 1;
+  }
+`;
 
 const SlideContent = styled.div`
   display: flex;
@@ -10,7 +52,7 @@ const SlideContent = styled.div`
   height: 240px;
   background: black;
   align-items: flex-end;
-  position: relative; /* Position 설정을 통해 자식 요소의 절대 위치 지정 가능 */
+  position: relative;
 `;
 
 const Image = styled.img`
@@ -20,7 +62,7 @@ const Image = styled.img`
 `;
 
 const Ranking = styled.div`
-  width: 100%;
+  width: 20%;
   height: 240px;
   color: #ffffffbf;
   font-size: 80px;
@@ -32,30 +74,51 @@ const Ranking = styled.div`
   letter-spacing: -5px;
 `;
 
-function BoxofficeSlider() {
+interface MovieSwiperSlideProps {
+  title: string;
+  images: string[];
+}
+
+function BoxofficeSlider({ title, images }: MovieSwiperSlideProps) {
+  const nextButtonRef = useRef<HTMLButtonElement | null>(null);
+  const prevButtonRef = useRef<HTMLButtonElement | null>(null);
+
+  const handleSwiper = (swiper: SwiperType) => {
+    if (swiper.params.navigation && typeof swiper.params.navigation !== 'boolean') {
+      const navigation = swiper.params.navigation as NavigationOptions;
+      navigation.nextEl = nextButtonRef.current;
+      navigation.prevEl = prevButtonRef.current;
+      swiper.navigation.init();
+      swiper.navigation.update();
+    }
+  };
+
   return (
-    <Swiper
-      centeredSlides={true}
-      slidesPerView={6} // 슬라이드 개수 조정
-      spaceBetween={0} // 슬라이드 간 거리
-      loop={true}
-      autoplay={{ delay: 5000 }}
-      navigation
-      modules={[Pagination, Navigation, Autoplay]}
-      style={{ width: '100%', height: '300px' }}
-    >
-      {Array.from({ length: 10 }, (_, i) => (
-        <SwiperSlide key={i}>
-          <SlideContent>
-            <Ranking>{i + 1}</Ranking>
-            <Image src={temp} alt={`${i + 1}번 사진`} />
-          </SlideContent>
-        </SwiperSlide>
-      ))}
-    </Swiper>
+    <>
+      <h1>{title}</h1>
+      <SwiperContainer>
+        <Swiper
+          slidesPerView={6}
+          spaceBetween={0}
+          loop={false}
+          navigation
+          modules={[Pagination, Navigation, Autoplay]}
+          onSwiper={handleSwiper}
+        >
+          {images.map((image, index) => (
+            <SwiperSlide key={index}>
+              <SlideContent>
+                <Ranking>{index + 1}</Ranking>
+                <Image src={image} alt={`${index}번째 영화`} />
+              </SlideContent>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+        <button ref={prevButtonRef} className="swiper-button-prev"></button>
+        <button ref={nextButtonRef} className="swiper-button-next"></button>
+      </SwiperContainer>
+    </>
   );
 }
 
 export default BoxofficeSlider;
-
-//TODO : 슬라이드 반복하지 않기

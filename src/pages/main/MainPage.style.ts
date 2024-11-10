@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import { theme } from 'styles/theme';
+//import { theme } from 'styles/theme';
 
-export const ContentsWrapper = styled.div`
+export const ContentsContainer = styled.div`
   width: 100vm;
   height: 100%;
   background-color: black;
@@ -16,20 +16,38 @@ export const VideoSliderWrapper = styled.div`
   padding-bottom: 50px;
 `;
 
-export const BoxofficeSliderWrapper = styled.div`
+export const Container = styled.div`
   width: 90%;
   height: 100%;
   margin: 0 auto;
-  margin-bottom: 40px;
 `;
 
-export const BoxofficeTitleWrapper = styled.div`
+export const BoxofficeSliderWrapper = styled.div`
   width: 100%;
   height: 100%;
-  margin-bottom: 30px;
+  margin-bottom: 40px;
   h1 {
     font-weight: bold;
     color: #ececec;
     font-size: 28px;
+    margin-bottom: 30px;
   }
+`;
+
+export const MovieSwiperWrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  h1 {
+    font-weight: bold;
+    color: #ececec;
+    font-size: 28px;
+    margin-bottom: 15px;
+  }
+  padding-bottom: 60px;
+`;
+
+export const Footer = styled.footer`
+  width: 100%;
+  height: 200px;
+  background-color: black;
 `;
