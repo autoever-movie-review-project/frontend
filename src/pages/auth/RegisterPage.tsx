@@ -27,7 +27,7 @@ function RegisterPage() {
       }
     },
     onError: (error: AxiosError<RegisterError>) => {
-      toast.error(error.response?.data?.message || '회원가입 중 오류가 발생했어요.');
+      toast.error(error.response?.data?.msg || '회원가입 중 오류가 발생했어요.');
     },
   });
 

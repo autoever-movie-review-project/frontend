@@ -60,7 +60,7 @@ export const useAuth = () => {
   /**
    * 로그아웃 처리를 위한 뮤테이션입니다.
    * 로그아웃 성공 시 user 쿼리 데이터를 null로 초기화합니다.
-   * authApi 대신 이 뮤테이션을 사용하세요.
+   * authApi 대신 이 mutation을 사용하세요.
    */
   const logoutMutation = useMutation({
     mutationFn: authApi.logout,

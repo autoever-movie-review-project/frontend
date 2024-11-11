@@ -15,7 +15,7 @@ export const Layout = styled.div`
   color: #fff;
   display: flex;
   flex-direction: column;
-  margin: calc(100% / 8);
+  margin-top: 100px;
   align-items: center;
 `;
 

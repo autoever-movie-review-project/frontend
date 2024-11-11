@@ -37,11 +37,11 @@ export const authApi = {
   },
 
   /**
-   * import해서 사용하지 마시고 useAuth hook을 사용해서 로그아웃 처리를 진행해주세요.
+   * 이 API를 import해서 사용하지 마시고 useAuth mutation을 사용해서 로그아웃 처리를 진행해주세요.
    *  */
   logout: async (): Promise<void> => {
     try {
-      await client.post('user/logout');
+      await client.post('/user/logout');
     } finally {
       removeCookie('accessToken');
       removeCookie('refreshToken');

@@ -11,7 +11,7 @@ export interface RegisterResponse {
 }
 
 export interface RegisterError {
-  message: string;
+  msg: string;
 }
 
 export interface LoginRequest {
