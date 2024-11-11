@@ -15,7 +15,7 @@ export const Layout = styled.div`
   color: #fff;
   display: flex;
   flex-direction: column;
-  margin-top: 100px;
+  margin-top: 300px;
   align-items: center;
 `;
 
@@ -82,4 +82,8 @@ export const ButtonSection = styled.div`
 export const ErrorMessage = styled.p`
   color: ${theme.colors.error};
   font-size: 12px;
+`;
+
+export const Logo = styled.img`
+  margin-bottom: 20px;
 `;

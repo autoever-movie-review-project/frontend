@@ -29,9 +29,12 @@ export interface LoginErrorResponse {
 }
 
 export interface User {
-  id: number;
+  userId: number;
   email: string;
   nickname: string;
+  profile?: string;
+  userType?: string;
+  points?: number;
 }
 
 export interface UserResponse {

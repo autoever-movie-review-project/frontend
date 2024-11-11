@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { UserResponse } from 'api/auth/auth';
+import { User, UserResponse } from 'api/auth/auth';
 import { authApi } from 'api/auth/authApi';
 import { client } from 'api/client';
 import { getCookie } from 'util/cookieUtil';
@@ -31,6 +31,7 @@ import { getCookie } from 'util/cookieUtil';
  * }
  * ```
  */
+
 export const useAuth = () => {
   const queryClient = useQueryClient();
 
@@ -54,6 +55,7 @@ export const useAuth = () => {
         return null;
       }
     },
+    initialData: null,
     staleTime: 5 * 60 * 1000, // 데이터를 5분간 신선한 상태로 유지
   });
 
