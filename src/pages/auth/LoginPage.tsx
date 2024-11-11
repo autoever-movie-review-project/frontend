@@ -11,6 +11,7 @@ import { authApi } from 'api/auth/authApi';
 import * as S from './LoginPage.style';
 import * as L from '../../components/Loading';
 import { toast } from 'react-toastify';
+import logo from 'assets/logo.png';
 
 const link = getKakaoLoginLink();
 
@@ -81,7 +82,7 @@ function LoginPage() {
       )}
       <S.Layout>
         <S.LoginSection>
-          <h1>Logo</h1>
+          <S.Logo src={logo}></S.Logo>
           <form onSubmit={handleSubmit(onSubmit)} noValidate>
             <S.LoginInput
               type="email"

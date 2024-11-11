@@ -21,9 +21,10 @@ export const HeaderContainer = styled.div`
 export const HeaderLogo = styled.img`
   display: flex;
   align-items: center;
-  width: 80px;
-  height: 60px;
+  width: 40px;
+  height: 40px;
   cursor: pointer;
+  margin: 10px;
 `;
 
 export const MenuWrapper = styled.div`
