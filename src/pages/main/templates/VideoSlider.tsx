@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { Pagination, Navigation, Autoplay } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.css';
-import test from '../../../assets/test.webm';
+import test from '../../../assets/capa.webm';
 import { theme } from 'styles/theme';
 
 const ContentsText = styled.div`

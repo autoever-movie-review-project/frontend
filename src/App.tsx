@@ -4,6 +4,8 @@ import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
 
 const loadingComp = <div style={{ height: '1000px', backgroundColor: 'red' } as React.CSSProperties}>로딩중</div>;
 const Main = lazy(() => import('pages/main/MainPage'));
+const Detail = lazy(() => import('pages/detail/DetailPage'));
+const Movies = lazy(() => import('pages/movies/MoviesPage'));
 
 function App() {
   const router = createBrowserRouter(
@@ -21,6 +23,22 @@ function App() {
             element: (
               <>
                 <Main />
+              </>
+            ),
+          },
+          {
+            path: '/detail/:postId',
+            element: (
+              <>
+                <Detail />
+              </>
+            ),
+          },
+          {
+            path: '/movies',
+            element: (
+              <>
+                <Movies />
               </>
             ),
           },

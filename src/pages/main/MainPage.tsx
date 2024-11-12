@@ -51,6 +51,7 @@ function MainPage() {
           {swiperData.map((item, index) => (
             <S.MovieSwiperWrapper key={index}>
               <MovieSwiperSlide title={item.title} images={item.images} />
+              {/*movieData={item.movieData} */}
             </S.MovieSwiperWrapper>
           ))}
         </S.Container>

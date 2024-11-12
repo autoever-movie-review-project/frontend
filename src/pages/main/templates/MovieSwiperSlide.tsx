@@ -6,6 +6,7 @@ import { theme } from 'styles/theme';
 import { useRef } from 'react';
 import { Swiper as SwiperType } from 'swiper';
 import { NavigationOptions } from 'swiper/types';
+import { useNavigate } from 'react-router-dom';
 
 const SlideContent = styled.div`
   display: flex;
@@ -13,6 +14,12 @@ const SlideContent = styled.div`
   height: 160px;
   background: black;
   position: relative;
+  cursor: pointer;
+`;
+
+const StyledSwiperSlide = styled(SwiperSlide)`
+  display: inline-block;
+  width: 290px !important;
 `;
 
 const Image = styled.img`
@@ -67,6 +74,8 @@ function MovieSwiperSlide(props: MovieSwiperSlideProps) {
   const nextButtonRef = useRef<HTMLButtonElement | null>(null);
   const prevButtonRef = useRef<HTMLButtonElement | null>(null);
 
+  const navigate = useNavigate();
+
   const handleSwiper = (swiper: SwiperType) => {
     if (swiper.params.navigation && typeof swiper.params.navigation !== 'boolean') {
       const navigation = swiper.params.navigation as NavigationOptions;
@@ -77,13 +86,17 @@ function MovieSwiperSlide(props: MovieSwiperSlideProps) {
     }
   };
 
+  const handleCardClick = (movieId: number) => {
+    navigate(`/detail/${movieId}`);
+  };
+
   return (
     <>
       <h1>{title}</h1>
       <SwiperContainer>
         <Swiper
           slidesPerView={6}
-          spaceBetween={40}
+          spaceBetween={20}
           loop={false}
           navigation
           modules={[Pagination, Navigation, Autoplay]}
@@ -91,11 +104,11 @@ function MovieSwiperSlide(props: MovieSwiperSlideProps) {
           onSwiper={handleSwiper}
         >
           {images.map((image, index) => (
-            <SwiperSlide key={index}>
-              <SlideContent>
+            <StyledSwiperSlide key={index}>
+              <SlideContent onClick={() => handleCardClick(index + 1)}>
                 <Image src={image} alt={`${index}번째 영화`} />
               </SlideContent>
-            </SwiperSlide>
+            </StyledSwiperSlide>
           ))}
         </Swiper>
         <button ref={prevButtonRef} className="swiper-button-prev"></button>
