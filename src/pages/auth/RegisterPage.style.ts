@@ -22,23 +22,23 @@ export const Layout = styled.div`
   h1 {
     font-size: ${theme.fontSize.h3};
     font-weight: ${theme.fontWeight.header};
-    padding-bottom: 60px;
+    padding-bottom: 30px;
   }
 
   form {
     display: flex;
     flex-direction: column;
-    padding-bottom: 50px;
+    padding-bottom: 30px;
     margin-left: 100px;
   }
 
   p {
-    margin-bottom: 7px;
+    margin-bottom: 5px;
   }
 `;
 
 export const StyledInput = styled(Input)`
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 
   p {
     padding-top: 20px;

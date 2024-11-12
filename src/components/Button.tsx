@@ -1,5 +1,6 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
+import { theme } from 'styles/theme';
 
 interface ButtonStyleProps {
   width?: string;
@@ -26,11 +27,11 @@ const gradientStyles = css`
 
 const disabledStyles = css`
   background: #cbd5e1;
-  cursor: not-allowed;
+  cursor: pointer;
 
   > div {
     background-color: #cbd5e1;
-    color: #94a3b8;
+    color: ${theme.colors.neutral50};
   }
 
   &:hover {

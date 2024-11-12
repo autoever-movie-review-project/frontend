@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Button from 'components/Button';
 import { useForm } from 'react-hook-form';
 import type { RegisterError, RegisterRequest } from 'api/auth/auth';
@@ -10,21 +10,20 @@ import * as S from './RegisterPage.style';
 import * as L from '../../components/Loading';
 import { AxiosError } from 'axios';
 
-interface FormData extends RegisterRequest {
+interface RegisterFormData extends RegisterRequest {
   code: number;
   passwordConfirm: string;
 }
 
 function RegisterPage() {
   const navigate = useNavigate();
+  const [isNotVerified, setVerified] = useState(true);
 
   const { mutate: register, isPending } = useMutation({
     mutationFn: authApi.register,
-    onSuccess: (data) => {
-      if (data.success) {
-        toast.success('환영합니다!');
-        navigate('/login');
-      }
+    onSuccess: () => {
+      toast('🎉 환영합니다!');
+      navigate('/login');
     },
     onError: (error: AxiosError<RegisterError>) => {
       toast.error(error.response?.data?.msg || '회원가입 중 오류가 발생했어요.');
@@ -35,8 +34,9 @@ function RegisterPage() {
     register: formRegister,
     handleSubmit,
     getValues,
+    trigger,
     formState: { errors },
-  } = useForm<FormData>({
+  } = useForm<RegisterFormData>({
     mode: 'onBlur',
   });
 
@@ -44,10 +44,8 @@ function RegisterPage() {
    * 회원가입 양식을 제출할 때 실행되는 함수입니다.
    * @param data 사용자가 입력한 회원가입 정보
    */
-  const onSubmit = async (data: FormData) => {
+  const onSubmit = async (data: RegisterFormData) => {
     register(data);
-    toast('🎉 환영합니다!');
-    navigate('/');
   };
 
   /**
@@ -57,15 +55,19 @@ function RegisterPage() {
     // 버튼 기본 동작 방지
     e.preventDefault();
 
+    const isCodeValid = await trigger('code');
     const email = getValues('email');
     const code = getValues('code');
 
-    try {
-      await authApi.codeVerification({ email, code });
-      toast.success('이메일 인증이 완료되었습니다.');
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        toast.error(error.response?.data?.msg || '인증번호 확인 중 오류가 발생했습니다.');
+    if (isCodeValid) {
+      try {
+        await authApi.verifyCode({ email, code });
+        setVerified(!isNotVerified);
+        toast.success('이메일 인증이 완료되었습니다.');
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          toast.error(error.response?.data?.msg || '인증번호 확인 중 오류가 발생했어요.');
+        }
       }
     }
   };
@@ -77,24 +79,28 @@ function RegisterPage() {
   const onClickSendCodeButton = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
+    const isEmailValid = await trigger('email');
     const email = getValues('email');
+
     console.log('인증메일 발송 시도');
 
-    try {
-      await authApi.checkExistingEmail({ email });
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        toast.error(error.response?.data?.msg || '이미 가입된 이메일이에요.');
-        return;
+    if (isEmailValid) {
+      try {
+        await authApi.checkExistingEmail({ email });
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          toast.error(error.response?.data.msg || '이미 가입된 이메일이거나 인증번호 발송에 오류가 발생했어요.');
+          return;
+        }
       }
-    }
 
-    try {
-      await authApi.sendVerificationCode({ email });
-      toast.success('인증번호가 발송되었습니다.');
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        toast.error(error.response?.data?.msg || '인증번호 발송 중 오류가 발생했어요.');
+      try {
+        await authApi.sendVerificationCode({ email });
+        toast.success('인증번호가 발송되었어요.');
+      } catch (error) {
+        if (error instanceof AxiosError) {
+          toast.error(error.response?.data.msg || '인증번호 발송 중 오류가 발생했어요.');
+        }
       }
     }
   };
@@ -107,7 +113,7 @@ function RegisterPage() {
         </L.LoadingOverlay>
       )}
       <S.Layout>
-        <h1>환영합니다! 회원가입을 위해 정보를 입력해주세요.</h1>
+        <h1>환영해요! 회원가입을 위한 정보를 입력해주세요.</h1>
         <form onSubmit={handleSubmit(onSubmit)}>
           <S.VerificationSection>
             <S.StyledInput
@@ -116,7 +122,7 @@ function RegisterPage() {
                 required: { value: true, message: '이메일을 입력해주세요.' },
                 pattern: {
                   value: /^\S+@\S+$/i,
-                  message: '이메일 형식이 올바르지 않습니다',
+                  message: '이메일 형식이 올바르지 않아요.',
                 },
               })}
             />
@@ -139,7 +145,7 @@ function RegisterPage() {
                 },
               })}
             />
-            <S.VerificationButton text="인증" width="50px" fontSize="17px" onClick={onCodeSubmit} />
+            {isNotVerified && <S.VerificationButton text="인증" width="50px" fontSize="17px" onClick={onCodeSubmit} />}
           </S.VerificationSection>
           {errors.code && <S.ErrorMessage>{errors.code.message}</S.ErrorMessage>}
           <S.StyledInput
@@ -149,7 +155,7 @@ function RegisterPage() {
               required: { value: true, message: '비밀번호를 입력해주세요.' },
               pattern: {
                 value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{6,18}$/,
-                message: '영문, 숫자, 특수문자 포함 6~18글자 비밀번호를 입력해주세요. ',
+                message: '영문, 숫자, 특수문자 포함 6~18글자 비밀번호를 입력해주세요.',
               },
             })}
           />

@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components';
 import { theme } from 'styles/theme';
+import { LogOut } from 'lucide-react';
 
 export const HeaderWrapper = styled.header`
   position: fixed;
@@ -95,4 +96,27 @@ export const MenuLogin = styled.button`
   &:hover {
     background-color: ${theme.colors.grayLight};
   }
+`;
+
+export const UserProfile = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  color: #fff;
+  font-size: ${theme.fontSize.lg};
+`;
+
+export const Profile = styled.img`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 100px;
+`;
+
+export const LogoutButton = styled(LogOut)`
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
 `;

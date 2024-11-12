@@ -2,23 +2,18 @@ import { Cookies } from 'react-cookie';
 
 const cookies = new Cookies();
 
-interface CookieOptions {
-  expires: Date;
-  path: string;
-}
-
 /**
  * 쿠키를 설정합니다.
  * @param name - 쿠키 이름 (예: 'accessToken' 또는 'refreshToken')
  * @param value - 쿠키 값
- * @param days - 쿠키 만료 기간 (일)
+ * @param minutes - 쿠키 만료 기간 (일)
  */
-export const setCookie = (name: string, value: string, days: number): void => {
-  const expires = new Date();
-  expires.setUTCDate(expires.getUTCDate() + days);
+export const setCookie = (name: string, value: string, minutes: number): void => {
+  const expiryDate = new Date();
+  expiryDate.setMinutes(expiryDate.getMinutes() + minutes);
 
-  const options: CookieOptions = {
-    expires: expires,
+  const options = {
+    expires: expiryDate,
     path: '/',
   };
 

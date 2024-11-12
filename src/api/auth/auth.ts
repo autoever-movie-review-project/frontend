@@ -1,22 +1,19 @@
-export interface RegisterRequest {
-  email: string;
-  password: string;
-  nickname: string;
-}
-
 export interface EmailRequest {
   email: string;
 }
 
-export interface CodeVerificationRequest {
-  email: string;
+export interface RegisterRequest extends EmailRequest {
+  password: string;
+  nickname: string;
+}
+
+export interface CodeVerificationRequest extends EmailRequest {
   code: number;
 }
 
 export interface RegisterResponse {
   success: boolean;
-  message?: string;
-  userId?: number;
+  msg?: string;
 }
 
 export interface RegisterError {
@@ -31,6 +28,10 @@ export interface LoginRequest {
 export interface LoginSuccessResponse {
   nickname: string;
   profile: string;
+  userType: 'ROLE_SOCIAL' | 'ROLE_USER';
+  points: number;
+  rankName: string;
+  rankImg: string;
 }
 
 export interface LoginErrorResponse {
@@ -38,16 +39,16 @@ export interface LoginErrorResponse {
 }
 
 export interface User {
-  userId: number;
   email: string;
   nickname: string;
-  profile?: string;
-  userType?: string;
-  points?: number;
+  profile: string;
+  points: number;
+  rankName: string;
+  rankImg: string;
 }
 
-export interface UserResponse {
+export interface UserResponse extends User {
   success: boolean;
-  message?: string;
+  msg?: string;
   data: User;
 }

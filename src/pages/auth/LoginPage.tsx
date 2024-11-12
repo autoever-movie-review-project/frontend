@@ -3,15 +3,14 @@ import Button from 'components/Button';
 import { useForm } from 'react-hook-form';
 import KakaoImg from 'assets/kakao_login_large_wide.png';
 import { getKakaoLoginLink } from 'api/auth/kakaoApi';
-import { LoginRequest, LoginSuccessResponse } from 'api/auth/auth';
-import { useMutation } from '@tanstack/react-query';
+import { LoginRequest } from 'api/auth/auth';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from 'hooks/useAuth';
-import { authApi } from 'api/auth/authApi';
 import * as S from './LoginPage.style';
 import * as L from '../../components/Loading';
 import { toast } from 'react-toastify';
 import logo from 'assets/logo.png';
+import { authApi } from 'api/auth/authApi';
 
 const link = getKakaoLoginLink();
 
@@ -21,26 +20,14 @@ const link = getKakaoLoginLink();
  */
 function LoginPage() {
   const navigate = useNavigate();
-  const { isAuthenticated, isLoading } = useAuth();
+  const { user, isAuthenticated, isLoading, login } = useAuth();
 
   // 이미 로그인된 사용자는 홈페이지로 리다이렉트
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isAuthenticated && user) {
       navigate('/', { replace: true });
     }
   }, [isAuthenticated, navigate]);
-
-  const { mutate: login, isPending: isLoginPending } = useMutation({
-    mutationFn: authApi.login,
-    onSuccess: (data: LoginSuccessResponse) => {
-      console.log(data);
-      toast.success('로그인이 완료되었습니다!');
-      navigate('/');
-    },
-    onError: (error: Error) => {
-      toast.error(error.message);
-    },
-  });
 
   const {
     register,
@@ -50,10 +37,26 @@ function LoginPage() {
 
   /**
    * 로그인 폼 제출을 처리하는 함수입니다.
-   * @param {LoginRequest} data - 이메일과 비밀번호가 포함된 로그인 데이터
+   * @param {LoginRequest} data - 사용자가 입력한 이메일, 비밀번호입니다.
    */
-  const onSubmit = (data: LoginRequest) => {
-    login(data);
+  const onSubmit = async (data: LoginRequest) => {
+    try {
+      await login(data, {
+        onSuccess: (response) => {
+          // response에서 직접 유저 정보 사용
+          setTimeout(() => {
+            navigate('/');
+            toast.success(`${response.nickname}님 환영합니다!`);
+          }, 1000);
+        },
+        onError: (error) => {
+          console.log(error);
+          toast.error('로그인에 실패했어요.');
+        },
+      });
+    } catch (error) {
+      toast.error('로그인에 실패했어요.');
+    }
   };
 
   /**
@@ -75,7 +78,7 @@ function LoginPage() {
   return (
     <S.Background>
       {/* 로그인 요청 중일 때만 로딩 표시 */}
-      {isLoginPending && (
+      {isLoading && (
         <L.LoadingOverlay>
           <L.LoadingCircle />
         </L.LoadingOverlay>
@@ -83,10 +86,11 @@ function LoginPage() {
       <S.Layout>
         <S.LoginSection>
           <S.Logo src={logo}></S.Logo>
-          <form onSubmit={handleSubmit(onSubmit)} noValidate>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <S.LoginInput
               type="email"
               title="이메일"
+              defaultValue={'jwy97@naver.com'}
               autoComplete="email"
               {...register('email', {
                 required: '이메일을 입력해주세요.',
@@ -100,6 +104,7 @@ function LoginPage() {
             <S.LoginInput
               type="password"
               title="비밀번호"
+              defaultValue={'Profit159023!'}
               autoComplete="current-password"
               {...register('password', {
                 required: '비밀번호를 입력해주세요.',
@@ -115,11 +120,7 @@ function LoginPage() {
             />
             {errors.password && <S.ErrorMessage>{errors.password.message}</S.ErrorMessage>}
             <S.ButtonSection>
-              <Button
-                text={isLoginPending ? '로그인 중...' : '로그인'}
-                width="300px"
-                onClick={handleSubmit(onSubmit)}
-              />
+              <Button text={isLoading ? '로그인 중...' : '로그인'} width="300px" onClick={handleSubmit(onSubmit)} />
               <S.KakaoButton
                 src={KakaoImg}
                 onClick={handleKakaoLogin}

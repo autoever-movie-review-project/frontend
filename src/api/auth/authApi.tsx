@@ -8,12 +8,12 @@ import {
   CodeVerificationRequest,
   EmailRequest,
 } from './auth';
-import { removeCookie, setCookie } from 'util/cookieUtil';
+import { getCookie, removeCookie, setCookie } from 'util/cookieUtil';
 import axios, { AxiosError } from 'axios';
 
 export const authApi = {
   checkExistingEmail: async (data: EmailRequest) => {
-    const response = await client.get(`/user/send-email-code?email=${data.email}`);
+    const response = await client.get(`/user/check-login-email?email=${data.email}`);
     return response.data;
   },
 
@@ -22,7 +22,7 @@ export const authApi = {
     return response.data;
   },
 
-  codeVerification: async (data: CodeVerificationRequest) => {
+  verifyCode: async (data: CodeVerificationRequest) => {
     const response = await client.post('/user/check-email-code', {
       email: data.email,
       code: data.code,
@@ -41,16 +41,20 @@ export const authApi = {
 
   login: async (data: LoginRequest): Promise<LoginSuccessResponse> => {
     try {
-      const response = await client.post<LoginSuccessResponse>('/user/login', data);
+      const response = await client.post<LoginSuccessResponse>('/user/login', {
+        email: data.email,
+        password: data.password,
+      });
 
-      if (response.status === 201) {
+      if (response.status === 200) {
         // Authorization 헤더에서 accessToken 추출
-        const authHeader = response.headers['Authorization'];
+        const authHeader = response.headers['authorization'];
         const accessToken = authHeader?.replace('Bearer ', '');
 
+        // accessToken이 존재하면 쿠키에 저장 (refreshToken은 HttpOnly 쿠키로 자동 저장됨)
         if (accessToken) {
-          // accessToken을 로컬에 저장 (refreshToken은 HttpOnly 쿠키로 자동 저장됨)
-          setCookie('accessToken', accessToken, 1);
+          setCookie('accessToken', accessToken, 5);
+          console.log(getCookie('accessToken'));
         }
 
         return response.data;
