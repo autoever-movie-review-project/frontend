@@ -3,20 +3,20 @@ import bgImg from 'assets/gamebg.png';
 import gametitle from 'assets/gametitle.svg';
 import { GameRoomList } from './GameRoomList';
 
-export const Game = () => {
+export const GameLobby = () => {
   return (
-    <S.GameWrapper $bgImg={bgImg}>
-      <S.GameContainer>
-        <S.GameHeader>
-          <S.GameTitle src={gametitle} />
+    <S.GameLobbyWrapper $bgImg={bgImg}>
+      <S.GameLobbyContainer>
+        <S.GameLobbyHeader>
+          <S.GameLobbyTitle src={gametitle} />
           <S.HeaderButtonWrapper>
             <S.QuickJoinButton>빠른입장</S.QuickJoinButton>
             <S.MakeRoomButton>방만들기</S.MakeRoomButton>
           </S.HeaderButtonWrapper>
-        </S.GameHeader>
+        </S.GameLobbyHeader>
 
         <GameRoomList />
-      </S.GameContainer>
-    </S.GameWrapper>
+      </S.GameLobbyContainer>
+    </S.GameLobbyWrapper>
   );
 };

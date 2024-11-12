@@ -1,13 +1,13 @@
 import styled from 'styled-components';
 
-export const GameWrapper = styled.div<{ $bgImg: string }>`
+export const GameLobbyWrapper = styled.div<{ $bgImg: string }>`
   width: 100vw;
   height: 100vh;
   display: flex;
   background: url(${({ $bgImg }) => $bgImg}) lightgray 0px 0px / 102.441% 100% no-repeat;
 `;
 
-export const GameContainer = styled.div`
+export const GameLobbyContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -18,14 +18,14 @@ export const GameContainer = styled.div`
   background: ${({ theme }) => theme.colors.primaryLight};
 `;
 
-export const GameHeader = styled.div`
+export const GameLobbyHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 90%;
 `;
 
-export const GameTitle = styled.img`
+export const GameLobbyTitle = styled.img`
   display: flex;
   height: 80%;
 `;
