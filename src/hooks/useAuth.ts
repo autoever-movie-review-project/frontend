@@ -10,7 +10,7 @@ import { getCookie } from 'util/cookieUtil';
 export const useAuth = () => {
   const queryClient = useQueryClient();
 
-  const { data: user, isLoading } = useQuery({
+  const { data: user, isLoading: isUserLoading } = useQuery({
     queryKey: ['user'],
     queryFn: async () => {
       const token = getCookie('accessToken');
@@ -31,27 +31,30 @@ export const useAuth = () => {
   const loginMutation = useMutation<LoginSuccessResponse, Error, LoginRequest>({
     mutationFn: (data: LoginRequest) => authApi.login(data),
     onSuccess: (response) => {
-      // response.data에서 user 정보를 가져와 캐시에 저장
       queryClient.setQueryData(['user'], response);
       queryClient.invalidateQueries({ queryKey: ['user'] });
     },
   });
 
   const logoutMutation = useMutation({
-    mutationFn: authApi.logout,
+    mutationFn: () => authApi.logout(),
     onSuccess: () => {
       queryClient.setQueryData(['user'], null);
       queryClient.removeQueries({ queryKey: ['user'], exact: true });
     },
   });
 
+  // 전체 로딩 상태 계산
+  const isLoading = isUserLoading || loginMutation.isPending;
+
   return {
     user,
     isAuthenticated: !!user,
     login: loginMutation.mutate,
     logout: logoutMutation.mutate,
-    isLoading,
+    isLoading, // 전체 로딩 상태
+    isUserLoading, // 유저 정보 로딩 상태
+    isLoginLoading: loginMutation.isPending, // 로그인 로딩 상태
     error: loginMutation.error || logoutMutation.error,
-    isLoginLoading: loginMutation.isPending,
   };
 };

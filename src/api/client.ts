@@ -19,11 +19,12 @@ client.interceptors.request.use(
   (config) => {
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
-      console.log('axios 인터셉터: accessToken 유무 확인');
+      console.log('Axios 인터셉터: Access Token 확인');
     }
     return config;
   },
   (error) => {
+    console.log('Axios 인터셉터: Access Token을 찾는데 실패했습니다.');
     return Promise.reject(error);
   }
 );

@@ -113,10 +113,13 @@ export const Profile = styled.img`
   width: 40px;
   height: 40px;
   border-radius: 100px;
+  cursor: pointer;
 `;
 
 export const LogoutButton = styled(LogOut)`
-  width: 20px;
-  height: 20px;
+  margin-left: 10px;
+  color: ${theme.colors.grayLight};
+  width: 15px;
+  height: 15px;
   cursor: pointer;
 `;

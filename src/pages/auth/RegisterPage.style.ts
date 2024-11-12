@@ -38,7 +38,7 @@ export const Layout = styled.div`
 `;
 
 export const StyledInput = styled(Input)`
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 
   p {
     padding-top: 20px;

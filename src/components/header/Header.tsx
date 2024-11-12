@@ -1,15 +1,15 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import * as S from './Header.style';
 import logo from 'assets/logo.png';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from 'hooks/useAuth';
 import profile from 'assets/default-profile.png';
-import { LogOut } from 'lucide-react';
+import { toast } from 'react-toastify';
 
 function Header() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, isAuthenticated, logout } = useAuth();
+  const { user, logout } = useAuth();
 
   const handleNavMenuClick = (path: string) => {
     navigate(path);
@@ -20,13 +20,22 @@ function Header() {
   };
 
   const handleLoginButtonClick = () => {
-    //로그인페이지로
+    //로그인 페이지로
     navigate('/login');
   };
 
-  const handleLogoutButtonClick = () => {
-    logout();
-    navigate('/');
+  const handleLogoutButtonClick = async () => {
+    try {
+      await logout();
+      window.location.reload();
+    } catch (error) {
+      console.error('로그아웃 실패:', error);
+      toast.error('서버와 통신하는데 실패했습니다.');
+    }
+  };
+
+  const handleUserProfileClick = () => {
+    navigate('/mypage');
   };
 
   return (
@@ -45,10 +54,10 @@ function Header() {
               Game
             </S.MenuButton>
           </S.MenuContainer>
-          {!isAuthenticated && <S.MenuLogin onClick={() => handleLoginButtonClick()}>로그인</S.MenuLogin>}
-          {isAuthenticated && (
+          {!user?.data && <S.MenuLogin onClick={() => handleLoginButtonClick()}>로그인</S.MenuLogin>}
+          {user?.data && (
             <S.UserProfile>
-              <S.Profile src={profile}></S.Profile>
+              <S.Profile src={profile} onClick={handleUserProfileClick}></S.Profile>
               {user?.data.nickname}
               <S.LogoutButton onClick={handleLogoutButtonClick}></S.LogoutButton>
             </S.UserProfile>

@@ -82,14 +82,14 @@ function RegisterPage() {
     const isEmailValid = await trigger('email');
     const email = getValues('email');
 
-    console.log('인증메일 발송 시도');
+    console.log('인증번호 발송 시도');
 
     if (isEmailValid) {
       try {
         await authApi.checkExistingEmail({ email });
       } catch (error) {
         if (error instanceof AxiosError) {
-          toast.error(error.response?.data.msg || '이미 가입된 이메일이거나 인증번호 발송에 오류가 발생했어요.');
+          toast.error(error.response?.data.msg || '이미 가입된 이메일이거나, 인증번호 발송에 오류가 발생했어요.');
           return;
         }
       }
@@ -127,7 +127,7 @@ function RegisterPage() {
               })}
             />
             <S.VerificationCodeSendButton
-              text="인증코드 발송"
+              text="인증번호 발송"
               width="100px"
               fontSize="15px"
               onClick={onClickSendCodeButton}

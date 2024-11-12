@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Button from 'components/Button';
 import { useForm } from 'react-hook-form';
 import KakaoImg from 'assets/kakao_login_large_wide.png';
@@ -10,7 +10,6 @@ import * as S from './LoginPage.style';
 import * as L from '../../components/Loading';
 import { toast } from 'react-toastify';
 import logo from 'assets/logo.png';
-import { authApi } from 'api/auth/authApi';
 
 const link = getKakaoLoginLink();
 
@@ -20,15 +19,7 @@ const link = getKakaoLoginLink();
  */
 function LoginPage() {
   const navigate = useNavigate();
-  const { user, isAuthenticated, isLoading, login } = useAuth();
-
-  // 이미 로그인된 사용자는 홈페이지로 리다이렉트
-  useEffect(() => {
-    if (isAuthenticated && user) {
-      navigate('/', { replace: true });
-    }
-  }, [isAuthenticated, navigate]);
-
+  const { isLoginLoading, isLoading, login } = useAuth();
   const {
     register,
     handleSubmit,
@@ -40,23 +31,18 @@ function LoginPage() {
    * @param {LoginRequest} data - 사용자가 입력한 이메일, 비밀번호입니다.
    */
   const onSubmit = async (data: LoginRequest) => {
-    try {
-      await login(data, {
-        onSuccess: (response) => {
-          // response에서 직접 유저 정보 사용
-          setTimeout(() => {
-            navigate('/');
-            toast.success(`${response.nickname}님 환영합니다!`);
-          }, 1000);
-        },
-        onError: (error) => {
-          console.log(error);
-          toast.error('로그인에 실패했어요.');
-        },
-      });
-    } catch (error) {
-      toast.error('로그인에 실패했어요.');
-    }
+    console.log('로그인 시도');
+    await login(data, {
+      onSuccess: (data) => {
+        console.log(`로그인 성공: ${data.email}`);
+        navigate('/');
+        toast.success(`${data.nickname}님 환영합니다!`);
+      },
+      onError: (error) => {
+        console.log(error);
+        toast.error('로그인에 실패했어요.');
+      },
+    });
   };
 
   /**
@@ -66,19 +52,10 @@ function LoginPage() {
     window.location.href = link;
   };
 
-  // Auth 상태 로딩 중일 때 로딩 화면 표시
-  if (isLoading) {
-    return (
-      <L.LoadingOverlay>
-        <L.LoadingCircle />
-      </L.LoadingOverlay>
-    );
-  }
-
   return (
     <S.Background>
       {/* 로그인 요청 중일 때만 로딩 표시 */}
-      {isLoading && (
+      {isLoginLoading && (
         <L.LoadingOverlay>
           <L.LoadingCircle />
         </L.LoadingOverlay>
