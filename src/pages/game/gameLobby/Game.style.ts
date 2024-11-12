@@ -11,7 +11,7 @@ export const GameLobbyContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 70%;
+  width: 80%;
   height: 78%;
   margin: auto;
   border-radius: 5px;
