@@ -4,6 +4,15 @@ export interface RegisterRequest {
   nickname: string;
 }
 
+export interface EmailRequest {
+  email: string;
+}
+
+export interface CodeVerificationRequest {
+  email: string;
+  code: number;
+}
+
 export interface RegisterResponse {
   success: boolean;
   message?: string;

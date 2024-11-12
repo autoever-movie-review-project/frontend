@@ -11,7 +11,7 @@ import * as L from '../../components/Loading';
 import { AxiosError } from 'axios';
 
 interface FormData extends RegisterRequest {
-  code: string;
+  code: number;
   passwordConfirm: string;
 }
 
@@ -35,7 +35,6 @@ function RegisterPage() {
     register: formRegister,
     handleSubmit,
     getValues,
-    trigger,
     formState: { errors },
   } = useForm<FormData>({
     mode: 'onBlur',
@@ -47,19 +46,56 @@ function RegisterPage() {
    */
   const onSubmit = async (data: FormData) => {
     register(data);
+    toast('🎉 환영합니다!');
+    navigate('/');
   };
 
   /**
    * 이메일 인증번호를 확인하는 함수입니다.
-   * 인증번호 유효성을 검사한 후, 올바른 형식이면 서버로 확인 요청을 보냅니다.
    */
-  const onCodeSubmit = async () => {
-    const isCodeValid = await trigger('code');
+  const onCodeSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    // 버튼 기본 동작 방지
+    e.preventDefault();
 
-    if (isCodeValid) {
-      const codeValue = getValues('code');
-      console.log({ code: codeValue });
-      // API 호출로 DB에 인증코드 체크
+    const email = getValues('email');
+    const code = getValues('code');
+
+    try {
+      await authApi.codeVerification({ email, code });
+      toast.success('이메일 인증이 완료되었습니다.');
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        toast.error(error.response?.data?.msg || '인증번호 확인 중 오류가 발생했습니다.');
+      }
+    }
+  };
+
+  /**
+   * 이메일로 인증 번호를 전송하는 함수입니다.
+   * 중복된 이메일인 경우, 인증번호를 전송하지 않습니다.
+   */
+  const onClickSendCodeButton = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    const email = getValues('email');
+    console.log('인증메일 발송 시도');
+
+    try {
+      await authApi.checkExistingEmail({ email });
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        toast.error(error.response?.data?.msg || '이미 가입된 이메일이에요.');
+        return;
+      }
+    }
+
+    try {
+      await authApi.sendVerificationCode({ email });
+      toast.success('인증번호가 발송되었습니다.');
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        toast.error(error.response?.data?.msg || '인증번호 발송 중 오류가 발생했어요.');
+      }
     }
   };
 
@@ -73,16 +109,24 @@ function RegisterPage() {
       <S.Layout>
         <h1>환영합니다! 회원가입을 위해 정보를 입력해주세요.</h1>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <S.StyledInput
-            title="이메일"
-            {...formRegister('email', {
-              required: { value: true, message: '이메일을 입력해주세요.' },
-              pattern: {
-                value: /^\S+@\S+$/i,
-                message: '이메일 형식이 올바르지 않습니다',
-              },
-            })}
-          />
+          <S.VerificationSection>
+            <S.StyledInput
+              title="이메일"
+              {...formRegister('email', {
+                required: { value: true, message: '이메일을 입력해주세요.' },
+                pattern: {
+                  value: /^\S+@\S+$/i,
+                  message: '이메일 형식이 올바르지 않습니다',
+                },
+              })}
+            />
+            <S.VerificationCodeSendButton
+              text="인증코드 발송"
+              width="100px"
+              fontSize="15px"
+              onClick={onClickSendCodeButton}
+            />
+          </S.VerificationSection>
           {errors.email && <S.ErrorMessage>{errors.email.message}</S.ErrorMessage>}
           <S.VerificationSection>
             <S.StyledInput

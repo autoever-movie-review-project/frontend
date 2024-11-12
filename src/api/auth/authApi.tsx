@@ -1,11 +1,41 @@
 import { client } from 'api/client';
-import { RegisterRequest, RegisterResponse, LoginRequest, LoginSuccessResponse, LoginErrorResponse } from './auth';
+import {
+  RegisterRequest,
+  RegisterResponse,
+  LoginRequest,
+  LoginSuccessResponse,
+  LoginErrorResponse,
+  CodeVerificationRequest,
+  EmailRequest,
+} from './auth';
 import { removeCookie, setCookie } from 'util/cookieUtil';
 import axios, { AxiosError } from 'axios';
 
 export const authApi = {
-  register: async (data: RegisterRequest): Promise<RegisterResponse> => {
-    const response = await client.post<RegisterResponse>('/user/signup', data);
+  checkExistingEmail: async (data: EmailRequest) => {
+    const response = await client.get(`/user/send-email-code?email=${data.email}`);
+    return response.data;
+  },
+
+  sendVerificationCode: async (data: EmailRequest) => {
+    const response = await client.post(`/user/send-email-code?email=${data.email}`);
+    return response.data;
+  },
+
+  codeVerification: async (data: CodeVerificationRequest) => {
+    const response = await client.post('/user/check-email-code', {
+      email: data.email,
+      code: data.code,
+    });
+    return response.data;
+  },
+
+  register: async (data: RegisterRequest) => {
+    const response = await client.post<RegisterResponse>('/user/signup', {
+      email: data.email,
+      password: data.password,
+      nickname: data.nickname,
+    });
     return response.data;
   },
 

@@ -29,7 +29,7 @@ export const Layout = styled.div`
     display: flex;
     flex-direction: column;
     padding-bottom: 50px;
-    margin-left: 60px;
+    margin-left: 100px;
   }
 
   p {
@@ -50,6 +50,12 @@ export const VerificationSection = styled.div`
   display: flex;
   position: relative;
 `;
+
+export const VerificationCodeSendButton = styled(Button)`
+  position: relative;
+  right: 100px;
+  top: 22px;
+` as React.ForwardRefExoticComponent<ButtonProps & React.RefAttributes<HTMLInputElement>>;
 
 export const VerificationButton = styled(Button)`
   position: relative;

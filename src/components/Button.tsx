@@ -7,9 +7,8 @@ interface ButtonStyleProps {
   disabled?: boolean;
 }
 
-export interface ButtonProps extends ButtonStyleProps {
+export interface ButtonProps extends ButtonStyleProps, React.ButtonHTMLAttributes<HTMLButtonElement> {
   text: string;
-  onClick: () => void;
   children?: React.ReactNode;
 }
 
@@ -76,9 +75,9 @@ const ContentWrapper = styled.div`
   gap: 3px;
 `;
 
-const Button = ({ text, width, fontSize, disabled = false, onClick, children, ...props }: ButtonProps) => {
+const Button = ({ text, width, fontSize, disabled = false, children, ...props }: ButtonProps) => {
   return (
-    <StyledButton type="button" width={width} fontSize={fontSize} disabled={disabled} onClick={onClick} {...props}>
+    <StyledButton type="button" width={width} fontSize={fontSize} disabled={disabled} {...props}>
       <div>
         <ContentWrapper>
           {text}
