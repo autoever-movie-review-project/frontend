@@ -4,8 +4,6 @@ import MyPage from 'pages/mypage/MyPage';
 import Header from 'components/header/Header';
 import { lazy, Suspense } from 'react';
 import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 const loadingComp = <div style={{ height: '1000px', backgroundColor: 'red' } as React.CSSProperties}>로딩중</div>;
 const Main = lazy(() => import('pages/main/MainPage'));
@@ -18,15 +16,6 @@ function App() {
           <Suspense fallback={loadingComp}>
             <Header />
             <Outlet />
-            <ToastContainer
-              position="bottom-right"
-              autoClose={3000}
-              hideProgressBar={false}
-              newestOnTop={true}
-              closeOnClick
-              rtl={false}
-              draggable
-            />
           </Suspense>
         ),
         children: [

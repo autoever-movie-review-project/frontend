@@ -4,12 +4,11 @@ import {
   RegisterResponse,
   LoginRequest,
   LoginSuccessResponse,
-  LoginErrorResponse,
   CodeVerificationRequest,
   EmailRequest,
 } from './auth';
 import { getCookie, removeCookie, setCookie } from 'util/cookieUtil';
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 
 export const authApi = {
   checkExistingEmail: async (data: EmailRequest) => {
@@ -54,7 +53,6 @@ export const authApi = {
         // accessToken이 존재하면 쿠키에 저장 (refreshToken은 HttpOnly 쿠키로 자동 저장됨)
         if (accessToken) {
           setCookie('accessToken', accessToken, 5);
-          console.log(getCookie('accessToken'));
         }
 
         return response.data;
@@ -63,8 +61,7 @@ export const authApi = {
       throw new Error('Login failed');
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        const axiosError = error as AxiosError<LoginErrorResponse>;
-        throw new Error(axiosError.response?.data.msg || '로그인에 실패했습니다.');
+        throw new Error(error.message);
       }
       throw error;
     }
@@ -74,11 +71,21 @@ export const authApi = {
    * 이 API를 import해서 사용하지 마시고 useAuth mutation을 사용해서 로그아웃 처리를 진행해주세요.
    *  */
   logout: async (): Promise<void> => {
+    console.log('로그아웃 시도');
     try {
-      await client.post('/user/logout');
-    } finally {
-      removeCookie('accessToken');
-      removeCookie('refreshToken');
+      const token = getCookie('accessToken');
+      const response = await client.post('/user/logout', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      removeCookie('accessToken', '/');
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        throw new Error(error.message);
+      }
+      throw error;
     }
   },
 };

@@ -26,16 +26,13 @@ export interface LoginRequest {
 }
 
 export interface LoginSuccessResponse {
+  email: string;
   nickname: string;
   profile: string;
   userType: 'ROLE_SOCIAL' | 'ROLE_USER';
   points: number;
   rankName: string;
   rankImg: string;
-}
-
-export interface LoginErrorResponse {
-  msg: string;
 }
 
 export interface User {
@@ -45,10 +42,4 @@ export interface User {
   points: number;
   rankName: string;
   rankImg: string;
-}
-
-export interface UserResponse extends User {
-  success: boolean;
-  msg?: string;
-  data: User;
 }
