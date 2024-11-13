@@ -1,3 +1,6 @@
+import LoginPage from 'pages/auth/LoginPage';
+import RegisterPage from 'pages/auth/RegisterPage';
+import MyPage from 'pages/mypage/MyPage';
 import Header from 'components/header/Header';
 import { lazy, Suspense } from 'react';
 import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
@@ -23,6 +26,18 @@ function App() {
                 <Main />
               </>
             ),
+          },
+          {
+            path: '/login',
+            element: <LoginPage />,
+          },
+          {
+            path: '/register',
+            element: <RegisterPage />,
+          },
+          {
+            path: '/mypage',
+            element: <MyPage />,
           },
         ],
       },

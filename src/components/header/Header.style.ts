@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components';
 import { theme } from 'styles/theme';
+import { LogOut } from 'lucide-react';
 
 export const HeaderWrapper = styled.header`
   position: fixed;
@@ -21,9 +22,10 @@ export const HeaderContainer = styled.div`
 export const HeaderLogo = styled.img`
   display: flex;
   align-items: center;
-  width: 80px;
-  height: 60px;
+  width: 40px;
+  height: 40px;
   cursor: pointer;
+  margin: 10px;
 `;
 
 export const MenuWrapper = styled.div`
@@ -94,4 +96,36 @@ export const MenuLogin = styled.button`
   &:hover {
     background-color: ${theme.colors.grayLight};
   }
+`;
+
+export const UserProfile = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  color: #fff;
+  font-size: ${theme.fontSize.lg};
+`;
+
+export const Profile = styled.img`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 100px;
+  cursor: pointer;
+`;
+
+export const LogoutButton = styled(LogOut)`
+  margin-left: 15px;
+  color: ${theme.colors.grayLight};
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+`;
+
+export const ProfileWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
