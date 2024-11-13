@@ -51,7 +51,7 @@ export const useAuth = () => {
     user,
     isAuthenticated: !!user,
     login: loginMutation.mutate,
-    logout: logoutMutation.mutate,
+    logout: logoutMutation.mutateAsync,
     isLoading, // 전체 로딩 상태
     isUserLoading, // 유저 정보 로딩 상태
     isLoginLoading: loginMutation.isPending, // 로그인 로딩 상태

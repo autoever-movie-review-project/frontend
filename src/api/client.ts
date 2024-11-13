@@ -12,11 +12,10 @@ export const client = axios.create({
   withCredentials: true,
 });
 
-const token = getCookie('accessToken');
-
 // axios 요청을 보내기 전에 쿠키에 accessToken이 있는지 확인하여 없으면 에러를 반환합니다.
 client.interceptors.request.use(
   (config) => {
+    const token = getCookie('accessToken');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
       console.log('Axios 인터셉터: Access Token 확인');
