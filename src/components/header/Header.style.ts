@@ -124,7 +124,6 @@ export const Profile = styled.img`
 `;
 
 export const LogoutButton = styled(LogOut)`
-  margin-left: 15px;
   color: white;
   width: 15px;
   height: 15px;
