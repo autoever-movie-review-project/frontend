@@ -29,7 +29,7 @@ function Header() {
     console.log('로그아웃 버튼 클릭');
     try {
       await logout();
-      window.location.reload();
+      toast.success('로그아웃했어요.');
     } catch (error) {
       console.error('로그아웃 실패:', error);
       toast.error('서버와 통신하는데 실패했습니다.');

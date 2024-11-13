@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 import { theme } from 'styles/theme';
-import { LogOut } from 'lucide-react';
+import LogOut from 'assets/log-out.svg';
 
 export const HeaderWrapper = styled.header`
   position: fixed;

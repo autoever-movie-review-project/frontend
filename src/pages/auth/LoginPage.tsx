@@ -81,7 +81,7 @@ function LoginPage() {
             <S.LoginInput
               type="password"
               title="비밀번호"
-              defaultValue={'Profit159023!'}
+              defaultValue={'aaa1234@'}
               autoComplete="current-password"
               {...register('password', {
                 required: '비밀번호를 입력해주세요.',

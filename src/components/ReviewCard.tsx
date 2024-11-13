@@ -2,7 +2,9 @@ import React from 'react';
 import { toast } from 'react-toastify';
 import { useAuth } from 'hooks/useAuth';
 import styled from 'styled-components';
-import { Heart, Star as StarImg, StarHalf as StarHalfImg } from 'lucide-react';
+import Heart from 'assets/heart.svg';
+import StarImg from 'assets/star.svg';
+import StarHalfImg from 'assets/star-half.svg';
 import { theme } from 'styles/theme';
 
 export const Card = styled.div`
