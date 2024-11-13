@@ -5,6 +5,7 @@ import BoxofficeSlider from './templates/BoxofficeSlider';
 import MovieSwiperSlide from './templates/MovieSwiperSlide';
 import temp from 'assets/cardtemp.jpg';
 import boxofficetemp from 'assets/temp.svg';
+import { useAuth } from 'hooks/useAuth';
 
 const movieAPI = [
   { apiUrl: 'getapi1' }, //개봉 예정 영화 API get방식 가져오기
@@ -14,11 +15,11 @@ const movieAPI = [
 ];
 
 function MainPage() {
-  const [userName, setUserName] = useState('빈빈');
+  const { user } = useAuth();
   const [swiperData, setSwiperData] = useState<Array<{ title: string; images: string[] }>>([
     { title: '개봉 예정 영화', images: [temp, temp, temp, temp, temp, temp, temp] },
     { title: '인생 영화', images: [temp, temp, temp, temp, temp, temp, temp] },
-    { title: `${userName}님을 위한 추천 영화`, images: [temp, temp, temp, temp, temp, temp, temp] },
+    { title: `${user ? user : '빈빈'}님을 위한 추천 영화`, images: [temp, temp, temp, temp, temp, temp, temp] },
     { title: '유저들이 주목하는 실시간 인기 영화', images: [temp, temp, temp, temp, temp, temp, temp] },
   ]);
 

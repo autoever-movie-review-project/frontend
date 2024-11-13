@@ -12,6 +12,7 @@ function Header() {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, logout } = useAuth();
+  const rankName = user?.data.rankName as 'Master' | 'Diamond' | 'Gold' | 'Silver' | 'Bronze';
 
   const handleNavMenuClick = (path: string) => {
     navigate(path);
@@ -63,10 +64,12 @@ function Header() {
             {user?.data && (
               <S.ProfileWrapper>
                 <S.UserProfile onClick={handleUserProfileClick}>
-                  <Profile width="45px" height="45px" rank={user?.data.rankName} src={profile}></Profile>
+                  <Profile width="45px" height="45px" rank={rankName} src={profile}></Profile>
                   {user?.data.nickname}
                 </S.UserProfile>
-                <S.LogoutButton onClick={handleLogoutButtonClick}></S.LogoutButton>
+                <S.LogoutButtonWrapper onClick={() => handleLogoutButtonClick()}>
+                  <S.LogoutButton />
+                </S.LogoutButtonWrapper>
               </S.ProfileWrapper>
             )}
           </S.RightMenu>

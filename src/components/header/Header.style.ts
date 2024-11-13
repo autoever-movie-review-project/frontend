@@ -9,6 +9,7 @@ export const HeaderWrapper = styled.header`
   width: 100%;
   height: 80px;
   z-index: 9999;
+  background-color: black;
 `;
 
 export const HeaderContainer = styled.div`
@@ -121,6 +122,11 @@ export const Profile = styled.img`
   height: 40px;
   border-radius: 100px;
   cursor: pointer;
+`;
+
+export const LogoutButtonWrapper = styled.div`
+  width: 100%;
+  height: 100%;
 `;
 
 export const LogoutButton = styled(LogOut)`
