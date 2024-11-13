@@ -42,11 +42,10 @@ const ReviewTitleWrapper = styled.div`
 
 const ReviewWrapper = styled.div`
   width: 90%;
-  height: 100%;
   margin: 0 auto;
-  display: grid;
+  display: flex;
+  flex-wrap: wrap;
   gap: 30px;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
 `;
 
 function DetailPage() {
