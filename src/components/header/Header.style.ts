@@ -8,6 +8,7 @@ export const HeaderWrapper = styled.header`
   left: 0;
   width: 100%;
   height: 80px;
+  z-index: 9999;
 `;
 
 export const HeaderContainer = styled.div`
@@ -79,6 +80,13 @@ export const MenuButton = styled.button<{ $active: boolean }>`
         `}
 `;
 
+export const RightMenu = styled.div`
+  display: flex;
+  align-items: center;
+  justify-self: end;
+  gap: 30px;
+`;
+
 export const MenuLogin = styled.button`
   display: flex;
   border: none;
@@ -88,10 +96,9 @@ export const MenuLogin = styled.button`
   padding: 6px;
   justify-content: center;
   align-items: center;
-  border-radius: 30px;
+  border-radius: 20px;
   font-size: 18px;
   cursor: pointer;
-  justify-self: end;
 
   &:hover {
     background-color: ${theme.colors.grayLight};
