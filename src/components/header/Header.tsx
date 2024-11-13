@@ -59,27 +59,19 @@ function Header() {
               Game
             </S.MenuButton>
           </S.MenuContainer>
-          {user?.data && (
-            <S.ProfileWrapper>
-              <S.UserProfile onClick={handleUserProfileClick}>
-                <Profile width="45px" height="45px" rank={user?.data.rankName} src={DefaultProfile}></Profile>
-                {user?.data.nickname}
-              </S.UserProfile>
-              <S.LogoutButton src={LogOut} onClick={handleLogoutButtonClick}></S.LogoutButton>
-            </S.ProfileWrapper>
-          )}
-          {!user?.data && <S.MenuLogin onClick={() => handleLoginButtonClick()}>로그인</S.MenuLogin>}
           <S.RightMenu>
             <SearchBar />
             {!user?.data && <S.MenuLogin onClick={() => handleLoginButtonClick()}>로그인</S.MenuLogin>}
             {user?.data && (
-              <S.ProfileWrapper>
-                <S.UserProfile onClick={handleUserProfileClick}>
-                  <Profile width="45px" height="45px" rank={user?.data.rankName} src={profile}></Profile>
-                  {user?.data.nickname}
-                </S.UserProfile>
+              <>
+                <S.ProfileWrapper>
+                  <S.UserProfile onClick={handleUserProfileClick}>
+                    <Profile width="45px" height="45px" rank={user?.data.rankName} src={DefaultProfile}></Profile>
+                    <p>{user?.data.nickname}</p>
+                  </S.UserProfile>
+                </S.ProfileWrapper>
                 <S.LogoutButton onClick={handleLogoutButtonClick}></S.LogoutButton>
-              </S.ProfileWrapper>
+              </>
             )}
           </S.RightMenu>
         </S.MenuWrapper>

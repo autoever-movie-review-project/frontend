@@ -89,7 +89,13 @@ function RegisterPage() {
         await authApi.checkExistingEmail({ email });
       } catch (error) {
         if (error instanceof AxiosError) {
-          toast.error(error.response?.data.msg || '이미 가입된 이메일이거나, 인증번호 발송에 오류가 발생했어요.');
+          toast.error(
+            error.response?.data.msg || (
+              <>
+                이미 가입된 이메일이거나, <br /> 인증번호 발송중 오류가 발생했어요.
+              </>
+            )
+          );
           return;
         }
       }

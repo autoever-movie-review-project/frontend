@@ -27,7 +27,6 @@ const ProfileWrap = styled.div<ProfileProps>`
   border-radius: 9999px;
   background-color: ${(props) => rankColors[props.rank]};
   overflow: hidden;
-  cursor: pointer;
 `;
 
 const ProfileImage = styled.img`

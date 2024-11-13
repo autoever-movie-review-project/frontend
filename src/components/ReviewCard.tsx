@@ -6,10 +6,17 @@ import styled from 'styled-components';
 import Heart from 'assets/heart.svg?react';
 import StarImg from 'assets/star.svg?react';
 import StarHalfImg from 'assets/star-half.svg?react';
+import Profile from './Profile';
+
+interface UserTypeProps {
+  $userType: string;
+}
 
 export const Card = styled.div`
-  width: 280px;
+  width: 275px;
   height: 330px;
+  min-width: 200px;
+  min-height: 250px;
   background-color: ${theme.colors.grayDark};
   border-radius: ${theme.borderRadius.xs};
   padding: 12px;
@@ -41,6 +48,8 @@ export const ReviewText = styled.p`
   font-size: ${theme.fontSize.md};
   line-height: 22px;
   border-bottom: 0.5px solid ${theme.colors.grayLight};
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 export const UserSection = styled.div`
@@ -55,17 +64,6 @@ export const UserInfo = styled.div`
   gap: 0.75rem;
 `;
 
-export const Avatar = styled.div`
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 100px;
-  background-color: ${theme.colors.diamond};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-`;
-
 export const UserDetails = styled.div`
   display: flex;
   flex-direction: column;
@@ -77,15 +75,30 @@ export const Nickname = styled.p`
   font-weight: ${theme.fontWeight.regular};
 `;
 
-export const UserType = styled.span`
+export const UserType = styled.span<UserTypeProps>`
   display: flex;
   width: auto;
   font-size: 0.875rem;
-  background-color: ${theme.colors.diamond};
   padding: 0.125rem 0.5rem;
   border-radius: 10px;
-`;
 
+  ${({ $userType }) => {
+    switch ($userType.toLowerCase()) {
+      case 'master':
+        return `background-color: ${theme.colors.master}`;
+      case 'diamond':
+        return `background-color: ${theme.colors.diamond};`;
+      case 'gold':
+        return `background-color: ${theme.colors.gold};`;
+      case 'silver':
+        return `background-color: ${theme.colors.silver};`;
+      case 'bronze':
+        return `background-color: ${theme.colors.bronze};`;
+      default:
+        return `background-color: ${theme.colors.bronze};`;
+    }
+  }}
+`;
 export const LikeButton = styled.button`
   display: flex;
   align-items: center;
@@ -128,7 +141,7 @@ function ReviewCard({
   content,
   likesCount = 0,
   isLiked: initialIsLiked = false,
-  // profile,
+  profile,
   nickname = 'User',
   userType,
 }: ReviewCardProps) {
@@ -161,18 +174,16 @@ function ReviewCard({
     // 좋아요 토글 처리
   };
 
-  const userInitial = nickname?.charAt(0) || '?';
-
   return (
     <Card>
       <StarsContainer>{renderStars(rating)}</StarsContainer>
       <ReviewText>{content}</ReviewText>
       <UserSection>
         <UserInfo>
-          <Avatar>{userInitial}</Avatar>
+          <Profile width="2.5rem" height="2.5rem" rank={userType} src={profile}></Profile>
           <UserDetails>
             <Nickname>{nickname}</Nickname>
-            {userType && <UserType>{userType}</UserType>}
+            {userType && <UserType $userType={userType}>{userType}</UserType>}
           </UserDetails>
         </UserInfo>
         <LikeButton onClick={handleLikeClick} disabled={!user} aria-label={isLiked ? '좋아요 취소' : '좋아요'}>

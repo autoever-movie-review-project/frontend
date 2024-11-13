@@ -9,7 +9,7 @@ export const ContentsContainer = styled.div`
 
 export const VideoSliderWrapper = styled.div`
   background-color: black;
-  margin-top: 80px;
+  margin-top: 60px;
   width: 100%;
   height: calc(100vm-80px);
   /* padding-top: 30px; */

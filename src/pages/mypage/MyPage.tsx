@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { useAuth } from 'hooks/useAuth';
 import Profile from 'components/Profile';
 import DefaultProfile from 'assets/default-profile.png';
-
 import * as S from './MyPage.style';
 import ReviewCard from 'components/ReviewCard';
+import { useNavigate } from 'react-router-dom';
 
 function MyPage() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [activeMenu, setActiveMenu] = useState<'reviews' | 'movies' | 'likes'>('reviews');
 
   const handleMenuClick = (menu: 'reviews' | 'movies' | 'likes') => {
@@ -17,7 +18,7 @@ function MyPage() {
   return (
     <S.Background>
       <S.Layout>
-        <h1>프로필</h1>
+        <h1>마이페이지</h1>
         <S.UserProfileSection>
           <Profile width="110px" height="110px" src={DefaultProfile} rank={user?.data.rankName} />
           <S.UserDatails>
@@ -54,42 +55,68 @@ function MyPage() {
         </S.MenuBar>
         {activeMenu === 'reviews' && (
           <>
-            <h1>내가 작성한 리뷰</h1>
+            <h2>내가 작성한 리뷰</h2>
             <S.MyReviewSection>
               <ReviewCard
                 content="그럭저럭 볼만해요."
                 nickname={user?.data.nickname}
                 rating={3.5}
                 userType={user?.data.rankName}
+                profile={DefaultProfile}
               />
               <ReviewCard
                 content="인생 영화입니다."
                 nickname={user?.data.nickname}
                 rating={5}
                 userType={user?.data.rankName}
+                profile={DefaultProfile}
               />
-              <ReviewCard content="퉤" nickname={user?.data.nickname} rating={0.5} userType={user?.data.rankName} />
+              <ReviewCard
+                content="퉤"
+                nickname={user?.data.nickname}
+                rating={0.5}
+                userType={user?.data.rankName}
+                profile={DefaultProfile}
+              />
             </S.MyReviewSection>
           </>
         )}
         {activeMenu === 'movies' && (
           <>
-            <h1>찜한 영화</h1>
+            <h2>찜한 영화</h2>
+            <S.LikedMovieSection>
+              <img src="https://picsum.photos/seed/1/200/300"></img>
+              <img src="https://picsum.photos/seed/2/200/300"></img>
+              <img src="https://picsum.photos/seed/3/200/300"></img>
+            </S.LikedMovieSection>
           </>
         )}
         {activeMenu === 'likes' && (
           <>
-            <h1>좋아요한 리뷰</h1>
+            <h2>좋아요한 리뷰</h2>
             <>
               <S.MyReviewSection>
                 <ReviewCard
                   content="그럭저럭 볼만해요."
                   nickname={'빈빈'}
                   rating={3.5}
-                  userType={user?.data.rankName}
+                  userType={'Silver'}
+                  profile={DefaultProfile}
                 />
-                <ReviewCard content="인생 영화입니다." nickname={'한성용'} rating={5} userType={user?.data.rankName} />
-                <ReviewCard content="퉤" nickname={'대상연'} rating={0.5} userType={user?.data.rankName} />
+                <ReviewCard
+                  content="인생 영화입니다."
+                  nickname={'한성용'}
+                  rating={5}
+                  userType={'Gold'}
+                  profile={DefaultProfile}
+                />
+                <ReviewCard
+                  content="퉤"
+                  nickname={'대상연'}
+                  rating={0.5}
+                  userType={'Master'}
+                  profile={DefaultProfile}
+                />
               </S.MyReviewSection>
             </>
           </>

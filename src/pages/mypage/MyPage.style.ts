@@ -19,7 +19,8 @@ export const Layout = styled.div`
   display: flex;
   flex-direction: column;
   width: 60%;
-  margin-top: 80px;
+  margin-top: 100px;
+  margin-bottom: 40px;
   color: #fff;
 
   h1 {
@@ -28,11 +29,18 @@ export const Layout = styled.div`
     font-weight: ${theme.fontWeight.bold};
     margin-bottom: 30px;
   }
+
+  h2 {
+    color: #fff;
+    font-size: ${theme.fontSize.h3};
+    font-weight: ${theme.fontWeight.bold};
+    margin-bottom: 20px;
+  }
 `;
 
 export const UserProfileSection = styled.div`
   display: flex;
-  gap: 30px;
+  gap: 20px;
   margin-bottom: 30px;
 `;
 
@@ -95,17 +103,27 @@ export const EditIcon = styled(Pen)`
 
 export const MenuBar = styled.ul`
   display: flex;
-  justify-content: center;
   justify-content: space-between;
   padding: 30px;
   align-items: center;
   background-color: ${theme.colors.grayDark};
   border-radius: ${theme.borderRadius.xs};
   height: 40px;
-  margin-bottom: 40px;
+  margin-bottom: 70px;
+
+  @media screen and (max-width: 768px) {
+    padding: 20px;
+    height: 30px;
+    margin-bottom: 40px;
+  }
+  @media screen and (max-width: 480px) {
+    padding: 15px;
+    height: 25px;
+    margin-bottom: 30px;
+  }
 `;
 
-export const MenuBarItem = styled.li`
+export const MenuBarItem = styled.li<MenuBarItemProps>`
   width: 33.33%;
   font-size: 18px;
   cursor: pointer;
@@ -116,18 +134,64 @@ export const MenuBarItem = styled.li`
   ${({ $active }) =>
     $active &&
     `
-       font-weight: bold;
+      font-weight: bold;
       color: ${theme.colors.primary};
     `}
+
+  &:hover {
+    color: ${theme.colors.primary};
+  }
+
+  @media screen and (max-width: 768px) {
+    font-size: 16px;
+    padding: 20px;
+  }
+  @media screen and (max-width: 480px) {
+    font-size: 14px;
+    padding: 15px 10px;
+    white-space: nowrap;
+  }
 `;
 
 export const MenuBarItemText = styled.div`
   display: flex;
   flex-direction: column;
+  white-space: nowrap;
   gap: 8px;
+
+  p {
+    font-size: 24px;
+    font-weight: ${theme.fontWeight.regular};
+
+    @media screen and (max-width: 768px) {
+      font-size: 20px;
+    }
+    @media screen and (max-width: 480px) {
+      font-size: 10px;
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    gap: 6px;
+  }
+  @media screen and (max-width: 480px) {
+    gap: 4px;
+  }
+`;
+
+export const LikedMovieSection = styled.div`
+  display: flex;
+  gap: 10px;
+
+  img {
+    width: 280px;
+    height: 330px;
+    border-radius: 12px;
+  }
 `;
 
 export const MyReviewSection = styled.div`
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
 `;
