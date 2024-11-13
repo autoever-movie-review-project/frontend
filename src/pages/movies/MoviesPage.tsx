@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
 
@@ -31,26 +31,24 @@ const Text = styled.h1`
 const ContentsContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 30px;
   width: 95%;
   height: 100%;
   padding: 20px;
 `;
 
 const CardWrapper = styled.div`
-  width: 10%;
+  width: calc(100% / 7);
   height: 300px;
   background-color: #333;
-  border-radius: 10px;
   overflow: hidden;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
-
   display: flex;
-  align-items: center;
   gap: 20px;
+  border-radius: 5px;
 `;
 
 const CardImage = styled.img`
@@ -66,22 +64,34 @@ const CardTitle = styled.h2`
   padding: 10px;
 `;
 
-const initData = {
-  movieId: 0,
-  mainImg: '',
-  backdropImg: '',
-  title: '제목',
-  genre: '장르',
-  director: '디렉터',
-  releaseDate: '',
-  rating: 0,
-};
+const initData = [
+  {
+    movieId: 0,
+    mainImg: '',
+    backdropImg: '',
+    title: '제목',
+    genre: '장르',
+    director: '디렉터',
+    releaseDate: '',
+    rating: 0,
+  },
+  {
+    movieId: 0,
+    mainImg: '',
+    backdropImg: '',
+    title: '제목',
+    genre: '장르',
+    director: '디렉터',
+    releaseDate: '',
+    rating: 0,
+  },
+];
 
 const MoviesPage: React.FC = () => {
   const location = useLocation();
   const searchData = location.state?.searchData || '';
-  const [movies, setMovies] = useState([initData]);
-
+  const [movies, setMovies] = useState(initData);
+  const navigate = useNavigate();
   useEffect(() => {
     if (searchData) {
       const fetchMovies = async () => {
@@ -93,12 +103,16 @@ const MoviesPage: React.FC = () => {
           console.log(response.data);
         } catch (error) {
           setMovies([]);
-          console.log('영화 데이터를 불러오지 못했습니다.', error);
+          console.log('검색 get 실패', error);
         }
       };
       // fetchMovies();
     }
   }, [searchData]);
+
+  const handleCardClick = (movieId: number) => {
+    navigate(`/detail/${movieId}`);
+  };
 
   return (
     <Container>
@@ -109,7 +123,7 @@ const MoviesPage: React.FC = () => {
           </TextWrapper>
           <ContentsContainer>
             {movies.map((movie) => (
-              <CardWrapper key={movie.movieId}>
+              <CardWrapper key={movie.movieId} onClick={() => handleCardClick(movie.movieId)}>
                 <CardImage src={movie.mainImg} alt={movie.title} />
                 <CardTitle>{movie.title}</CardTitle>
               </CardWrapper>
