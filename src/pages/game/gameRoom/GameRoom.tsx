@@ -1,4 +1,4 @@
-import { GameLobbyContainer, GameLobbyWrapper } from '../gameLobby/Game.style';
+import { GameLobbyContainer, GameLobbyWrapper } from '../gameLobby/GameLobby.style';
 import * as S from './GameRoom.style';
 import bgImg from 'assets/gamebg.png';
 import { GameRoomUser } from './GameRoomUser';

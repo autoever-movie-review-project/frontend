@@ -1,4 +1,4 @@
-import * as S from './Game.style';
+import * as S from './GameLobby.style';
 import bgImg from 'assets/gamebg.png';
 import gametitle from 'assets/gametitle.svg';
 import { GameRoomList } from './GameRoomList';
