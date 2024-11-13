@@ -97,7 +97,7 @@ function BoxofficeSlider({ title, images }: MovieSwiperSlideProps) {
   };
 
   const handleCardClick = (movieId: number) => {
-    navigate(`/detail/${movieId}`);
+    navigate(`/movies/${movieId}`);
   };
 
   const [asd, setasd] = useState('3');

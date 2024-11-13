@@ -111,7 +111,7 @@ const MoviesPage: React.FC = () => {
   }, [searchData]);
 
   const handleCardClick = (movieId: number) => {
-    navigate(`/detail/${movieId}`);
+    navigate(`/movies/${movieId}`);
   };
 
   return (

@@ -19,7 +19,8 @@ function Header() {
   };
 
   const isCurrentPath = (path: string) => {
-    return location.pathname === path;
+    if (path.length === 1) return location.pathname === path;
+    else return location.pathname.includes(path);
   };
 
   const handleLoginButtonClick = () => {

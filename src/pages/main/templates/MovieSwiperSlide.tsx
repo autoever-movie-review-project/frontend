@@ -87,7 +87,7 @@ function MovieSwiperSlide(props: MovieSwiperSlideProps) {
   };
 
   const handleCardClick = (movieId: number) => {
-    navigate(`/detail/${movieId}`);
+    navigate(`/movies/${movieId}`);
   };
 
   return (

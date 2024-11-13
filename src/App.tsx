@@ -45,7 +45,7 @@ function App() {
             element: <MyPage />,
           },
           {
-            path: '/detail/:postId',
+            path: '/movies/:moviesId',
             element: (
               <>
                 <Detail />
