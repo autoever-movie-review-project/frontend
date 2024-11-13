@@ -3,6 +3,7 @@ import * as S from './GameRoom.style';
 import bgImg from 'assets/gamebg.png';
 import { GameRoomUser } from './GameRoomUser';
 import { useState } from 'react';
+import { Timer } from './Timer';
 
 export const GameRoom = () => {
   const [chatInput, setChatInput] = useState('');
@@ -49,7 +50,11 @@ export const GameRoom = () => {
       <GameLobbyContainer>
         {!isPlayingGame ? (
           <S.GameStartButtonWrapper>
-            <S.GameStartButton $isAllReady={false} onClick={roomManager ? handleGameStartClick : handleGameReadyClick}>
+            <S.GameStartButton
+              $isAllReady={false}
+              disabled={false}
+              onClick={roomManager ? handleGameStartClick : handleGameReadyClick}
+            >
               {roomManager ? '게임시작' : '게임준비'}
             </S.GameStartButton>
             <S.GameRoomExitButton>나가기</S.GameRoomExitButton>
@@ -61,6 +66,7 @@ export const GameRoom = () => {
               <S.QuizMovieTitle>{`영화 제목 <친구>`}</S.QuizMovieTitle>
               <S.QuizTitle>{`ㄴㄱ ㅇㅂㅈ ㅁㅎㅅㄴ`}</S.QuizTitle>
             </S.QuizBoard>
+            <Timer />
           </S.QuizBoardWrapper>
         )}
         <S.GameRoomUserContainer>
