@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from 'hooks/useAuth';
 import profile from 'assets/default-profile.png';
 import { toast } from 'react-toastify';
+import Profile from 'components/Profile';
 
 function Header() {
   const navigate = useNavigate();
@@ -25,6 +26,7 @@ function Header() {
   };
 
   const handleLogoutButtonClick = async () => {
+    console.log('로그아웃 버튼 클릭');
     try {
       await logout();
       window.location.reload();
@@ -56,11 +58,13 @@ function Header() {
           </S.MenuContainer>
           {!user?.data && <S.MenuLogin onClick={() => handleLoginButtonClick()}>로그인</S.MenuLogin>}
           {user?.data && (
-            <S.UserProfile>
-              <S.Profile src={profile} onClick={handleUserProfileClick}></S.Profile>
-              {user?.data.nickname}
+            <S.ProfileWrapper>
+              <S.UserProfile onClick={handleUserProfileClick}>
+                <Profile width="45px" height="45px" rank={user?.data.rankName} src={profile}></Profile>
+                {user?.data.nickname}
+              </S.UserProfile>
               <S.LogoutButton onClick={handleLogoutButtonClick}></S.LogoutButton>
-            </S.UserProfile>
+            </S.ProfileWrapper>
           )}
         </S.MenuWrapper>
       </S.HeaderContainer>
