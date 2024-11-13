@@ -40,7 +40,7 @@ function MediaContainer() {
       </TrailerWrapper>
       <ShortsWrapper>
         <Title>Shorts</Title>
-        <iframe width="20%" height="100%" src="https://youtube.com//embed/9dXRiw2Q0b4?si=nJUYr-TsDaFMwlQz"></iframe>
+        <iframe width="20%" height="100%" src="https://youtube.com/embed/9dXRiw2Q0b4?si=nJUYr-TsDaFMwlQz"></iframe>
       </ShortsWrapper>
     </Container>
   );

@@ -1,10 +1,11 @@
 import styled from 'styled-components';
-import star from 'assets/star.svg';
+import star from 'assets/star.svg?react';
 import like from 'assets/redheart.svg';
 import unlike from 'assets/emptyheart.svg';
 import kakaoshare from 'assets/kakaoshare.svg';
 
 import testimg from 'assets/testimg.svg';
+import { theme } from 'styles/theme';
 
 const MovieInfoContainer = styled.div`
   width: 50%;
@@ -141,6 +142,13 @@ const KaKaoButton = styled.button`
   border-radius: 5px;
 `;
 
+const Star = styled(star)`
+  width: 18px;
+  height: 18px;
+  color: #fee500;
+  fill: #fee500;
+`;
+
 function DetailMovieInfo() {
   return (
     <>
@@ -151,7 +159,7 @@ function DetailMovieInfo() {
             <AgeRating>12</AgeRating>
             <Division>ㆍ</Division>
             <Rating>
-              <img src={star} />
+              <Star />
               4.1
             </Rating>
             <Division>ㆍ</Division>

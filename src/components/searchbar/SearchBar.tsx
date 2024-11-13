@@ -27,7 +27,6 @@ const SearchBar: React.FC<SearchBarProps> = ({ defaultValue = '', handleChange }
   const [inputData, setInputData] = useState<string>(defaultValue);
   const navigate = useNavigate();
 
-  // 입력값으로 검색
   const searchWithData = (inputData: string) => {
     navigate('/movies', { state: { searchData: inputData } });
     if (handleChange) {

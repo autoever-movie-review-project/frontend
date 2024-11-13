@@ -2,10 +2,11 @@ import React from 'react';
 import { toast } from 'react-toastify';
 import { useAuth } from 'hooks/useAuth';
 import styled from 'styled-components';
-import Heart from 'assets/heart.svg';
-import StarImg from 'assets/star.svg';
-import StarHalfImg from 'assets/star-half.svg';
+import Heart from 'assets/heart.svg?react';
+import StarImg from 'assets/star.svg?react';
+import StarHalfImg from 'assets/star-half.svg?react';
 import { theme } from 'styles/theme';
+import { rankToKorean } from 'util/englishToKorean';
 
 export const Card = styled.div`
   width: 280px;
@@ -119,6 +120,8 @@ interface ReviewCardProps {
   userType: string;
 }
 
+const koreanRank = rankToKorean(UserType);
+
 function ReviewCard({
   // reviewid,
   rating,
@@ -169,7 +172,7 @@ function ReviewCard({
           <Avatar>{userInitial}</Avatar>
           <UserDetails>
             <Nickname>{nickname}</Nickname>
-            {userType && <UserType>{userType}</UserType>}
+            {userType && <UserType>{koreanRank}</UserType>}
           </UserDetails>
         </UserInfo>
         <LikeButton
