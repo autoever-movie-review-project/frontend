@@ -1,3 +1,4 @@
+import { useAuth } from 'hooks/useAuth';
 import React from 'react';
 import styled from 'styled-components';
 import { theme } from 'styles/theme';
@@ -7,6 +8,7 @@ const Background = styled.div`
 `;
 
 const Layout = styled.div`
+  margin-top: 80px;
   display: flex;
 `;
 
@@ -24,6 +26,8 @@ const Profile = styled.div`
 const UserDetails = styled.div``;
 
 function MyPage() {
+  const { user } = useAuth();
+
   return (
     <Background>
       <Layout>

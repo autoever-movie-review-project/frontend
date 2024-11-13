@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 import { theme } from 'styles/theme';
-import LogOut from 'assets/log-out.svg';
+import LogOut from 'assets/log-out.svg?react';
 
 export const HeaderWrapper = styled.header`
   position: fixed;
@@ -118,7 +118,7 @@ export const Profile = styled.img`
 
 export const LogoutButton = styled(LogOut)`
   margin-left: 15px;
-  color: ${theme.colors.grayLight};
+  color: white;
   width: 15px;
   height: 15px;
   cursor: pointer;

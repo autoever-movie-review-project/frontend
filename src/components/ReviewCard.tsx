@@ -1,11 +1,11 @@
 import React from 'react';
 import { toast } from 'react-toastify';
 import { useAuth } from 'hooks/useAuth';
-import styled from 'styled-components';
-import Heart from 'assets/heart.svg';
-import StarImg from 'assets/star.svg';
-import StarHalfImg from 'assets/star-half.svg';
 import { theme } from 'styles/theme';
+import styled from 'styled-components';
+import Heart from 'assets/heart.svg?react';
+import StarImg from 'assets/star.svg?react';
+import StarHalfImg from 'assets/star-half.svg?react';
 
 export const Card = styled.div`
   width: 280px;
@@ -113,7 +113,7 @@ interface ReviewCardProps {
   rating: number;
   content: string;
   likesCount: number;
-  isLiked?: boolean;
+  isLiked: boolean;
   // profile: string;
   nickname: string;
   userType: string;
