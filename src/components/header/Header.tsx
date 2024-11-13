@@ -31,6 +31,7 @@ function Header() {
     try {
       await logout();
       toast.success('로그아웃했어요.');
+      navigate('/');
     } catch (error) {
       console.error('로그아웃 실패:', error);
       toast.error('서버와 통신하는데 실패했습니다.');
