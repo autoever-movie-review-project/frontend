@@ -1,3 +1,4 @@
+import ScrollToTop from 'components/common/ScrollToTop';
 import Header from 'components/header/Header';
 import { lazy, Suspense } from 'react';
 import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
@@ -13,6 +14,7 @@ function App() {
       {
         element: (
           <Suspense fallback={loadingComp}>
+            <ScrollToTop />
             <Header />
             <Outlet />
           </Suspense>

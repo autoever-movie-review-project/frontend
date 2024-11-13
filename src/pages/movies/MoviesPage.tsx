@@ -4,11 +4,14 @@ import axios from 'axios';
 import styled from 'styled-components';
 
 const Container = styled.div`
-  width: 100vm;
-  height: 100px;
+  width: 100%;
+  height: 100%;
   color: white;
   margin-top: 80px;
   background-color: black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const TextWrapper = styled.div`
@@ -17,19 +20,59 @@ const TextWrapper = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
+  margin-bottom: 50px;
 `;
 
 const Text = styled.h1`
   font-size: 40px;
+  font-weight: bold;
+`;
+
+const ContentsContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  width: 95%;
+  height: 100%;
+  padding: 20px;
+`;
+
+const CardWrapper = styled.div`
+  width: 10%;
+  height: 300px;
+  background-color: #333;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  display: flex;
+  align-items: center;
+  gap: 20px;
+`;
+
+const CardImage = styled.img`
+  width: 100%;
+  height: 240px;
+  object-fit: cover;
+`;
+
+const CardTitle = styled.h2`
+  font-size: 18px;
+  color: white;
+  text-align: center;
+  padding: 10px;
 `;
 
 const initData = {
   movieId: 0,
   mainImg: '',
   backdropImg: '',
-  title: '',
-  genre: '',
-  director: '',
+  title: '제목',
+  genre: '장르',
+  director: '디렉터',
   releaseDate: '',
   rating: 0,
 };
@@ -41,33 +84,43 @@ const MoviesPage: React.FC = () => {
 
   useEffect(() => {
     if (searchData) {
-      // axios 요청으로 검색어 전달
       const fetchMovies = async () => {
         try {
-          console.log('gd');
-
-          const response = await axios.get('/api/movie/search', {
+          const response = await axios.get('http://localhost:5173/api/movie/search', {
             params: { title: searchData, genre: searchData },
           });
           setMovies(response.data);
+          console.log(response.data);
         } catch (error) {
           setMovies([]);
-          console.error('영화 데이터를 불러오지 못했습니다.', error);
+          console.log('영화 데이터를 불러오지 못했습니다.', error);
         }
       };
-      fetchMovies();
+      // fetchMovies();
     }
   }, [searchData]);
 
   return (
     <Container>
-      <TextWrapper>
-        {searchData !== '' ? (
-          <Text>"{searchData}"에 대한 검색 결과 입니다</Text>
-        ) : (
+      {searchData ? (
+        <>
+          <TextWrapper>
+            <Text>"{searchData}" 에 대한 검색 결과 입니다</Text>
+          </TextWrapper>
+          <ContentsContainer>
+            {movies.map((movie) => (
+              <CardWrapper key={movie.movieId}>
+                <CardImage src={movie.mainImg} alt={movie.title} />
+                <CardTitle>{movie.title}</CardTitle>
+              </CardWrapper>
+            ))}
+          </ContentsContainer>
+        </>
+      ) : (
+        <TextWrapper>
           <Text>검색어를 입력 해 주세요 !!</Text>
-        )}
-      </TextWrapper>
+        </TextWrapper>
+      )}
     </Container>
   );
 };
