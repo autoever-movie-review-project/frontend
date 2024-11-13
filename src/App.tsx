@@ -1,3 +1,4 @@
+import ScrollToTop from 'components/common/ScrollToTop';
 import LoginPage from 'pages/auth/LoginPage';
 import RegisterPage from 'pages/auth/RegisterPage';
 import MyPage from 'pages/mypage/MyPage';
@@ -7,6 +8,8 @@ import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
 
 const loadingComp = <div style={{ height: '1000px', backgroundColor: 'red' } as React.CSSProperties}>로딩중</div>;
 const Main = lazy(() => import('pages/main/MainPage'));
+const Detail = lazy(() => import('pages/detail/DetailPage'));
+const Movies = lazy(() => import('pages/movies/MoviesPage'));
 
 function App() {
   const router = createBrowserRouter(
@@ -14,6 +17,7 @@ function App() {
       {
         element: (
           <Suspense fallback={loadingComp}>
+            <ScrollToTop />
             <Header />
             <Outlet />
           </Suspense>
@@ -38,6 +42,22 @@ function App() {
           {
             path: '/mypage',
             element: <MyPage />,
+          },
+          {
+            path: '/detail/:postId',
+            element: (
+              <>
+                <Detail />
+              </>
+            ),
+          },
+          {
+            path: '/movies',
+            element: (
+              <>
+                <Movies />
+              </>
+            ),
           },
         ],
       },

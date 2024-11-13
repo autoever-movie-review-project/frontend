@@ -6,6 +6,7 @@ import { useAuth } from 'hooks/useAuth';
 import profile from 'assets/default-profile.png';
 import { toast } from 'react-toastify';
 import Profile from 'components/Profile';
+import SearchBar from 'components/searchbar/SearchBar';
 
 function Header() {
   const navigate = useNavigate();
@@ -56,16 +57,19 @@ function Header() {
               Game
             </S.MenuButton>
           </S.MenuContainer>
-          {!user?.data && <S.MenuLogin onClick={() => handleLoginButtonClick()}>로그인</S.MenuLogin>}
-          {user?.data && (
-            <S.ProfileWrapper>
-              <S.UserProfile onClick={handleUserProfileClick}>
-                <Profile width="45px" height="45px" rank={user?.data.rankName} src={profile}></Profile>
-                {user?.data.nickname}
-              </S.UserProfile>
-              <S.LogoutButton onClick={handleLogoutButtonClick}></S.LogoutButton>
-            </S.ProfileWrapper>
-          )}
+          <S.RightMenu>
+            <SearchBar />
+            {!user?.data && <S.MenuLogin onClick={() => handleLoginButtonClick()}>로그인</S.MenuLogin>}
+            {user?.data && (
+              <S.ProfileWrapper>
+                <S.UserProfile onClick={handleUserProfileClick}>
+                  <Profile width="45px" height="45px" rank={user?.data.rankName} src={profile}></Profile>
+                  {user?.data.nickname}
+                </S.UserProfile>
+                <S.LogoutButton onClick={handleLogoutButtonClick}></S.LogoutButton>
+              </S.ProfileWrapper>
+            )}
+          </S.RightMenu>
         </S.MenuWrapper>
       </S.HeaderContainer>
     </S.HeaderWrapper>
