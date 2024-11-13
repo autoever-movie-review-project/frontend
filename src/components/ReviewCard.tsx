@@ -12,7 +12,7 @@ export const Card = styled.div`
   height: 330px;
   background-color: ${theme.colors.grayDark};
   border-radius: ${theme.borderRadius.xs};
-  padding: 15px;
+  padding: 12px;
   color: white;
 `;
 
@@ -23,11 +23,13 @@ export const StarsContainer = styled.div`
 `;
 
 export const Star = styled(StarImg)<{ $filled?: boolean }>`
+  width: 20px;
   color: ${theme.colors.grayDark};
   fill: ${(props) => (props.$filled ? `${theme.colors.primaryDark}` : '#111')};
 `;
 
 export const HalfStar = styled(StarHalfImg)<{ $filled?: boolean }>`
+  width: 20px;
   color: ${theme.colors.grayDark};
   fill: ${(props) => (props.$filled ? `${theme.colors.primaryDark}` : '#111')};
 `;
@@ -76,7 +78,8 @@ export const Nickname = styled.p`
 `;
 
 export const UserType = styled.span`
-  width: 37px;
+  display: flex;
+  width: auto;
   font-size: 0.875rem;
   background-color: ${theme.colors.diamond};
   padding: 0.125rem 0.5rem;
@@ -109,12 +112,12 @@ export const LikeCount = styled.span`
 `;
 
 interface ReviewCardProps {
-  reviewid: number;
+  reviewid?: number;
   rating: number;
   content: string;
   likesCount: number;
   isLiked: boolean;
-  // profile: string;
+  profile: string;
   nickname: string;
   userType: string;
 }
@@ -129,7 +132,7 @@ function ReviewCard({
   nickname = 'User',
   userType,
 }: ReviewCardProps) {
-  const { isAuthenticated } = useAuth();
+  const { user } = useAuth();
   const [isLiked, setIsLiked] = React.useState(initialIsLiked);
   const [likeCount, setLikeCount] = React.useState(likesCount);
 
@@ -151,7 +154,7 @@ function ReviewCard({
   };
 
   const handleLikeClick = () => {
-    if (!isAuthenticated) {
+    if (!user) {
       toast.warn('로그인이 필요한 서비스입니다.');
       return;
     }
@@ -172,11 +175,7 @@ function ReviewCard({
             {userType && <UserType>{userType}</UserType>}
           </UserDetails>
         </UserInfo>
-        <LikeButton
-          onClick={handleLikeClick}
-          disabled={!isAuthenticated}
-          aria-label={isLiked ? '좋아요 취소' : '좋아요'}
-        >
+        <LikeButton onClick={handleLikeClick} disabled={!user} aria-label={isLiked ? '좋아요 취소' : '좋아요'}>
           <HeartIcon $isLiked={isLiked} />
           <LikeCount>{likeCount}</LikeCount>
         </LikeButton>
