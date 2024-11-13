@@ -6,6 +6,7 @@ export const HeaderWrapper = styled.header`
   position: fixed;
   top: 0;
   left: 0;
+
   width: 100%;
   height: 80px;
   z-index: 9999;
@@ -14,8 +15,10 @@ export const HeaderWrapper = styled.header`
 
 export const HeaderContainer = styled.div`
   width: 100%;
+  height: 80px;
   display: flex;
   //justify-content: space-between;
+  align-items: center;
   padding: 0 60px;
   background-color: black;
   gap: 30px;
@@ -46,7 +49,7 @@ export const MenuButton = styled.button<{ $active: boolean }>`
   display: flex;
   border: none;
   background: none;
-  padding: 4px 1rem;
+  padding: 6px 12px;
   justify-content: center;
   align-items: center;
   cursor: pointer;

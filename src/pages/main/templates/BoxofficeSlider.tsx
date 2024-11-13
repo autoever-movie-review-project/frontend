@@ -114,7 +114,7 @@ function BoxofficeSlider({ title, images }: MovieSwiperSlideProps) {
           onSwiper={handleSwiper}
         >
           {images.map((image, index) => (
-            <SwiperSlide key={index}>
+            <SwiperSlide key={index} style={{ minWidth: '270px' }}>
               <SlideContent>
                 <Ranking>{index + 1}</Ranking>
                 <Image src={image} alt={`${index}번째 영화`} onClick={() => handleCardClick(index + 1)} />

@@ -1,28 +1,36 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import reload from 'assets/reload.svg';
 
 import testimg from 'assets/temp.svg';
 
-const Container = styled.div`
+const Layout = styled.div`
   width: 100vm;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  background-color: black;
+`;
+
+const Container = styled.div`
+  width: 1100px;
   height: 100%;
   background-color: black;
   margin-top: 60px;
 `;
 
 const Wrapper = styled.div`
-  width: 1100px;
-  height: 100%;
+  width: 100%;
   display: flex;
   justify-content: space-between;
+  height: 100%;
+  margin-bottom: 20px;
 `;
 
 const TitleWrapper = styled.div`
   width: 600px;
   height: 50px;
   padding-top: 60px;
-  margin-left: 200px;
   margin-bottom: 50px;
 `;
 
@@ -57,7 +65,11 @@ const ResetButton = styled.div`
   }
 `;
 
-const PreferencesMovieWrapper = styled.div`
+const PreferencesMovieContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
   width: 1100px;
   height: 100%;
   margin: 0 auto;
@@ -69,29 +81,48 @@ const PreferencesMovie = styled.img`
 `;
 
 function PreferencesPage() {
-  const [movieList, setMovieList] = useState([]);
+  const [movieList, setMovieList] = useState();
+  const [selectedMovieList, setSelectedMovieList] = useState();
+
+  useEffect(() => {
+    //랜덤영화 9개 get axios
+  }, []);
+
+  useEffect(() => {
+    //선택된영화 상태 setSelectedMovieList 관리
+  }, []);
+
+  const handleResetButtonClick = () => {
+    //랜덤영화리셋
+  };
+
+  const handleCheckImage = () => {
+    // boolean css관리, useEffect
+  };
 
   return (
-    <Container>
-      <Wrapper>
-        <TitleWrapper>
-          <Title>선호하는 영화 3가지를 선택해 주세요.</Title>
-          <SubTitle>관련도 높은 영화를 추천해드릴 예정이에요!</SubTitle>
-        </TitleWrapper>
-        <ResetButton>
-          <p>새로고침</p>
-          <img src={reload} />
-        </ResetButton>
-      </Wrapper>
-      <PreferencesMovieWrapper>
-        <PreferencesMovie src={testimg} />
-        <PreferencesMovie src={testimg} />
-        <PreferencesMovie src={testimg} />
-        <PreferencesMovie src={testimg} />
-        <PreferencesMovie src={testimg} />
-        <PreferencesMovie src={testimg} />
-      </PreferencesMovieWrapper>
-    </Container>
+    <Layout>
+      <Container>
+        <Wrapper>
+          <TitleWrapper>
+            <Title>선호하는 영화 3가지를 선택해 주세요.</Title>
+            <SubTitle>관련도 높은 영화를 추천해드릴 예정이에요!</SubTitle>
+          </TitleWrapper>
+          <ResetButton onClick={() => handleResetButtonClick()}>
+            <p>새로고침</p>
+            <img src={reload} />
+          </ResetButton>
+        </Wrapper>
+        <PreferencesMovieContainer>
+          <PreferencesMovie src={testimg} onClick={() => handleCheckImage()} />
+          <PreferencesMovie src={testimg} />
+          <PreferencesMovie src={testimg} />
+          <PreferencesMovie src={testimg} />
+          <PreferencesMovie src={testimg} />
+          <PreferencesMovie src={testimg} />
+        </PreferencesMovieContainer>
+      </Container>
+    </Layout>
   );
 }
 
