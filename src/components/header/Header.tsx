@@ -6,7 +6,6 @@ import { useAuth } from 'hooks/useAuth';
 import { toast } from 'react-toastify';
 import Profile from 'components/Profile';
 import DefaultProfile from 'assets/default-profile.png';
-import LogOut from 'assets/log-out.svg';
 import SearchBar from 'components/searchbar/SearchBar';
 
 function Header() {

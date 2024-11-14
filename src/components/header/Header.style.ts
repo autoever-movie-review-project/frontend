@@ -9,22 +9,21 @@ export const HeaderWrapper = styled.header`
   width: 100%;
   height: 80px;
   z-index: 9999;
+  background-color: black;
 `;
 
 export const HeaderContainer = styled.div`
-  width: 100%;
   display: flex;
-  //justify-content: space-between;
-  padding: 0 60px;
-  background-color: black;
+  width: 100%;
+  padding: 0 75px;
   gap: 30px;
 `;
 
 export const HeaderLogo = styled.img`
   display: flex;
   align-items: center;
-  width: 40px;
-  height: 40px;
+  width: 55px;
+  height: 55px;
   cursor: pointer;
   margin: 10px;
 `;
