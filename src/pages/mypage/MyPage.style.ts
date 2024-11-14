@@ -1,10 +1,13 @@
 import styled from 'styled-components';
 import { theme } from 'styles/theme';
 import Pen from 'assets/pen.svg?react';
-
-interface MenuBarItemProps {
-  $active: boolean;
-}
+import Question from 'assets/question.svg?react';
+import BronzeIcon from 'assets/bronze.png';
+import SilverIcon from 'assets/silver.png';
+import GoldIcon from 'assets/gold.png';
+import DiamondIcon from 'assets/diamond.png';
+import MasterIcon from 'assets/master.png';
+import { IModalProps, Modal } from 'components/Modal/Modal';
 
 export const Background = styled.div`
   display: flex;
@@ -54,18 +57,71 @@ export const UserDatails = styled.div`
 
 export const RankSection = styled.div`
   display: flex;
+  align-items: center;
+
   gap: 5px;
 `;
 
-export const RankIcon = styled.div``;
+const rankImages = {
+  'bronze.png': BronzeIcon,
+  'silver.png': SilverIcon,
+  'gold.png': GoldIcon,
+  'diamond.png': DiamondIcon,
+  'master.png': MasterIcon,
+};
 
-export const UserType = styled.span`
+type RankImageType = keyof typeof rankImages;
+
+interface RankIconProps {
+  rankImg: string;
+  alt?: string;
+}
+
+export const RankIcon = styled.img.attrs<RankIconProps>(({ rankImg, alt }) => ({
+  src: rankImages[rankImg as RankImageType] || rankImages['bronze.png'],
+  alt: alt || '등급 아이콘',
+}))`
+  width: 24px;
+  height: 24px;
+
+  @media screen and (max-width: 768px) {
+    width: 20px;
+    height: 20px;
+  }
+
+  @media screen and (max-width: 480px) {
+    width: 16px;
+    height: 16px;
+  }
+`;
+
+interface RankProps {
+  $rank: string;
+}
+
+export const Rank = styled.span<RankProps>`
   display: flex;
   width: auto;
   font-size: 0.875rem;
-  background-color: ${theme.colors.bronze};
   padding: 0.125rem 0.5rem;
   border-radius: 10px;
+
+  ${({ $rank }) => {
+    switch ($rank) {
+      case 'Master':
+        return `background-color: ${theme.colors.master}`;
+      case 'Diamond':
+        return `background-color: ${theme.colors.diamond};`;
+      case 'Gold':
+        return `background-color: ${theme.colors.gold};`;
+      case 'Silver':
+        return `background-color: ${theme.colors.silver};`;
+      case 'Bronze':
+        return `background-color: ${theme.colors.bronze};`;
+      default:
+        return `background-color: ${theme.colors.bronze};`;
+    }
+  }}
 `;
 
 export const Nickname = styled.div`
@@ -122,6 +178,10 @@ export const MenuBar = styled.ul`
     margin-bottom: 30px;
   }
 `;
+
+interface MenuBarItemProps {
+  $active: boolean;
+}
 
 export const MenuBarItem = styled.li<MenuBarItemProps>`
   width: 33.33%;
@@ -195,3 +255,24 @@ export const MyReviewSection = styled.div`
   flex-wrap: wrap;
   gap: 10px;
 `;
+
+export const QuestionIcon = styled(Question)`
+  cursor: pointer;
+`;
+
+export const RankInfoSection = styled.div`
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 55px;
+`;
+
+export const RankInfo = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+`;
+
+export const RankInfoModal = styled(Modal)<IModalProps>``;

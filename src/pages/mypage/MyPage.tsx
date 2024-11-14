@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import { useAuth } from 'hooks/useAuth';
+import { useModal } from 'hooks/useModal';
 import Profile from 'components/Profile';
 import DefaultProfile from 'assets/default-profile.png';
 import * as S from './MyPage.style';
 import ReviewCard from 'components/ReviewCard';
-import { useNavigate } from 'react-router-dom';
 
 function MyPage() {
   const { user } = useAuth();
-  const navigate = useNavigate();
+  const { openModal, closeModal, isModalOpen } = useModal();
   const [activeMenu, setActiveMenu] = useState<'reviews' | 'movies' | 'likes'>('reviews');
+  const rankIconSrc = new URL(`../assets/${user?.data.rankImg}`, import.meta.url).href;
 
   const handleMenuClick = (menu: 'reviews' | 'movies' | 'likes') => {
     setActiveMenu(menu);
@@ -23,8 +24,9 @@ function MyPage() {
           <Profile width="110px" height="110px" src={DefaultProfile} rank={user?.data.rankName} />
           <S.UserDatails>
             <S.RankSection>
-              <S.RankIcon>등급 아이콘</S.RankIcon>
-              <S.UserType>{user?.data.rankName}</S.UserType>
+              <S.RankIcon rankImg={rankIconSrc}></S.RankIcon>
+              <S.Rank rank={user?.data.rankName}>{user?.data.rankName}</S.Rank>
+              <S.QuestionIcon onClick={openModal} />
             </S.RankSection>
             <S.Nickname>{user?.data.nickname}</S.Nickname>
             <S.Email>{user?.data.email}</S.Email>
@@ -61,21 +63,21 @@ function MyPage() {
                 content="그럭저럭 볼만해요."
                 nickname={user?.data.nickname}
                 rating={3.5}
-                userType={user?.data.rankName}
+                rank={user?.data.rankName}
                 profile={DefaultProfile}
               />
               <ReviewCard
                 content="인생 영화입니다."
                 nickname={user?.data.nickname}
                 rating={5}
-                userType={user?.data.rankName}
+                rank={user?.data.rankName}
                 profile={DefaultProfile}
               />
               <ReviewCard
                 content="퉤"
                 nickname={user?.data.nickname}
                 rating={0.5}
-                userType={user?.data.rankName}
+                rank={user?.data.rankName}
                 profile={DefaultProfile}
               />
             </S.MyReviewSection>
@@ -100,21 +102,21 @@ function MyPage() {
                   content="그럭저럭 볼만해요."
                   nickname={'빈빈'}
                   rating={3.5}
-                  userType={'Silver'}
+                  rank={'Silver'}
                   profile={DefaultProfile}
                 />
                 <ReviewCard
                   content="인생 영화입니다."
                   nickname={'한성용'}
                   rating={5}
-                  userType={'Gold'}
+                  rank={'Gold'}
                   profile={DefaultProfile}
                 />
                 <ReviewCard
-                  content="퉤"
+                  content="별로인 거 같아요."
                   nickname={'대상연'}
                   rating={0.5}
-                  userType={'Master'}
+                  rank={'Master'}
                   profile={DefaultProfile}
                 />
               </S.MyReviewSection>
@@ -122,6 +124,32 @@ function MyPage() {
           </>
         )}
       </S.Layout>
+      {isModalOpen && (
+        <S.RankInfoModal closeModal={closeModal} modalTitle="등급 소개" width="300px" height="350px">
+          <S.RankInfoSection>
+            <S.RankInfo>
+              <S.RankIcon rankImg="bronze.png" />
+              <S.Rank $rank="Bronze">브론즈</S.Rank>0 포인트 이상
+            </S.RankInfo>
+            <S.RankInfo>
+              <S.RankIcon rankImg="silver.png" />
+              <S.Rank $rank="Silver">실버</S.Rank>1000 포인트 이상
+            </S.RankInfo>
+            <S.RankInfo>
+              <S.RankIcon rankImg="gold.png" />
+              <S.Rank $rank="Gold">골드</S.Rank>2000 포인트 이상
+            </S.RankInfo>
+            <S.RankInfo>
+              <S.RankIcon rankImg="diamond.png" />
+              <S.Rank $rank="Diamond">다이아</S.Rank>4000 포인트 이상
+            </S.RankInfo>
+            <S.RankInfo>
+              <S.RankIcon rankImg="master.png" />
+              <S.Rank $rank="Master">마스터</S.Rank>7000 포인트 이상
+            </S.RankInfo>
+          </S.RankInfoSection>
+        </S.RankInfoModal>
+      )}
     </S.Background>
   );
 }
