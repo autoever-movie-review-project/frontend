@@ -8,8 +8,8 @@ import StarImg from 'assets/star.svg?react';
 import StarHalfImg from 'assets/star-half.svg?react';
 import Profile from './Profile';
 
-interface UserTypeProps {
-  $userType: string;
+interface RankProps {
+  $rank: string;
 }
 
 export const Card = styled.div`
@@ -75,15 +75,15 @@ export const Nickname = styled.p`
   font-weight: ${theme.fontWeight.regular};
 `;
 
-export const UserType = styled.span<UserTypeProps>`
+export const Rank = styled.span<RankProps>`
   display: flex;
   width: auto;
   font-size: 0.875rem;
   padding: 0.125rem 0.5rem;
   border-radius: 10px;
 
-  ${({ $userType }) => {
-    switch ($userType.toLowerCase()) {
+  ${({ $rank }) => {
+    switch ($rank.toLowerCase()) {
       case 'master':
         return `background-color: ${theme.colors.master}`;
       case 'diamond':
@@ -99,6 +99,7 @@ export const UserType = styled.span<UserTypeProps>`
     }
   }}
 `;
+
 export const LikeButton = styled.button`
   display: flex;
   align-items: center;
@@ -126,13 +127,13 @@ export const LikeCount = styled.span`
 
 interface ReviewCardProps {
   reviewid?: number;
-  rating: number;
-  content: string;
-  likesCount: number;
-  isLiked: boolean;
-  profile: string;
-  nickname: string;
-  userType: string;
+  rating: number | undefined;
+  content: string | undefined;
+  likesCount: number | undefined;
+  isLiked: boolean | undefined;
+  profile: string | undefined;
+  nickname: string | undefined;
+  rank: string | undefined;
 }
 
 function ReviewCard({
@@ -142,8 +143,8 @@ function ReviewCard({
   likesCount = 0,
   isLiked: initialIsLiked = false,
   profile,
-  nickname = 'User',
-  userType,
+  nickname = '사용자',
+  rank,
 }: ReviewCardProps) {
   const { user } = useAuth();
   const [isLiked, setIsLiked] = React.useState(initialIsLiked);
@@ -180,10 +181,10 @@ function ReviewCard({
       <ReviewText>{content}</ReviewText>
       <UserSection>
         <UserInfo>
-          <Profile width="2.5rem" height="2.5rem" rank={userType} src={profile}></Profile>
+          <Profile width="2.5rem" height="2.5rem" rank={rank} src={profile}></Profile>
           <UserDetails>
             <Nickname>{nickname}</Nickname>
-            {userType && <UserType $userType={userType}>{userType}</UserType>}
+            {rank && <Rank $rank={rank}>{rank}</Rank>}
           </UserDetails>
         </UserInfo>
         <LikeButton onClick={handleLikeClick} disabled={!user} aria-label={isLiked ? '좋아요 취소' : '좋아요'}>
