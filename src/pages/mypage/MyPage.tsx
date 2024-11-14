@@ -4,13 +4,12 @@ import { useModal } from 'hooks/useModal';
 import Profile from 'components/Profile';
 import DefaultProfile from 'assets/default-profile.png';
 import * as S from './MyPage.style';
-import ReviewCard from 'components/ReviewCard';
+import ReviewCard from 'components/ReviewCrad/ReviewCard';
 
 function MyPage() {
   const { user } = useAuth();
   const { openModal, closeModal, isModalOpen } = useModal();
   const [activeMenu, setActiveMenu] = useState<'reviews' | 'movies' | 'likes'>('reviews');
-  const rankIconSrc = new URL(`../assets/${user?.data.rankImg}`, import.meta.url).href;
 
   const handleMenuClick = (menu: 'reviews' | 'movies' | 'likes') => {
     setActiveMenu(menu);
@@ -24,8 +23,8 @@ function MyPage() {
           <Profile width="110px" height="110px" src={DefaultProfile} rank={user?.data.rankName} />
           <S.UserDatails>
             <S.RankSection>
-              <S.RankIcon rankImg={rankIconSrc}></S.RankIcon>
-              <S.Rank rank={user?.data.rankName}>{user?.data.rankName}</S.Rank>
+              <S.RankIcon rankImg={user?.data.rankImg}></S.RankIcon>
+              <S.Rank $rank={user?.data.rankName}>{user?.data.rankName}</S.Rank>
               <S.QuestionIcon onClick={openModal} />
             </S.RankSection>
             <S.Nickname>{user?.data.nickname}</S.Nickname>
@@ -129,23 +128,23 @@ function MyPage() {
           <S.RankInfoSection>
             <S.RankInfo>
               <S.RankIcon rankImg="bronze.png" />
-              <S.Rank $rank="Bronze">브론즈</S.Rank>0 포인트 이상
+              <S.Rank $rank="Bronze">Bronze</S.Rank>0 포인트 이상
             </S.RankInfo>
             <S.RankInfo>
               <S.RankIcon rankImg="silver.png" />
-              <S.Rank $rank="Silver">실버</S.Rank>1000 포인트 이상
+              <S.Rank $rank="Silver">Silver</S.Rank>1000 포인트 이상
             </S.RankInfo>
             <S.RankInfo>
               <S.RankIcon rankImg="gold.png" />
-              <S.Rank $rank="Gold">골드</S.Rank>2000 포인트 이상
+              <S.Rank $rank="Gold">Gold</S.Rank>2000 포인트 이상
             </S.RankInfo>
             <S.RankInfo>
               <S.RankIcon rankImg="diamond.png" />
-              <S.Rank $rank="Diamond">다이아</S.Rank>4000 포인트 이상
+              <S.Rank $rank="Diamond">Diamond</S.Rank>4000 포인트 이상
             </S.RankInfo>
             <S.RankInfo>
               <S.RankIcon rankImg="master.png" />
-              <S.Rank $rank="Master">마스터</S.Rank>7000 포인트 이상
+              <S.Rank $rank="Master">Master</S.Rank>7000 포인트 이상
             </S.RankInfo>
           </S.RankInfoSection>
         </S.RankInfoModal>

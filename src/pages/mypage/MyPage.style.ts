@@ -73,7 +73,7 @@ const rankImages = {
 type RankImageType = keyof typeof rankImages;
 
 interface RankIconProps {
-  rankImg: string;
+  rankImg?: string;
   alt?: string;
 }
 
@@ -96,7 +96,7 @@ export const RankIcon = styled.img.attrs<RankIconProps>(({ rankImg, alt }) => ({
 `;
 
 interface RankProps {
-  $rank: string;
+  $rank?: string;
 }
 
 export const Rank = styled.span<RankProps>`
