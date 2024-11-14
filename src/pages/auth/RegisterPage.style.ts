@@ -22,7 +22,7 @@ export const Layout = styled.div`
   h1 {
     font-size: ${theme.fontSize.h3};
     font-weight: ${theme.fontWeight.header};
-    padding-bottom: 30px;
+    padding-bottom: 60px;
   }
 
   form {
@@ -38,7 +38,7 @@ export const Layout = styled.div`
 `;
 
 export const StyledInput = styled(Input)`
-  margin-bottom: 10px;
+  margin-bottom: 14px;
 
   p {
     padding-top: 20px;
@@ -53,7 +53,7 @@ export const VerificationSection = styled.div`
 
 export const VerificationCodeSendButton = styled(Button)`
   position: relative;
-  right: 100px;
+  right: 90px;
   top: 22px;
 ` as React.ForwardRefExoticComponent<ButtonProps & React.RefAttributes<HTMLInputElement>>;
 

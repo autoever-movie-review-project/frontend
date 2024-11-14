@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import Profile from 'components/Profile';
 import DefaultProfile from 'assets/default-profile.png';
 import SearchBar from 'components/searchbar/SearchBar';
+import Button from 'components/Button';
 
 function Header() {
   const navigate = useNavigate();
@@ -60,7 +61,9 @@ function Header() {
           </S.MenuContainer>
           <S.RightMenu>
             <SearchBar />
-            {!user?.data && <S.MenuLogin onClick={() => handleLoginButtonClick()}>로그인</S.MenuLogin>}
+            {!user?.data && (
+              <Button text="로그인" width="100px" fontSize="20px" onClick={() => handleLoginButtonClick()}></Button>
+            )}
             {user?.data && (
               <>
                 <S.ProfileWrapper>

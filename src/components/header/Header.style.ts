@@ -22,8 +22,8 @@ export const HeaderContainer = styled.div`
 export const HeaderLogo = styled.img`
   display: flex;
   align-items: center;
-  width: 55px;
-  height: 55px;
+  width: 40px;
+  height: 40px;
   cursor: pointer;
   margin: 10px;
 `;
@@ -83,7 +83,7 @@ export const RightMenu = styled.div`
   display: flex;
   align-items: center;
   justify-self: end;
-  gap: 30px;
+  gap: 20px;
 `;
 
 export const MenuLogin = styled.button`
@@ -109,7 +109,8 @@ export const UserProfile = styled.div`
   align-items: center;
   gap: 15px;
   color: #fff;
-  font-size: ${theme.fontSize.lg};
+  font-size: ${theme.fontSize.md};
+  font-weight: ${theme.fontWeight.semibold};
 `;
 
 export const Profile = styled.img`
@@ -123,7 +124,7 @@ export const Profile = styled.img`
 `;
 
 export const LogoutButton = styled(LogOut)`
-  color: white;
+  color: ${theme.colors.neutral500};
   width: 15px;
   height: 15px;
   cursor: pointer;

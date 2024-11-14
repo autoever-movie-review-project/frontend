@@ -67,6 +67,7 @@ function LoginPage() {
             <S.LoginInput
               type="email"
               title="이메일"
+              titleSize="13px"
               defaultValue={'jwy97@naver.com'}
               autoComplete="email"
               {...register('email', {
@@ -81,6 +82,7 @@ function LoginPage() {
             <S.LoginInput
               type="password"
               title="비밀번호"
+              titleSize="13px"
               defaultValue={'aaa1234@'}
               autoComplete="current-password"
               {...register('password', {
@@ -97,17 +99,24 @@ function LoginPage() {
             />
             {errors.password && <S.ErrorMessage>{errors.password.message}</S.ErrorMessage>}
             <S.ButtonSection>
-              <Button text={isLoading ? '로그인 중...' : '로그인'} width="300px" onClick={handleSubmit(onSubmit)} />
-              <S.KakaoButton
-                src={KakaoImg}
-                onClick={handleKakaoLogin}
-                alt="카카오 로그인"
-                aria-label="카카오 계정으로 로그인"
+              <Button
+                text={isLoading ? '로그인 중...' : '로그인'}
+                width="300px"
+                fontSize="16px"
+                onClick={handleSubmit(onSubmit)}
               />
+              <S.ImageWrapper>
+                <S.KakaoButton
+                  src={KakaoImg}
+                  onClick={handleKakaoLogin}
+                  alt="카카오 로그인"
+                  aria-label="카카오 계정으로 로그인"
+                />
+              </S.ImageWrapper>
             </S.ButtonSection>
           </form>
           <S.UnableToLoginSection>
-            <S.StyledLink to="/register">회원가입하기</S.StyledLink>
+            <S.StyledLink to="/register">회원가입</S.StyledLink>
             <span> | </span>
             <p>비밀번호 재설정</p>
           </S.UnableToLoginSection>

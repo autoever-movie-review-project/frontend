@@ -22,7 +22,7 @@ function RegisterPage() {
   const { mutate: register, isPending } = useMutation({
     mutationFn: authApi.register,
     onSuccess: () => {
-      toast('🎉 환영합니다!');
+      toast('🎉환영합니다!');
       navigate('/login');
     },
     onError: (error: AxiosError<RegisterError>) => {
@@ -63,7 +63,7 @@ function RegisterPage() {
       try {
         await authApi.verifyCode({ email, code });
         setVerified(!isNotVerified);
-        toast.success('이메일 인증이 완료되었습니다.');
+        toast.success('이메일 인증이 완료되었어요.');
       } catch (error) {
         if (error instanceof AxiosError) {
           toast.error(error.response?.data?.msg || '인증번호 확인 중 오류가 발생했어요.');
@@ -125,7 +125,7 @@ function RegisterPage() {
         </L.LoadingOverlay>
       )}
       <S.Layout>
-        <h1>환영해요! 회원가입을 위한 정보를 입력해주세요.</h1>
+        <h1>회원가입을 위한 정보를 입력해주세요.</h1>
         <form onSubmit={handleSubmit(onSubmit)}>
           <S.VerificationSection>
             <S.StyledInput
@@ -140,8 +140,8 @@ function RegisterPage() {
             />
             <S.VerificationCodeSendButton
               text="인증번호 발송"
-              width="100px"
-              fontSize="15px"
+              width="90px"
+              fontSize="14px"
               onClick={onClickSendCodeButton}
             />
           </S.VerificationSection>
@@ -157,7 +157,7 @@ function RegisterPage() {
                 },
               })}
             />
-            {isNotVerified && <S.VerificationButton text="인증" width="50px" fontSize="17px" onClick={onCodeSubmit} />}
+            {isNotVerified && <S.VerificationButton text="인증" width="50px" fontSize="16px" onClick={onCodeSubmit} />}
           </S.VerificationSection>
           {errors.code && <S.ErrorMessage>{errors.code.message}</S.ErrorMessage>}
           <S.StyledInput
@@ -198,7 +198,7 @@ function RegisterPage() {
           />
           {errors.nickname && <S.ErrorMessage>{errors.nickname.message}</S.ErrorMessage>}
         </form>
-        <Button text="회원가입" width="300px" onClick={handleSubmit(onSubmit)} />
+        <Button text="회원가입" width="300px" fontSize="20px" onClick={handleSubmit(onSubmit)} />
       </S.Layout>
     </S.Background>
   );
