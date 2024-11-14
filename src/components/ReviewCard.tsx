@@ -8,6 +8,7 @@ import StarImg from 'assets/star.svg?react';
 import StarHalfImg from 'assets/star-half.svg?react';
 import Profile from './Profile';
 import { rankToKorean } from 'util/englishToKorean';
+import DefaultProfile from 'assets/default-profile.png';
 
 interface RankProps {
   $rank: string;
@@ -134,10 +135,8 @@ interface ReviewCardProps {
   isLiked: boolean | undefined;
   profile: string | undefined;
   nickname: string | undefined;
-  rank: string | undefined;
+  rank: 'Master' | 'Diamond' | 'Gold' | 'Silver' | 'Bronze';
 }
-
-const koreanRank = rankToKorean(Rank);
 
 function ReviewCard({
   // reviewid,
@@ -153,13 +152,13 @@ function ReviewCard({
   const [isLiked, setIsLiked] = React.useState(initialIsLiked);
   const [likeCount, setLikeCount] = React.useState(likesCount);
 
-  const renderStars = (rating: number) => {
+  const renderStars = (rating: number | undefined) => {
     const stars = [];
-    const fullStars = Math.floor(rating);
-    const hasHalfStar = rating % 1 >= 0.5;
+    const fullStars = typeof rating === 'number' ? Math.floor(rating) : null;
+    const hasHalfStar = typeof rating === 'number' ? rating % 1 >= 0.5 : null;
 
     for (let i = 0; i < 5; i++) {
-      if (i < fullStars) {
+      if (fullStars && i < fullStars) {
         stars.push(<Star key={i} $filled></Star>);
       } else if (i === fullStars && hasHalfStar) {
         stars.push(<HalfStar key={i} $filled></HalfStar>);
@@ -184,10 +183,10 @@ function ReviewCard({
       <ReviewText>{content}</ReviewText>
       <UserSection>
         <UserInfo>
-          <Profile width="2.5rem" height="2.5rem" rank={rank} src={profile}></Profile>
+          <Profile width="2.5rem" height="2.5rem" rank={rank} src={DefaultProfile}></Profile>
           <UserDetails>
             <Nickname>{nickname}</Nickname>
-            {rank && <Rank $rank={rank}>{koreanRank}</Rank>}
+            {rank && <Rank $rank={rank}>{rank}</Rank>}
           </UserDetails>
         </UserInfo>
         <LikeButton onClick={handleLikeClick} disabled={!user} aria-label={isLiked ? '좋아요 취소' : '좋아요'}>

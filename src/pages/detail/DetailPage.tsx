@@ -81,7 +81,9 @@ function DetailPage() {
           content={'임시내용'}
           likesCount={3}
           nickname={'임시닉'}
-          userType={'Silver'}
+          rank={'Silver'}
+          profile={'string'}
+          isLiked={true}
         />
         <ReviewCard
           reviewid={0}
@@ -89,31 +91,39 @@ function DetailPage() {
           content={'임시내용'}
           likesCount={3}
           nickname={'임시닉'}
-          userType={'Silver'}
-        />{' '}
+          rank={'Silver'}
+          profile={'string'}
+          isLiked={true}
+        />
         <ReviewCard
           reviewid={0}
           rating={3.5}
           content={'임시내용'}
           likesCount={3}
           nickname={'임시닉'}
-          userType={'Silver'}
-        />{' '}
+          rank={'Silver'}
+          profile={'string'}
+          isLiked={true}
+        />
         <ReviewCard
           reviewid={0}
           rating={3.5}
           content={'임시내용'}
           likesCount={3}
           nickname={'임시닉'}
-          userType={'Silver'}
-        />{' '}
+          rank={'Silver'}
+          profile={'string'}
+          isLiked={true}
+        />
         <ReviewCard
           reviewid={0}
           rating={3.5}
           content={'임시내용'}
           likesCount={3}
           nickname={'임시닉'}
-          userType={'Silver'}
+          rank={'Diamond'}
+          profile={'string'}
+          isLiked={false}
         />
       </ReviewWrapper>
     </Container>
