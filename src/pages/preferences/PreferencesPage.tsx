@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import reload from 'assets/reload.svg';
-
 import testimg from 'assets/temp.svg';
+import { theme } from 'styles/theme';
 
 const Layout = styled.div`
-  width: 100vm;
+  width: 100vw;
   height: 100%;
   display: flex;
   justify-content: center;
   background-color: black;
+  padding-bottom: 30px;
 `;
 
 const Container = styled.div`
@@ -57,7 +58,7 @@ const ResetButton = styled.div`
   p {
     color: #ececec;
     font-size: 20px;
-    font-family: 500px;
+    font-weight: 500;
   }
   img {
     width: 20px;
@@ -75,30 +76,57 @@ const PreferencesMovieContainer = styled.div`
   margin: 0 auto;
 `;
 
-const PreferencesMovie = styled.img`
+const PreferencesMovieWrapper = styled.div<{ $active: boolean }>`
   width: 300px;
   height: 420px;
+  cursor: pointer;
+  border: 6px solid transparent;
+  border-radius: 10px;
+  ${({ $active }) =>
+    $active &&
+    css`
+      border-color: ${theme.colors.primary};
+    `}
 `;
 
+const PreferencesMovie = styled.img`
+  width: 100%;
+  height: 100%;
+`;
+
+interface Movie {
+  movieId: number;
+  title: string;
+  genre: string;
+  cast: string[];
+  main_img: string;
+}
+
 function PreferencesPage() {
-  const [movieList, setMovieList] = useState();
-  const [selectedMovieList, setSelectedMovieList] = useState();
+  const [movieList, setMovieList] = useState([testimg, testimg, testimg]);
+  const [selectedMovieList, setSelectedMovieList] = useState([10]);
 
   useEffect(() => {
-    //랜덤영화 9개 get axios
-  }, []);
-
-  useEffect(() => {
-    //선택된영화 상태 setSelectedMovieList 관리
+    // 첫 랜덤리스트 받아오기
   }, []);
 
   const handleResetButtonClick = () => {
-    //랜덤영화리셋
+    setSelectedMovieList([]);
+    // 랜덤리스트 axios
   };
 
-  const handleCheckImage = () => {
-    // boolean css관리, useEffect
+  const handleMovieClick = (index: number) => {
+    if (selectedMovieList.includes(index)) {
+      setSelectedMovieList(selectedMovieList.filter((item) => item !== index));
+    } else {
+      setSelectedMovieList([...selectedMovieList, index]);
+    }
   };
+
+  function checkMovie(index: number) {
+    if (selectedMovieList.includes(index)) return true;
+    else return false;
+  }
 
   return (
     <Layout>
@@ -108,18 +136,17 @@ function PreferencesPage() {
             <Title>선호하는 영화 3가지를 선택해 주세요.</Title>
             <SubTitle>관련도 높은 영화를 추천해드릴 예정이에요!</SubTitle>
           </TitleWrapper>
-          <ResetButton onClick={() => handleResetButtonClick()}>
+          <ResetButton onClick={handleResetButtonClick}>
             <p>새로고침</p>
-            <img src={reload} />
+            <img src={reload} alt="reload" />
           </ResetButton>
         </Wrapper>
         <PreferencesMovieContainer>
-          <PreferencesMovie src={testimg} onClick={() => handleCheckImage()} />
-          <PreferencesMovie src={testimg} />
-          <PreferencesMovie src={testimg} />
-          <PreferencesMovie src={testimg} />
-          <PreferencesMovie src={testimg} />
-          <PreferencesMovie src={testimg} />
+          {movieList.map((movie, index) => (
+            <PreferencesMovieWrapper key={index} $active={checkMovie(index)} onClick={() => handleMovieClick(index)}>
+              <PreferencesMovie src={movie} alt="movie" />
+            </PreferencesMovieWrapper>
+          ))}
         </PreferencesMovieContainer>
       </Container>
     </Layout>
