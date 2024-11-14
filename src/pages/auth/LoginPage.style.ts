@@ -71,6 +71,7 @@ export const StyledLink = styled(Link)`
 export const KakaoButton = styled.img`
   width: 300px;
   border-radius: 10px;
+  cursor: pointer;
 `;
 
 export const ButtonSection = styled.div`

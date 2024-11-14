@@ -182,23 +182,6 @@ const initialMovies: Movie[] = [
     reviewCount: 75,
     plot: 'This is the plot for Movie Title 3.',
   },
-  {
-    movieId: 4,
-    mainImg: testimg,
-    backdropImg: 'assets/backdrop4.jpg',
-    title: 'Movie Title 4',
-    genre: ['Horror'],
-    directorName: ['Director 4'],
-    actorName: ['Actor 7', 'Actor 8'],
-    actorImg: ['assets/actor7.jpg', 'assets/actor8.jpg'],
-    releaseDate: '2023-04-01',
-    rating: 9.1,
-    ageRating: 'NC-17',
-    runtime: 100,
-    language: 'Korean',
-    reviewCount: 150,
-    plot: 'This is the plot for Movie Title 4.',
-  },
 ];
 
 function PreferencesPage() {
