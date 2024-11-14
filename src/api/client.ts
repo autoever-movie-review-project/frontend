@@ -1,11 +1,8 @@
 import axios from 'axios';
 import { getCookie, removeCookie, setCookie } from 'util/cookieUtil';
 
-export const API_SERVER_HOST = 'http://localhost:8080';
-const prefix = `${API_SERVER_HOST}/api`;
-
 export const client = axios.create({
-  baseURL: prefix,
+  baseURL: `${import.meta.env.VITE_BASE_URL}/api`,
   headers: {
     'Content-Type': 'application/json',
   },

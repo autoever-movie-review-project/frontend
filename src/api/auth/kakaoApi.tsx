@@ -1,8 +1,7 @@
 import axios from 'axios';
-import { API_SERVER_HOST } from '../client';
 
-const REST_API_KEY: string = '1e06d291e4149fbebab01d2b56a28306';
-const REDIRECT_URI: string = 'http://localhost:5173/member/kakao';
+const REST_API_KEY: string = `${import.meta.env.VITE_KAKAO_API_KEY}`;
+const REDIRECT_URI: string = `${import.meta.env.VITE_KAKAO_REDIRECT_URI}`;
 const AUTH_CODE_PATH: string = 'https://kauth.kakao.com/oauth/authorize';
 const ACCESS_TOKEN_URL: string = 'https://kauth.kakao.com/oauth/token';
 
@@ -52,7 +51,7 @@ export const getAccessToken = async (authCode: string): Promise<string> => {
 export const getMemberWithAccessToken = async (accessToken: string): Promise<KakaoMemberResponse> => {
   try {
     const response = await axios.get<KakaoMemberResponse>(
-      `${API_SERVER_HOST}/api/member/kakao?accessToken=${accessToken}`
+      `${import.meta.env.VITE_BASE_URL}/api/member/kakao?accessToken=${accessToken}`
     );
     return response.data;
   } catch (error) {
