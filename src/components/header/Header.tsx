@@ -3,9 +3,9 @@ import * as S from './Header.style';
 import logo from 'assets/logo.png';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from 'hooks/useAuth';
-import profile from 'assets/default-profile.png';
 import { toast } from 'react-toastify';
 import Profile from 'components/Profile';
+import DefaultProfile from 'assets/default-profile.png';
 import SearchBar from 'components/searchbar/SearchBar';
 
 function Header() {
@@ -33,6 +33,7 @@ function Header() {
     try {
       await logout();
       toast.success('로그아웃했어요.');
+      navigate('/');
     } catch (error) {
       console.error('로그아웃 실패:', error);
       toast.error('서버와 통신하는데 실패했습니다.');
@@ -63,15 +64,15 @@ function Header() {
             <SearchBar />
             {!user?.data && <S.MenuLogin onClick={() => handleLoginButtonClick()}>로그인</S.MenuLogin>}
             {user?.data && (
-              <S.ProfileWrapper>
-                <S.UserProfile onClick={handleUserProfileClick}>
-                  <Profile width="45px" height="45px" rank={rankName} src={profile}></Profile>
-                  {user?.data.nickname}
-                </S.UserProfile>
-                <S.LogoutButtonWrapper onClick={() => handleLogoutButtonClick()}>
-                  <S.LogoutButton />
-                </S.LogoutButtonWrapper>
-              </S.ProfileWrapper>
+              <>
+                <S.ProfileWrapper>
+                  <S.UserProfile onClick={handleUserProfileClick}>
+                    <Profile width="45px" height="45px" rank={rankName} src={DefaultProfile}></Profile>
+                    <p>{user?.data.nickname}</p>
+                  </S.UserProfile>
+                </S.ProfileWrapper>
+                <S.LogoutButton onClick={handleLogoutButtonClick}></S.LogoutButton>
+              </>
             )}
           </S.RightMenu>
         </S.MenuWrapper>

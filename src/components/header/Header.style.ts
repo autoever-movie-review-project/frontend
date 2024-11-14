@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 import { theme } from 'styles/theme';
-import LogOut from 'assets/log-out.svg';
+import LogOut from 'assets/log-out.svg?react';
 
 export const HeaderWrapper = styled.header`
   position: fixed;
@@ -27,8 +27,8 @@ export const HeaderContainer = styled.div`
 export const HeaderLogo = styled.img`
   display: flex;
   align-items: center;
-  width: 40px;
-  height: 40px;
+  width: 55px;
+  height: 55px;
   cursor: pointer;
   margin: 10px;
 `;
@@ -133,8 +133,7 @@ export const LogoutButtonWrapper = styled.div`
 `;
 
 export const LogoutButton = styled(LogOut)`
-  margin-left: 15px;
-  color: ${theme.colors.grayLight};
+  color: white;
   width: 15px;
   height: 15px;
   cursor: pointer;
@@ -144,4 +143,5 @@ export const ProfileWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 `;

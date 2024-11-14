@@ -5,6 +5,8 @@ import MyPage from 'pages/mypage/MyPage';
 import Header from 'components/header/Header';
 import { lazy, Suspense } from 'react';
 import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
+import { GameLobby } from 'pages/game/gameLobby/GameLobby';
+import { GameRoom } from 'pages/game/gameRoom/GameRoom';
 
 const loadingComp = <div style={{ height: '1000px', backgroundColor: 'red' } as React.CSSProperties}>로딩중</div>;
 const Main = lazy(() => import('pages/main/MainPage'));
@@ -59,6 +61,14 @@ function App() {
                 <Movies />
               </>
             ),
+          },
+          {
+            path: '/game',
+            element: <GameLobby />,
+          },
+          {
+            path: '/gameroom/:roomId',
+            element: <GameRoom />,
           },
           {
             path: '/preferences',

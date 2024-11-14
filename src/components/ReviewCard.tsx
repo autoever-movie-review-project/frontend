@@ -1,19 +1,26 @@
 import React from 'react';
 import { toast } from 'react-toastify';
 import { useAuth } from 'hooks/useAuth';
+import { theme } from 'styles/theme';
 import styled from 'styled-components';
 import Heart from 'assets/heart.svg?react';
 import StarImg from 'assets/star.svg?react';
 import StarHalfImg from 'assets/star-half.svg?react';
-import { theme } from 'styles/theme';
+import Profile from './Profile';
 import { rankToKorean } from 'util/englishToKorean';
 
+interface RankProps {
+  $rank: string;
+}
+
 export const Card = styled.div`
-  width: 280px;
+  width: 275px;
   height: 330px;
+  min-width: 200px;
+  min-height: 250px;
   background-color: ${theme.colors.grayDark};
   border-radius: ${theme.borderRadius.xs};
-  padding: 15px;
+  padding: 12px;
   color: white;
 `;
 
@@ -24,11 +31,13 @@ export const StarsContainer = styled.div`
 `;
 
 export const Star = styled(StarImg)<{ $filled?: boolean }>`
+  width: 20px;
   color: ${theme.colors.grayDark};
   fill: ${(props) => (props.$filled ? `${theme.colors.primaryDark}` : '#111')};
 `;
 
 export const HalfStar = styled(StarHalfImg)<{ $filled?: boolean }>`
+  width: 20px;
   color: ${theme.colors.grayDark};
   fill: ${(props) => (props.$filled ? `${theme.colors.primaryDark}` : '#111')};
 `;
@@ -40,6 +49,8 @@ export const ReviewText = styled.p`
   font-size: ${theme.fontSize.md};
   line-height: 22px;
   border-bottom: 0.5px solid ${theme.colors.grayLight};
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 export const UserSection = styled.div`
@@ -54,17 +65,6 @@ export const UserInfo = styled.div`
   gap: 0.75rem;
 `;
 
-export const Avatar = styled.div`
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 100px;
-  background-color: ${theme.colors.diamond};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-`;
-
 export const UserDetails = styled.div`
   display: flex;
   flex-direction: column;
@@ -76,12 +76,29 @@ export const Nickname = styled.p`
   font-weight: ${theme.fontWeight.regular};
 `;
 
-export const UserType = styled.span`
-  width: 37px;
+export const Rank = styled.span<RankProps>`
+  display: flex;
+  width: auto;
   font-size: 0.875rem;
-  background-color: ${theme.colors.diamond};
   padding: 0.125rem 0.5rem;
   border-radius: 10px;
+
+  ${({ $rank }) => {
+    switch ($rank.toLowerCase()) {
+      case 'master':
+        return `background-color: ${theme.colors.master}`;
+      case 'diamond':
+        return `background-color: ${theme.colors.diamond};`;
+      case 'gold':
+        return `background-color: ${theme.colors.gold};`;
+      case 'silver':
+        return `background-color: ${theme.colors.silver};`;
+      case 'bronze':
+        return `background-color: ${theme.colors.bronze};`;
+      default:
+        return `background-color: ${theme.colors.bronze};`;
+    }
+  }}
 `;
 
 export const LikeButton = styled.button`
@@ -110,17 +127,17 @@ export const LikeCount = styled.span`
 `;
 
 interface ReviewCardProps {
-  reviewid: number;
-  rating: number;
-  content: string;
-  likesCount: number;
-  isLiked?: boolean;
-  // profile: string;
-  nickname: string;
-  userType: string;
+  reviewid?: number;
+  rating: number | undefined;
+  content: string | undefined;
+  likesCount: number | undefined;
+  isLiked: boolean | undefined;
+  profile: string | undefined;
+  nickname: string | undefined;
+  rank: string | undefined;
 }
 
-const koreanRank = rankToKorean(UserType);
+const koreanRank = rankToKorean(Rank);
 
 function ReviewCard({
   // reviewid,
@@ -128,11 +145,11 @@ function ReviewCard({
   content,
   likesCount = 0,
   isLiked: initialIsLiked = false,
-  // profile,
-  nickname = 'User',
-  userType,
+  profile,
+  nickname = '사용자',
+  rank,
 }: ReviewCardProps) {
-  const { isAuthenticated } = useAuth();
+  const { user } = useAuth();
   const [isLiked, setIsLiked] = React.useState(initialIsLiked);
   const [likeCount, setLikeCount] = React.useState(likesCount);
 
@@ -154,14 +171,12 @@ function ReviewCard({
   };
 
   const handleLikeClick = () => {
-    if (!isAuthenticated) {
+    if (!user) {
       toast.warn('로그인이 필요한 서비스입니다.');
       return;
     }
     // 좋아요 토글 처리
   };
-
-  const userInitial = nickname?.charAt(0) || '?';
 
   return (
     <Card>
@@ -169,17 +184,13 @@ function ReviewCard({
       <ReviewText>{content}</ReviewText>
       <UserSection>
         <UserInfo>
-          <Avatar>{userInitial}</Avatar>
+          <Profile width="2.5rem" height="2.5rem" rank={rank} src={profile}></Profile>
           <UserDetails>
             <Nickname>{nickname}</Nickname>
-            {userType && <UserType>{koreanRank}</UserType>}
+            {rank && <Rank $rank={rank}>{koreanRank}</Rank>}
           </UserDetails>
         </UserInfo>
-        <LikeButton
-          onClick={handleLikeClick}
-          disabled={!isAuthenticated}
-          aria-label={isLiked ? '좋아요 취소' : '좋아요'}
-        >
+        <LikeButton onClick={handleLikeClick} disabled={!user} aria-label={isLiked ? '좋아요 취소' : '좋아요'}>
           <HeartIcon $isLiked={isLiked} />
           <LikeCount>{likeCount}</LikeCount>
         </LikeButton>

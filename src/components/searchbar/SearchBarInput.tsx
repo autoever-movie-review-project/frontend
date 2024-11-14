@@ -6,7 +6,7 @@ const SearchBarInputField = styled.input`
   text-align: left;
   color: ${theme.colors.grayLight};
   height: 40px;
-  font-size: 17px;
+  font-size: 15px;
   width: 100%;
   background-color: transparent;
   outline: transparent;
