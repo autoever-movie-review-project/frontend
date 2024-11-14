@@ -89,14 +89,26 @@ function RegisterPage() {
         await authApi.checkExistingEmail({ email });
       } catch (error) {
         if (error instanceof AxiosError) {
-          toast.error(error.response?.data.msg || '이미 가입된 이메일이거나, 인증번호 발송에 오류가 발생했어요.');
+          toast.error(
+            error.response?.data.msg || (
+              <>
+                이미 가입된 이메일이거나, <br /> 인증번호 발송중 오류가 발생했어요.
+              </>
+            )
+          );
           return;
         }
       }
 
       try {
         await authApi.sendVerificationCode({ email });
-        toast.success('인증번호가 발송되었어요.');
+        toast.success(
+          <>
+            인증번호가 발송되었어요.
+            <br />
+            메일함을 확인해주세요.
+          </>
+        );
       } catch (error) {
         if (error instanceof AxiosError) {
           toast.error(error.response?.data.msg || '인증번호 발송 중 오류가 발생했어요.');

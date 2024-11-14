@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { theme } from 'styles/theme';
-import default_profile from 'assets/default-profile.png';
+import DefaultProfile from 'assets/default-profile.png';
 
 interface ProfileProps {
   width?: string;
@@ -24,21 +24,20 @@ const ProfileWrap = styled.div<ProfileProps>`
   align-items: center;
   width: ${(props) => props.width || '100px'};
   height: ${(props) => props.height || '100px'};
-  border-radius: 100px;
+  border-radius: 9999px;
   background-color: ${(props) => rankColors[props.rank]};
   overflow: hidden;
-  cursor: pointer;
 `;
 
 const ProfileImage = styled.img`
-  width: 85%;
-  height: 85%;
+  width: 90%;
+  height: 90%;
 `;
 
 function Profile({ width, height, rank, src }: ProfileProps) {
   return (
     <ProfileWrap width={width} height={height} rank={rank}>
-      <ProfileImage src={src} alt={default_profile} />
+      <ProfileImage src={src} alt={DefaultProfile} />
     </ProfileWrap>
   );
 }

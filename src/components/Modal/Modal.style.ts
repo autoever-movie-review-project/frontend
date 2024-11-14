@@ -11,16 +11,21 @@ export const ModalDim = styled.div`
   z-index: 99999;
 `;
 
-export const ModalWrapper = styled.div`
+interface ModalWrapperProps {
+  $width?: number | string;
+  $height?: number | string;
+}
+
+export const ModalWrapper = styled.div<ModalWrapperProps>`
   position: fixed;
   top: 50%;
   left: 50%;
-  width: 40%;
-  height: 70%;
+  width: ${({ $width = 40 }) => (typeof $width === 'number' ? `${$width}%` : $width)};
+  height: ${({ $height = 70 }) => (typeof $height === 'number' ? `${$height}%` : $height)};
   transform: translate(-50%, -50%);
   background: #383838;
   border-radius: 10px;
-  padding: 24px 24px;
+  padding: 24px;
   box-sizing: border-box;
   z-index: 99999;
 `;
