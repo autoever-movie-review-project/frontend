@@ -1,18 +1,57 @@
 import React, { useState } from 'react';
 import { useAuth } from 'hooks/useAuth';
 import { useModal } from 'hooks/useModal';
+import { userApi } from 'api/user/userApi';
 import Profile from 'components/Profile';
 import DefaultProfile from 'assets/default-profile.png';
 import * as S from './MyPage.style';
 import ReviewCard from 'components/ReviewCrad/ReviewCard';
+import EditProfileModal, { FormInputs } from './EditProfileModal';
+import { toast } from 'react-toastify';
+import { AxiosError } from 'axios';
+import { useQueryClient } from '@tanstack/react-query';
+import { UpdateUserRequest } from 'api/user/user';
 
 function MyPage() {
+  const queryClient = useQueryClient();
   const { user } = useAuth();
   const { openModal, closeModal, isModalOpen } = useModal();
+  const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState<'reviews' | 'movies' | 'likes'>('reviews');
 
   const handleMenuClick = (menu: 'reviews' | 'movies' | 'likes') => {
     setActiveMenu(menu);
+  };
+
+  const handleProfileUpdate = async (data: FormInputs) => {
+    try {
+      const updateData: UpdateUserRequest = {
+        nickname: data.nickname,
+        profile: data.profile || user?.data.profile || '',
+        currentPassword: data.currentPassword,
+        newPassword: data.newPassword,
+      };
+
+      await userApi.updateUser(updateData);
+      if (updateData.newPassword) {
+        await userApi.updatePassword(updateData);
+      }
+
+      queryClient.invalidateQueries({ queryKey: ['user'] });
+      toast.success('프로필이 수정되었어요.');
+      setEditModalOpen(false);
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        toast.error(error.response?.data?.msg || '프로필 수정 중 오류가 발생했어요.');
+      }
+    }
+  };
+
+  const handleProfileButtonClick = () => {
+    if (!isModalOpen) {
+      // 랭크 정보 모달이 열려있지 않을 때만
+      setEditModalOpen(true);
+    }
   };
 
   return (
@@ -31,7 +70,7 @@ function MyPage() {
             <S.Email>{user?.data.email}</S.Email>
           </S.UserDatails>
         </S.UserProfileSection>
-        <S.ProfileEditButton>
+        <S.ProfileEditButton onClick={handleProfileButtonClick}>
           <S.EditIcon />
           프로필 편집
         </S.ProfileEditButton>
@@ -149,6 +188,12 @@ function MyPage() {
           </S.RankInfoSection>
         </S.RankInfoModal>
       )}
+      <EditProfileModal
+        isOpen={isEditModalOpen}
+        onClose={() => setEditModalOpen(false)}
+        currentUser={user}
+        onSubmit={handleProfileUpdate}
+      />
     </S.Background>
   );
 }

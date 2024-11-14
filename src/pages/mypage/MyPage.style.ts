@@ -130,7 +130,7 @@ export const Nickname = styled.div`
 `;
 
 export const Email = styled.div`
-  color: ${theme.colors.neutral400};
+  color: ${theme.colors.grayLight};
   font-size: ${theme.fontSize.md};
 `;
 
@@ -145,6 +145,7 @@ export const ProfileEditButton = styled.div`
   height: 50px;
   margin-bottom: 30px;
   cursor: pointer;
+  transition: 0.2s ease-in-out;
 
   &:hover {
     background-color: #1f2123;
@@ -258,11 +259,17 @@ export const MyReviewSection = styled.div`
 
 export const QuestionIcon = styled(Question)`
   cursor: pointer;
+  transition: 0.2s ease-in-out;
+
+  &:hover {
+    fill: #1f2123;
+  }
 `;
 
 export const RankInfoSection = styled.div`
   color: #fff;
   display: flex;
+  align-items: start;
   flex-direction: column;
   gap: 10px;
   margin-top: 55px;
