@@ -4,6 +4,7 @@ import reload from 'assets/reload.svg';
 import testimg from 'assets/temp.svg';
 import { theme } from 'styles/theme';
 import { client } from 'api/client';
+import { useNavigate } from 'react-router-dom';
 
 const Layout = styled.div`
   width: 100vw;
@@ -203,6 +204,7 @@ const initialMovies: Movie[] = [
 function PreferencesPage() {
   const [movieList, setMovieList] = useState(initialMovies);
   const [selectedMovies, setSelectedMovies] = useState<Movie[]>([]);
+  const navigate = useNavigate();
 
   const fetchMovies = async () => {
     try {
@@ -245,6 +247,7 @@ function PreferencesPage() {
 
   const handleCompleteButtonClick = async () => {
     //await post선호영화 3개보내는 axios
+    navigate('/');
   };
 
   return (
