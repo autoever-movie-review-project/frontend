@@ -9,6 +9,16 @@ export const ModalDim = styled.div`
   background: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(2px);
   z-index: 99999;
+  animation: fadeIn 0.3s ease forwards;
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
 `;
 
 interface ModalWrapperProps {
@@ -22,12 +32,24 @@ export const ModalWrapper = styled.div<ModalWrapperProps>`
   left: 50%;
   width: ${({ $width = 40 }) => (typeof $width === 'number' ? `${$width}%` : $width)};
   height: ${({ $height = 70 }) => (typeof $height === 'number' ? `${$height}%` : $height)};
-  transform: translate(-50%, -50%);
   background: #383838;
   border-radius: 10px;
   padding: 24px;
   box-sizing: border-box;
   z-index: 99999;
+  transform: translate(-50%, -50%) scale(0.95);
+  animation: modalIn 0.3s ease forwards;
+
+  @keyframes modalIn {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+  }
 `;
 
 export const ModalHeader = styled.div`
