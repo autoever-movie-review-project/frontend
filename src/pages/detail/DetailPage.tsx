@@ -7,7 +7,6 @@ import ActorContainer from './templates/ActorContainer';
 const Container = styled.div`
   width: 100vm;
   height: 100%;
-
   margin-top: 80px;
   background-color: black;
 `;
@@ -22,12 +21,12 @@ const Title = styled.h1`
 `;
 
 const Wrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
   width: 90%;
   margin: 0 auto;
   height: 100%;
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 150px;
+  margin-bottom: 80px;
 `;
 
 function DetailPage() {
