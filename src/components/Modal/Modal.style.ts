@@ -9,16 +9,6 @@ export const ModalDim = styled.div`
   background: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(2px);
   z-index: 99999;
-  animation: fadeIn 0.3s ease forwards;
-
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
-  }
 `;
 
 interface ModalWrapperProps {
@@ -38,18 +28,6 @@ export const ModalWrapper = styled.div<ModalWrapperProps>`
   box-sizing: border-box;
   z-index: 99999;
   transform: translate(-50%, -50%) scale(0.95);
-  animation: modalIn 0.3s ease forwards;
-
-  @keyframes modalIn {
-    from {
-      opacity: 0;
-      transform: translate(-50%, -50%) scale(0.95);
-    }
-    to {
-      opacity: 1;
-      transform: translate(-50%, -50%) scale(1);
-    }
-  }
 `;
 
 export const ModalHeader = styled.div`
