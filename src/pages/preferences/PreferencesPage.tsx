@@ -108,7 +108,6 @@ const CompleteButton = styled.button`
   background-color: ${theme.colors.primary};
   color: #ececec;
   font-size: 20px;
-  text-shadow: 1px 0 0 rgba(0, 0, 0, 0.5);
 `;
 
 interface Movie {

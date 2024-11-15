@@ -57,7 +57,7 @@ const ActorContainer: React.FC<ActorContainerProps> = ({ actors }) => {
       <ActorList>
         {actors.map((actor, index) => (
           <ActorItem key={index}>
-            <ActorImage src={testactor} alt={actor.name} />
+            <ActorImage src={actor.src || testactor} alt={actor.name} />
             <ActorName>{actor.name}</ActorName>
           </ActorItem>
         ))}

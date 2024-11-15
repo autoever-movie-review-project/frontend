@@ -7,6 +7,7 @@ import { useRef } from 'react';
 import { Swiper as SwiperType } from 'swiper';
 import { NavigationOptions } from 'swiper/types';
 import { useNavigate } from 'react-router-dom';
+import Movie from 'models/movie.model';
 
 const SlideContent = styled.div`
   display: flex;
@@ -66,11 +67,11 @@ const SwiperContainer = styled.div`
 
 interface MovieSwiperSlideProps {
   title: string;
-  images: string[];
+  movies: Movie[];
 }
 
 function MovieSwiperSlide(props: MovieSwiperSlideProps) {
-  const { title, images } = props;
+  const { title, movies } = props;
   const nextButtonRef = useRef<HTMLButtonElement | null>(null);
   const prevButtonRef = useRef<HTMLButtonElement | null>(null);
 
@@ -103,10 +104,10 @@ function MovieSwiperSlide(props: MovieSwiperSlideProps) {
           style={{ width: '100%', height: '160px' }}
           onSwiper={handleSwiper}
         >
-          {images.map((image, index) => (
+          {movies.map((movie, index) => (
             <StyledSwiperSlide key={index}>
-              <SlideContent onClick={() => handleCardClick(index + 1)}>
-                <Image src={image} alt={`${index}번째 영화`} />
+              <SlideContent onClick={() => handleCardClick(movie.movieId)}>
+                <Image src={movie.mainImg} alt={`${index}번째 영화`} />
               </SlideContent>
             </StyledSwiperSlide>
           ))}

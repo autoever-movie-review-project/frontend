@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import DetailMovieInfo from './templates/DetailMovieInfo';
 import MediaContainer from './templates/MediaContainer';
@@ -8,11 +8,15 @@ import { useModal } from 'hooks/useModal';
 import { Modal } from 'components/Modal/Modal';
 import ReviewRating from './templates/ReviewRating';
 import { theme } from 'styles/theme';
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
 
 const Container = styled.div`
   width: 100vm;
   height: 100%;
-
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   margin-top: 80px;
   background-color: black;
 `;
@@ -106,16 +110,32 @@ const ReviewSubmitButton = styled.button`
   background-color: ${theme.colors.primary};
   color: #ececec;
 
-  //hover시 버튼 효과주기
-  //선호영화 버튼 그림자때기..
+  &:hover {
+    background-color: ${theme.colors.primaryDark};
+  }
 `;
 
 function DetailPage() {
+  const { movieId } = useParams();
   const [actorList, setActorList] = useState([]);
   //리뷰데이터 axios 받아오기
+  const [movieDetails, setMovieDetails] = useState(null);
   const { openModal, closeModal, isModalOpen } = useModal();
   const [rating, setRating] = useState(0);
   const [reviewContent, setReviewContent] = useState('');
+
+  useEffect(() => {
+    const fetchMovieDetails = async () => {
+      try {
+        const response = await axios.get(`/api/movie/${movieId}`);
+        setMovieDetails(response.data);
+        setActorList(response.data.actors);
+      } catch (error) {
+        console.error('Error fetching movie details:', error);
+      }
+    };
+    fetchMovieDetails();
+  }, [movieId]);
 
   const submitReview = () => {
     if (reviewContent === '') {
@@ -123,9 +143,9 @@ function DetailPage() {
     } else if (rating < 1) {
       alert('별점을 등록해주세요.');
     } else {
-      // 리뷰 post axios
+      // 리뷰 post axios (userId, movieId, content, rating)
     }
-    console.log('리뷰 제출:', { rating, reviewContent });
+    console.log('리뷰 제출:', { movieId, rating, reviewContent });
 
     close();
   };
@@ -153,6 +173,7 @@ function DetailPage() {
             { src: 'image1.jpg', name: '김배우' },
             { src: 'image2.jpg', name: '이배우' }, //axios 배우리스트
           ]}
+          //actors={actorList}
         />
       </Wrapper>
       <ReviewTitleWrapper>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
+import Movie from 'models/movie.model';
 
 const Container = styled.div`
   width: 100%;
@@ -46,7 +47,6 @@ const CardWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  display: flex;
   gap: 20px;
   border-radius: 5px;
 `;
@@ -64,39 +64,38 @@ const CardTitle = styled.h2`
   padding: 10px;
 `;
 
-const initData = [
+const initData: Movie[] = [
   {
     movieId: 0,
-    mainImg: '',
-    backdropImg: '',
     title: '제목',
-    genre: '장르',
-    director: '디렉터',
-    releaseDate: '',
-    rating: 0,
-  },
-  {
-    movieId: 0,
-    mainImg: '',
+    tagline: '',
+    plot: '',
     backdropImg: '',
-    title: '제목',
-    genre: '장르',
-    director: '디렉터',
-    releaseDate: '',
+    mainImg: '',
+    releaseDate: new Date(),
     rating: 0,
+    language: '',
+    runtime: 0,
+    ageRating: '',
+    reviewCount: 0,
+    directorName: [],
+    actorName: [],
+    actorImg: [],
+    genre: [],
   },
 ];
 
 const MoviesPage: React.FC = () => {
   const location = useLocation();
   const searchData = location.state?.searchData || '';
-  const [movies, setMovies] = useState(initData);
+  const [movies, setMovies] = useState<Movie[]>(initData);
   const navigate = useNavigate();
+
   useEffect(() => {
     if (searchData) {
       const fetchMovies = async () => {
         try {
-          const response = await axios.get('http://localhost:5173/api/movie/search', {
+          const response = await axios.get<Movie[]>('http://localhost:5173/api/movie/search', {
             params: { title: searchData, genre: searchData },
           });
           setMovies(response.data);
@@ -106,7 +105,7 @@ const MoviesPage: React.FC = () => {
           console.log('검색 get 실패', error);
         }
       };
-      // fetchMovies();
+      //fetchMovies();
     }
   }, [searchData]);
 
