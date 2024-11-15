@@ -301,7 +301,7 @@ const EditProfileModal = ({ isOpen, onClose, currentUser, onSubmit }: EditProfil
           </ProfileSection>
           <Form onSubmit={handleSubmit(onSubmitForm)}>
             <InputGroup>
-              <Label>닉네임 변경</Label>
+              <Label>새 닉네임</Label>
               <Input
                 {...register('nickname', {
                   required: '닉네임을 입력해주세요.',
@@ -340,7 +340,7 @@ const EditProfileModal = ({ isOpen, onClose, currentUser, onSubmit }: EditProfil
                 {...register('newPassword', {
                   pattern: {
                     value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{6,18}$/,
-                    message: '비밀번호는 영문, 숫자, 특수문자를 포함하여 6-18자여야 해요.',
+                    message: '비밀번호는 영문, 숫자, 특수문자를 포함한 6-18자여야 해요.',
                   },
                   // validate: (value) =>
                   //   !watch('currentPassword') ||

@@ -19,7 +19,7 @@ const StyledButton = styled.button<ButtonStyleProps>`
   align-items: center;
   width: ${({ width }) => width || '270px'};
   height: 36px;
-  border: 1.5px solid ${theme.colors.grayLight};
+  border: 1px solid ${theme.colors.text};
   border-radius: 8px;
   padding: 12px;
   background-color: ${theme.colors.primary};

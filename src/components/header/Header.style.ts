@@ -4,6 +4,9 @@ import LogOut from 'assets/log-out.svg?react';
 
 export const HeaderWrapper = styled.header`
   position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   top: 0;
   left: 0;
   width: 100%;
@@ -14,8 +17,8 @@ export const HeaderWrapper = styled.header`
 
 export const HeaderContainer = styled.div`
   display: flex;
+  justify-content: center;
   width: 100%;
-  padding: 0 75px;
   gap: 30px;
 `;
 
@@ -38,6 +41,7 @@ export const MenuWrapper = styled.div`
 
 export const MenuContainer = styled.div`
   display: flex;
+  align-items: center;
 `;
 
 export const MenuButton = styled.button<{ $active: boolean }>`
