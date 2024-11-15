@@ -1,19 +1,57 @@
 import React, { useState } from 'react';
 import { useAuth } from 'hooks/useAuth';
 import { useModal } from 'hooks/useModal';
+import { userApi } from 'api/user/userApi';
 import Profile from 'components/Profile';
 import DefaultProfile from 'assets/default-profile.png';
 import * as S from './MyPage.style';
-import ReviewCard from 'components/ReviewCard';
+import ReviewCard from 'components/ReviewCrad/ReviewCard';
+import EditProfileModal, { FormInputs } from './EditProfileModal';
+import { toast } from 'react-toastify';
+import { AxiosError } from 'axios';
+import { useQueryClient } from '@tanstack/react-query';
+import { UpdateUserRequest } from 'api/user/user';
 
 function MyPage() {
+  const queryClient = useQueryClient();
   const { user } = useAuth();
   const { openModal, closeModal, isModalOpen } = useModal();
+  const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState<'reviews' | 'movies' | 'likes'>('reviews');
-  const rankIconSrc = new URL(`../assets/${user?.data.rankImg}`, import.meta.url).href;
 
   const handleMenuClick = (menu: 'reviews' | 'movies' | 'likes') => {
     setActiveMenu(menu);
+  };
+
+  const handleProfileUpdate = async (data: FormInputs) => {
+    try {
+      const updateData: UpdateUserRequest = {
+        nickname: data.nickname,
+        profile: data.profile || user?.data.profile || '',
+        currentPassword: data.currentPassword,
+        newPassword: data.newPassword,
+      };
+
+      await userApi.updateUser(updateData);
+      if (updateData.newPassword) {
+        await userApi.updatePassword(updateData);
+      }
+
+      queryClient.invalidateQueries({ queryKey: ['user'] });
+      toast.success('프로필이 수정되었어요.');
+      setEditModalOpen(false);
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        toast.error(error.response?.data?.msg || '프로필 수정 중 오류가 발생했어요.');
+      }
+    }
+  };
+
+  const handleProfileButtonClick = () => {
+    if (!isModalOpen) {
+      // 랭크 정보 모달이 열려있지 않을 때만
+      setEditModalOpen(true);
+    }
   };
 
   return (
@@ -24,15 +62,15 @@ function MyPage() {
           <Profile width="110px" height="110px" src={DefaultProfile} rank={user?.data.rankName} />
           <S.UserDatails>
             <S.RankSection>
-              <S.RankIcon rankImg={rankIconSrc}></S.RankIcon>
-              <S.Rank rank={user?.data.rankName}>{user?.data.rankName}</S.Rank>
+              <S.RankIcon rankImg={user?.data.rankImg}></S.RankIcon>
+              <S.Rank $rank={user?.data.rankName}>{user?.data.rankName}</S.Rank>
               <S.QuestionIcon onClick={openModal} />
             </S.RankSection>
             <S.Nickname>{user?.data.nickname}</S.Nickname>
             <S.Email>{user?.data.email}</S.Email>
           </S.UserDatails>
         </S.UserProfileSection>
-        <S.ProfileEditButton>
+        <S.ProfileEditButton onClick={handleProfileButtonClick}>
           <S.EditIcon />
           프로필 편집
         </S.ProfileEditButton>
@@ -129,27 +167,33 @@ function MyPage() {
           <S.RankInfoSection>
             <S.RankInfo>
               <S.RankIcon rankImg="bronze.png" />
-              <S.Rank $rank="Bronze">브론즈</S.Rank>0 포인트 이상
+              <S.Rank $rank="Bronze">Bronze</S.Rank>0 포인트 이상
             </S.RankInfo>
             <S.RankInfo>
               <S.RankIcon rankImg="silver.png" />
-              <S.Rank $rank="Silver">실버</S.Rank>1000 포인트 이상
+              <S.Rank $rank="Silver">Silver</S.Rank>1000 포인트 이상
             </S.RankInfo>
             <S.RankInfo>
               <S.RankIcon rankImg="gold.png" />
-              <S.Rank $rank="Gold">골드</S.Rank>2000 포인트 이상
+              <S.Rank $rank="Gold">Gold</S.Rank>2000 포인트 이상
             </S.RankInfo>
             <S.RankInfo>
               <S.RankIcon rankImg="diamond.png" />
-              <S.Rank $rank="Diamond">다이아</S.Rank>4000 포인트 이상
+              <S.Rank $rank="Diamond">Diamond</S.Rank>4000 포인트 이상
             </S.RankInfo>
             <S.RankInfo>
               <S.RankIcon rankImg="master.png" />
-              <S.Rank $rank="Master">마스터</S.Rank>7000 포인트 이상
+              <S.Rank $rank="Master">Master</S.Rank>7000 포인트 이상
             </S.RankInfo>
           </S.RankInfoSection>
         </S.RankInfoModal>
       )}
+      <EditProfileModal
+        isOpen={isEditModalOpen}
+        onClose={() => setEditModalOpen(false)}
+        currentUser={user}
+        onSubmit={handleProfileUpdate}
+      />
     </S.Background>
   );
 }

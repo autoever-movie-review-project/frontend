@@ -4,6 +4,9 @@ import LogOut from 'assets/log-out.svg?react';
 
 export const HeaderWrapper = styled.header`
   position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   top: 0;
   left: 0;
   width: 100%;
@@ -14,16 +17,16 @@ export const HeaderWrapper = styled.header`
 
 export const HeaderContainer = styled.div`
   display: flex;
+  justify-content: center;
   width: 100%;
-  padding: 0 75px;
   gap: 30px;
 `;
 
 export const HeaderLogo = styled.img`
   display: flex;
   align-items: center;
-  width: 55px;
-  height: 55px;
+  width: 40px;
+  height: 40px;
   cursor: pointer;
   margin: 10px;
 `;
@@ -38,6 +41,7 @@ export const MenuWrapper = styled.div`
 
 export const MenuContainer = styled.div`
   display: flex;
+  align-items: center;
 `;
 
 export const MenuButton = styled.button<{ $active: boolean }>`
@@ -83,7 +87,7 @@ export const RightMenu = styled.div`
   display: flex;
   align-items: center;
   justify-self: end;
-  gap: 30px;
+  gap: 20px;
 `;
 
 export const MenuLogin = styled.button`
@@ -109,7 +113,8 @@ export const UserProfile = styled.div`
   align-items: center;
   gap: 15px;
   color: #fff;
-  font-size: ${theme.fontSize.lg};
+  font-size: ${theme.fontSize.md};
+  font-weight: ${theme.fontWeight.semibold};
 `;
 
 export const Profile = styled.img`
@@ -123,7 +128,7 @@ export const Profile = styled.img`
 `;
 
 export const LogoutButton = styled(LogOut)`
-  color: white;
+  color: ${theme.colors.neutral500};
   width: 15px;
   height: 15px;
   cursor: pointer;

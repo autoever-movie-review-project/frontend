@@ -19,7 +19,8 @@ const StyledInput = styled.input<StyledInputProps>`
   background-color: transparent;
   font-weight: ${theme.fontWeight.regular};
   transition: border-color 0.3s ease;
-  caret-color: transparent;
+  caret-color: ${theme.colors.primaryLight};
+
   &:focus {
     border-bottom: 2px solid ${(props) => (props.error ? theme.colors.error : theme.colors.primary)};
   }
@@ -31,17 +32,26 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
   height?: string;
   placeholder?: string;
   title?: string;
+  titleSize?: string;
   error?: boolean;
 }
 
 export default forwardRef(function Input(
-  { width, height, placeholder, title, error, ...rest }: InputProps,
+  { width, height, placeholder, title, titleSize, error, ...rest }: InputProps,
   ref: React.ForwardedRef<HTMLInputElement>
 ) {
   return (
     <div>
-      {title && <p>{title}</p>}
-      <StyledInput ref={ref} width={width} height={height} placeholder={placeholder} error={error} {...rest} />
+      {title && <p style={{ fontSize: `${titleSize}` }}>{title}</p>}
+      <StyledInput
+        ref={ref}
+        width={width}
+        height={height}
+        placeholder={placeholder}
+        error={error}
+        {...rest}
+        autoComplete="off"
+      />
     </div>
   );
 });

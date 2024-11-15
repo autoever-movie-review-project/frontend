@@ -25,21 +25,15 @@ export interface LoginRequest {
   password: string;
 }
 
-export interface LoginSuccessResponse {
-  email: string;
-  nickname: string;
-  profile: string;
-  userType: 'ROLE_SOCIAL' | 'ROLE_USER';
-  points: number;
-  rankName: string;
-  rankImg: string;
+export interface User {
+  email?: string;
+  nickname?: string;
+  profile?: string;
+  points?: number;
+  rankName?: 'Bronze' | 'Silver' | 'Gold' | 'Diamond' | 'Master';
+  rankImg?: string;
 }
 
-export interface User {
-  email: string;
-  nickname: string;
-  profile: string;
-  points: number;
-  rankName: string;
-  rankImg: string;
+export interface LoginSuccessResponse extends User {
+  userType: 'ROLE_SOCIAL' | 'ROLE_USER';
 }

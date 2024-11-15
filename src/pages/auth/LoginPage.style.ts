@@ -55,11 +55,16 @@ export const UnableToLoginSection = styled.div`
   padding-bottom: 30px;
   color: ${theme.colors.neutral50};
   gap: 5px;
+
+  p {
+    font-weight: ${theme.fontWeight.bold};
+  }
 `;
 
 export const StyledLink = styled(Link)`
-  color: inherit;
+  color: ${theme.colors.primary};
   text-decoration: none;
+  font-weight: bold;
 
   &:focus,
   &:active {
@@ -68,9 +73,20 @@ export const StyledLink = styled(Link)`
   }
 `;
 
+export const ImageWrapper = styled.div`
+  position: relative;
+  display: inline-block;
+  transition: filter 0.3s ease;
+
+  &:hover {
+    filter: brightness(0.8);
+  }
+`;
+
 export const KakaoButton = styled.img`
   width: 300px;
   border-radius: 10px;
+  cursor: pointer;
 `;
 
 export const ButtonSection = styled.div`
