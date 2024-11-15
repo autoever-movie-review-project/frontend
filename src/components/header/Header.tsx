@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import * as S from './Header.style';
 import logo from 'assets/logo.png';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -8,11 +8,14 @@ import Profile from 'components/Profile';
 import DefaultProfile from 'assets/default-profile.png';
 import SearchBar from 'components/searchbar/SearchBar';
 import Button from 'components/Button';
+import { useModal } from 'hooks/useModal';
+import { Modal } from 'components/Modal/Modal';
 
 function Header() {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, logout } = useAuth();
+  const { isModalOpen, openModal, closeModal } = useModal();
 
   const handleNavMenuClick = (path: string) => {
     navigate(path);
@@ -28,7 +31,6 @@ function Header() {
   };
 
   const handleLogoutButtonClick = async () => {
-    console.log('로그아웃 버튼 클릭');
     try {
       await logout();
       toast.success('로그아웃했어요.');
@@ -72,12 +74,28 @@ function Header() {
                     <p>{user?.data.nickname}</p>
                   </S.UserProfile>
                 </S.ProfileWrapper>
-                <S.LogoutButton onClick={handleLogoutButtonClick}></S.LogoutButton>
+                <S.LogoutButton onClick={openModal}></S.LogoutButton>
               </>
             )}
           </S.RightMenu>
         </S.MenuWrapper>
       </S.HeaderContainer>
+      {isModalOpen && (
+        <Modal width="250px" height="200px" closeModal={closeModal}>
+          <S.LogoutModalSection>
+            로그아웃하실 건가요?
+            <Button
+              text="로그아웃"
+              width="auto"
+              fontSize="16px"
+              onClick={() => {
+                handleLogoutButtonClick();
+                closeModal();
+              }}
+            ></Button>
+          </S.LogoutModalSection>
+        </Modal>
+      )}
     </S.HeaderWrapper>
   );
 }
