@@ -29,7 +29,7 @@ export const Layout = styled.div`
     display: flex;
     flex-direction: column;
     padding-bottom: 30px;
-    margin-left: 100px;
+    margin-left: 90px;
   }
 
   p {
