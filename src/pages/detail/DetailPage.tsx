@@ -119,11 +119,12 @@ function DetailPage() {
   const { movieId } = useParams();
   const [actorList, setActorList] = useState([]);
   //리뷰데이터 axios 받아오기
-  const [movieDetails, setMovieDetails] = useState(null);
-  const { openModal, closeModal, isModalOpen } = useModal();
-  const [rating, setRating] = useState(0);
-  const [reviewContent, setReviewContent] = useState('');
-  const [trailerId, setTrailerId] = useState('d'); // 유튜브 예고편
+  const [movieDetails, setMovieDetails] = useState(null); //영화 디테일 데이터
+  const { openModal, closeModal, isModalOpen } = useModal(); // 리뷰모달 hook
+  const [rating, setRating] = useState(0); // 리뷰별점
+  const [reviewContent, setReviewContent] = useState(''); // 리뷰내용
+  const [trailerId, setTrailerId] = useState(''); // 유튜브 예고편 videoId값
+  const [shorts, setShorts] = useState([]); // 쇼츠 3개 배열 videoId값
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
@@ -138,27 +139,51 @@ function DetailPage() {
     fetchMovieDetails();
   }, [movieId]);
 
-  useEffect(() => {
-    const fetchTrailer = async (movieTitle: string) => {
-      try {
-        const response = await axios.get(`https://www.googleapis.com/youtube/v3/search`, {
-          params: {
-            part: 'snippet',
-            q: `${movieTitle} 예고편`,
-            key: import.meta.env.VITE_YOUTUBE_API_KEY,
-            type: 'video',
-            maxResults: 1,
-          },
-        });
-        const videoId = response.data.items[0]?.id.videoId;
-        setTrailerId(videoId);
-      } catch (error) {
-        console.error('YouTube API Error:', error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchTrailer = async (movieTitle: string) => {
+  //     try {
+  //       const response = await axios.get(`https://www.googleapis.com/youtube/v3/search`, {
+  //         params: {
+  //           part: 'snippet',
+  //           q: `${movieTitle} 예고편`,
+  //           key: import.meta.env.VITE_YOUTUBE_API_KEY,
+  //           type: 'video',
+  //           maxResults: 1,
+  //         },
+  //       });
+  //       const videoId = response.data.items[0]?.id.videoId;
+  //       setTrailerId(videoId);
+  //     } catch (error) {
+  //       setTrailerId('fail');
+  //       console.error('YouTube API Error:', error);
+  //     }
+  //   };
 
-    fetchTrailer('파일럿');
-  }, [[movieId]]);
+  //   fetchTrailer('파일럿'); //movieDetails.title
+  // }, [[movieId]]);
+
+  // useEffect(() => {
+  //   const fetchShorts = async (movieTitle: string) => {
+  //     try {
+  //       const response = await axios.get('https://www.googleapis.com/youtube/v3/search', {
+  //         params: {
+  //           part: 'snippet',
+  //           q: `${movieTitle} 쇼츠`,
+  //           key: import.meta.env.VITE_YOUTUBE_API_KEY,
+  //           type: 'video',
+  //           maxResults: 3,
+  //         },
+  //       });
+  //       const videoIds = response.data.items.map((item: { id: { videoId: string } }) => item.id.videoId);
+  //       setShorts(videoIds);
+  //     } catch (error) {
+  //       console.error('YouTube API Error:', error);
+  //       setShorts([]);
+  //     }
+  //   };
+
+  //   fetchShorts('파일럿'); //movieDetails.title
+  // }, [movieId]);
 
   const submitReview = () => {
     if (reviewContent === '') {
@@ -185,7 +210,7 @@ function DetailPage() {
         <DetailMovieInfo />
       </Wrapper>
       <Wrapper>
-        <MediaContainer trailerId={trailerId} />
+        <MediaContainer trailerId={trailerId} shorts={shorts} />
       </Wrapper>
       <Wrapper>
         <ActorContainer
