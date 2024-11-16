@@ -7,15 +7,15 @@ export interface ReviewRequest {
 
 export interface ReviewResponse {
   reviewId: number;
-  user: {
-    userId: number;
-    username: string;
-  };
-  movie: {
-    movieId: number;
-    title: string;
-  };
+  userId: number;
+  nickname: string;
+  profile: string;
+  rankImg: string;
   content: string;
   likesCount: number;
   rating: number;
+  createdAt: string;
+  modifiedAt: string;
 }
+
+export type ReviewResponseArray = ReviewResponse[];

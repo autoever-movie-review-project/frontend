@@ -10,6 +10,8 @@ import ReviewRating from './templates/ReviewRating';
 import { theme } from 'styles/theme';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import { fetchReviewsByMovieId } from 'api/review/reviewApi';
+import { ReviewResponseArray } from 'models/review.model';
 
 const Container = styled.div`
   width: 100vm;
@@ -117,12 +119,13 @@ const ReviewSubmitButton = styled.button`
 
 function DetailPage() {
   const { movieId } = useParams();
+  const numericMovieId = Number(movieId);
   const [actorList, setActorList] = useState([]);
-  //리뷰데이터 axios 받아오기
+  const [reviews, setReviews] = useState<ReviewResponseArray>([]); // 리뷰 데이터
   const [movieDetails, setMovieDetails] = useState(null); //영화 디테일 데이터
   const { openModal, closeModal, isModalOpen } = useModal(); // 리뷰모달 hook
-  const [rating, setRating] = useState(0); // 리뷰별점
-  const [reviewContent, setReviewContent] = useState(''); // 리뷰내용
+  const [rating, setRating] = useState(0); // 리뷰별점 post용
+  const [reviewContent, setReviewContent] = useState(''); // 리뷰내용 post용
   const [trailerId, setTrailerId] = useState(''); // 유튜브 예고편 videoId값
   const [shorts, setShorts] = useState([]); // 쇼츠 3개 배열 videoId값
 
@@ -136,7 +139,18 @@ function DetailPage() {
         console.error('Error fetching movie details:', error);
       }
     };
+
+    const getReviews = async () => {
+      try {
+        const reviewData = await fetchReviewsByMovieId(numericMovieId);
+        setReviews(reviewData);
+      } catch (error) {
+        console.error('Failed to fetch reviews:', error);
+      }
+    };
+
     fetchMovieDetails();
+    getReviews();
   }, [movieId]);
 
   // useEffect(() => {
@@ -228,6 +242,20 @@ function DetailPage() {
         <Title>리뷰</Title>
       </ReviewTitleWrapper>
       <ReviewWrapper>
+        {reviews.map((review) => (
+          <div key={review.reviewId}>
+            <ReviewCard
+              reviewid={review.reviewId}
+              rating={review.rating}
+              content={review.content}
+              likesCount={review.likesCount}
+              nickname={review.nickname}
+              rank={review.rankImg as 'Silver' | 'Master' | 'Diamond' | 'Gold' | 'Bronze'}
+              profile={review.profile}
+              isLiked={false}
+            />
+          </div>
+        ))}
         <ReviewCard
           reviewid={0}
           rating={3.5}
@@ -237,46 +265,6 @@ function DetailPage() {
           rank={'Silver'}
           profile={'string'}
           isLiked={true}
-        />
-        <ReviewCard
-          reviewid={0}
-          rating={3.5}
-          content={'임시내용'}
-          likesCount={3}
-          nickname={'임시닉'}
-          rank={'Silver'}
-          profile={'string'}
-          isLiked={true}
-        />
-        <ReviewCard
-          reviewid={0}
-          rating={3.5}
-          content={'임시내용'}
-          likesCount={3}
-          nickname={'임시닉'}
-          rank={'Silver'}
-          profile={'string'}
-          isLiked={true}
-        />
-        <ReviewCard
-          reviewid={0}
-          rating={3.5}
-          content={'임시내용'}
-          likesCount={3}
-          nickname={'임시닉'}
-          rank={'Silver'}
-          profile={'string'}
-          isLiked={true}
-        />
-        <ReviewCard
-          reviewid={0}
-          rating={3.5}
-          content={'임시내용'}
-          likesCount={3}
-          nickname={'임시닉'}
-          rank={'Diamond'}
-          profile={'string'}
-          isLiked={false}
         />
       </ReviewWrapper>
       {isModalOpen && (
