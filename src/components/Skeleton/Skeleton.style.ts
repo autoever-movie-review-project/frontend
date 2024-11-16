@@ -1,12 +1,11 @@
-// components/Skeleton/Skeleton.style.ts
 import styled, { css, keyframes } from 'styled-components';
 
 const wave = keyframes`
   0% {
-    background-position: -200% 0;
+    background-position: 200% 50%;
   }
   100% {
-    background-position: 200% 0;
+    background-position: -200% 50%;
   }
 `;
 
@@ -72,14 +71,14 @@ export const SkeletonItem = styled.span<SkeletonItemProps>`
     switch ($animation) {
       case 'pulse':
         return css`
-          animation: ${pulse} 1.5s ease-in-out 0.5s infinite;
+          animation: ${pulse} 1s ease-in-out 0.3s infinite;
         `;
       case 'wave':
         return css`
           background: linear-gradient(
             90deg,
             ${({ theme }) => theme.colors.grayDark} 25%,
-            ${({ theme }) => theme.colors.gray} 37%,
+            ${({ theme }) => theme.colors.grayLight} 37%,
             ${({ theme }) => theme.colors.grayDark} 63%
           );
           background-size: 200% 100%;
