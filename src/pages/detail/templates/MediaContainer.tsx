@@ -27,16 +27,16 @@ const Title = styled.h1`
   margin-bottom: 20px;
 `;
 
-function MediaContainer() {
+function MediaContainer({ trailerId }: { trailerId: string }) {
   return (
     <Container>
       <TrailerWrapper>
         <Title>예고편</Title>
-        <iframe
-          width="100%"
-          height="100%"
-          src="https://www.youtube.com/embed/lQ2FIaPGVKY?loop=1&mute=1&autoplay=1"
-        ></iframe>
+        {trailerId ? (
+          <iframe width="100%" height="100%" src={`https://www.youtube.com/embed/${trailerId}?loop=1`}></iframe>
+        ) : (
+          <iframe width="100%" height="100%" src="https://youtube.com/embed/9dXRiw2Q0b4?si=nJUYr-TsDaFMwlQz"></iframe>
+        )}
       </TrailerWrapper>
       <ShortsWrapper>
         <Title>Shorts</Title>

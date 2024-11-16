@@ -123,6 +123,7 @@ function DetailPage() {
   const { openModal, closeModal, isModalOpen } = useModal();
   const [rating, setRating] = useState(0);
   const [reviewContent, setReviewContent] = useState('');
+  const [trailerId, setTrailerId] = useState('d'); // 유튜브 예고편
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
@@ -136,6 +137,28 @@ function DetailPage() {
     };
     fetchMovieDetails();
   }, [movieId]);
+
+  useEffect(() => {
+    const fetchTrailer = async (movieTitle: string) => {
+      try {
+        const response = await axios.get(`https://www.googleapis.com/youtube/v3/search`, {
+          params: {
+            part: 'snippet',
+            q: `${movieTitle} 예고편`,
+            key: import.meta.env.VITE_YOUTUBE_API_KEY,
+            type: 'video',
+            maxResults: 1,
+          },
+        });
+        const videoId = response.data.items[0]?.id.videoId;
+        setTrailerId(videoId);
+      } catch (error) {
+        console.error('YouTube API Error:', error);
+      }
+    };
+
+    fetchTrailer('파일럿');
+  }, [[movieId]]);
 
   const submitReview = () => {
     if (reviewContent === '') {
@@ -162,7 +185,7 @@ function DetailPage() {
         <DetailMovieInfo />
       </Wrapper>
       <Wrapper>
-        <MediaContainer />
+        <MediaContainer trailerId={trailerId} />
       </Wrapper>
       <Wrapper>
         <ActorContainer
