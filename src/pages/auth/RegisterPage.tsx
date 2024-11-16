@@ -82,9 +82,9 @@ function RegisterPage() {
     const isEmailValid = await trigger('email');
     const email = getValues('email');
 
-    console.log('인증번호 발송 시도');
-
     if (isEmailValid) {
+      console.log('인증번호 발송 시도');
+      toast.success('인증번호를 요청하는 중이에요.');
       try {
         await authApi.checkExistingEmail({ email });
       } catch (error) {
@@ -149,7 +149,7 @@ function RegisterPage() {
                 required: '인증번호를 입력해주세요.',
                 pattern: {
                   value: /^[0-9]{6}$/,
-                  message: '6자리 인증번호를 입력해주세요.',
+                  message: '인증번호 형식이 아니에요.',
                 },
               })}
             />
