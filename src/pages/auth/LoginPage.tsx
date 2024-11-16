@@ -68,10 +68,6 @@ function LoginPage() {
               autoComplete="email"
               {...register('email', {
                 required: '이메일을 입력해주세요.',
-                pattern: {
-                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                  message: '올바른 이메일 형식이 아니에요.',
-                },
               })}
             />
             {errors.email && <S.ErrorMessage>{errors.email.message}</S.ErrorMessage>}
@@ -83,19 +79,12 @@ function LoginPage() {
               autoComplete="current-password"
               {...register('password', {
                 required: '비밀번호를 입력해주세요.',
-                minLength: {
-                  value: 6,
-                  message: '비밀번호는 최소 6자 이상이어야 해요.',
-                },
-                pattern: {
-                  value: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{6,18}$/,
-                  message: '비밀번호는 영문, 숫자, 특수문자를 포함해야 해요.',
-                },
               })}
             />
             {errors.password && <S.ErrorMessage>{errors.password.message}</S.ErrorMessage>}
             <S.ButtonSection>
               <Button
+                type="submit"
                 text={isLoading ? '로그인 중...' : '로그인'}
                 width="300px"
                 fontSize="16px"
