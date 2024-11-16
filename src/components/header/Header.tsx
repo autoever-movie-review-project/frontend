@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import * as S from './Header.style';
 import logo from 'assets/logo.png';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -44,6 +44,11 @@ function Header() {
   const handleUserProfileClick = () => {
     navigate('/mypage');
   };
+
+  // 회원가입 페이지에서는 보이지 헤더가 않습니다.
+  if (location.pathname === '/register') {
+    return null;
+  }
 
   return (
     <S.HeaderWrapper>
