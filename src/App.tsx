@@ -7,8 +7,9 @@ import { lazy, Suspense } from 'react';
 import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
 import { GameLobby } from 'pages/game/gameLobby/GameLobby';
 import { GameRoom } from 'pages/game/gameRoom/GameRoom';
+import Loading from 'components/Loading';
 
-const loadingComp = <div style={{ height: '1000px', backgroundColor: 'red' } as React.CSSProperties}>로딩중</div>;
+const loadingComp = <Loading />;
 const Main = lazy(() => import('pages/main/MainPage'));
 const Detail = lazy(() => import('pages/detail/DetailPage'));
 const Movies = lazy(() => import('pages/movies/MoviesPage'));

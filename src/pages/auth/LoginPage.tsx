@@ -7,7 +7,7 @@ import { LoginRequest } from 'api/auth/auth';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from 'hooks/useAuth';
 import * as S from './LoginPage.style';
-import * as L from '../../components/Loading';
+import Loading from '../../components/Loading';
 import { toast } from 'react-toastify';
 import logo from 'assets/logo.png';
 
@@ -55,11 +55,7 @@ function LoginPage() {
   return (
     <S.Background>
       {/* 로그인 요청 중일 때만 로딩 표시 */}
-      {isLoginLoading && (
-        <L.LoadingOverlay>
-          <L.LoadingCircle />
-        </L.LoadingOverlay>
-      )}
+      {isLoginLoading && <Loading />}
       <S.Layout>
         <S.LoginSection>
           <S.Logo src={logo}></S.Logo>

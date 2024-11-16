@@ -7,7 +7,7 @@ import { useMutation } from '@tanstack/react-query';
 import { authApi } from 'api/auth/authApi';
 import { toast } from 'react-toastify';
 import * as S from './RegisterPage.style';
-import * as L from '../../components/Loading';
+import Loading from '../../components/Loading';
 import { AxiosError } from 'axios';
 
 interface RegisterFormData extends RegisterRequest {
@@ -119,11 +119,7 @@ function RegisterPage() {
 
   return (
     <S.Background>
-      {isPending && (
-        <L.LoadingOverlay>
-          <L.LoadingCircle />
-        </L.LoadingOverlay>
-      )}
+      {isPending && <Loading></Loading>}
       <S.Layout>
         <h1>회원가입을 위한 정보를 입력해주세요.</h1>
         <form onSubmit={handleSubmit(onSubmit)}>
