@@ -1,257 +1,11 @@
-import styled from 'styled-components';
 import { theme } from 'styles/theme';
 import { useEffect, useState } from 'react';
-import EmptyHeartSrc from 'assets/empty-heart.svg?react';
 import Pen from 'assets/pen.svg?react';
 import Headphones from 'assets/headphones.svg?react';
-import kakaoshare from 'assets/kakaoshare.svg?react';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
-import { toast } from 'react-toastify';
-
-const Container = styled.div`
-  display: flex;
-  width: 100%;
-  height: 100%;
-  position: relative;
-  overflow: hidden; // 블러 효과가 컨테이너 밖으로 넘치지 않도록
-  margin-bottom: 60px;
-`;
-
-const MovieInfoContainer = styled.div`
-  min-height: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  margin-top: 60px;
-  position: relative;
-  z-index: 1;
-`;
-
-const getBackgroundImage = (backdropPath?: string) => {
-  const baseUrl = 'https://image.tmdb.org/t/p/original';
-  const gradient = 'linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.7) 100%)';
-
-  if (!backdropPath) return gradient;
-  return `${gradient}, url(${baseUrl}${backdropPath})`;
-};
-
-const MovieDetailWrapper = styled.div<{ backdrop?: string }>`
-  width: 100%;
-  max-height: 80vh;
-  position: relative;
-  display: flex;
-  justify-content: space-between;
-  padding: 0 70px;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: ${(props) => getBackgroundImage(props.backdrop)};
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    filter: blur(8px) brightness(0.4);
-    z-index: -1;
-  }
-
-  z-index: 1;
-`;
-
-const CustomCursor = styled.div<{ isVisible: boolean }>`
-  position: absolute;
-  pointer-events: none;
-  z-index: 100;
-  opacity: ${(props) => (props.isVisible ? 1 : 0)};
-  transition: opacity 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  background-color: rgba(0, 0, 0, 0.3);
-  padding: 8px;
-  border-radius: 50%;
-`;
-
-const MovieImageWrapper = styled.div`
-  width: 240px;
-  height: 380px;
-  margin-top: 40px;
-  position: relative;
-  cursor: pointer;
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: filter 0.3s ease;
-  }
-
-  &:hover {
-    img {
-      filter: brightness(0.7); // 호버 시 이미지를 약간 어둡게
-    }
-
-    ${CustomCursor} {
-      opacity: 1;
-    }
-  }
-`;
-
-const MovieTitle = styled.div`
-  width: 200px;
-  height: 60px;
-  display: flex;
-  padding: 10px;
-  align-items: center;
-  gap: 10px;
-  font-size: 40px;
-  font-weight: bold;
-  color: #ececec;
-`;
-
-const MovieInfoWrapper = styled.div`
-  width: 100%;
-  display: flex;
-  color: #babac1;
-  margin-bottom: 10px;
-`;
-
-const AgeRating = styled.div`
-  display: flex;
-  padding: 5px 10px;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background: ${theme.colors.grayDark};
-  color: ${theme.colors.text};
-  text-align: center;
-  font-size: 15px;
-`;
-
-const Division = styled.div`
-  display: flex;
-  width: 20px;
-  height: 20px;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
-
-const Rating = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  border-radius: 10000px;
-  gap: 5px;
-  /* background-color: ${theme.colors.grayDark}; */
-  font-size: 60px;
-`;
-
-const Year = styled.div`
-  width: 40px;
-  display: flex;
-  align-items: center;
-`;
-
-const RunningTime = styled.div`
-  width: 70px;
-  display: flex;
-  align-items: center;
-`;
-
-const Genre = styled.div`
-  width: 60px;
-  display: flex;
-  align-items: center;
-`;
-
-const MoviePlot = styled.div`
-  display: flex;
-  align-items: center;
-  width: 500px;
-  height: 80px;
-  color: #84868d;
-  font-size: 15px;
-  line-height: 20px;
-`;
-
-const Star = styled.div`
-  color: yellow;
-  font-size: 40px;
-`;
-
-const EmptyHeart = styled(EmptyHeartSrc)``;
-
-const ReviewSection = styled.div`
-  display: flex;
-  color: ${theme.colors.text};
-  justify-content: space-between;
-  width: 500px;
-`;
-
-const ButtonBackground = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 130px;
-  height: 130px;
-  /* background-color: ${theme.colors.grayDark}; */
-  /* border: 2px solid ${theme.colors.grayLight}; */
-  border-radius: 100px;
-  transition: 0.2s all;
-  cursor: pointer;
-
-  &:hover {
-    transform: scale(1.05);
-  }
-`;
-
-const LikeButton = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  gap: 10px;
-  svg {
-    width: 30px;
-    height: 30px;
-  }
-  white-space: nowrap;
-  font-size: ${theme.fontSize.lg};
-`;
-
-const ReviewWriteButton = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  gap: 10px;
-  svg {
-    width: 30px;
-    height: 30px;
-  }
-  white-space: nowrap;
-  font-size: ${theme.fontSize.lg};
-`;
-
-const StyledHeadphones = styled.div`
-  svg {
-    width: 30px;
-    height: 30px;
-  }
-`;
-
-const RatingDistribution = styled.div`
-  width: 33%;
-  height: 300px;
-  margin-top: 170px;
-  color: ${theme.colors.text};
-`;
+import { BarChart, Bar, XAxis, YAxis, Tooltip } from 'recharts';
+import MoviePlayer from './MusicPlayer';
+import * as S from './DetailMovieInfo.style';
+import Skeleton from 'components/Skeleton/Skeleton';
 
 interface Genre {
   id: number;
@@ -277,11 +31,14 @@ const ratingData = [
   { rating: '4점', count: 856, 비율: 31 },
   { rating: '5점', count: 1245, 비율: 45 },
 ];
+
 function DetailMovieInfo() {
+  const [isLiked, setIsLiked] = useState(false);
   const [movieData, setMovieData] = useState<Movie | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [movieLoading, setMovieLoading] = useState(true);
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
+  const [showPlayer, setShowPlayer] = useState(false);
 
   useEffect(() => {
     const fetchMovieData = async () => {
@@ -297,7 +54,7 @@ function DetailMovieInfo() {
       try {
         // 먼저 영화 검색
         const searchResponse = await fetch(
-          'https://api.themoviedb.org/3/search/movie?query=%EA%B8%B0%EC%83%9D%EC%B6%A9&include_adult=false&language=ko-KR&page=1',
+          'https://api.themoviedb.org/3/search/movie?query=%EC%98%AC%EB%93%9C%EB%B3%B4%EC%9D%B4&include_adult=false&language=ko-KR&page=1',
           options
         );
         const searchData = await searchResponse.json();
@@ -306,71 +63,99 @@ function DetailMovieInfo() {
           const movieId = searchData.results[0].id;
           const detailResponse = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?language=ko-KR`, options);
           const detailData = await detailResponse.json();
-          console.log('Movie Detail Data:', detailData); // 들어온 데이터
+          console.log('영화 정보:', detailData);
           setMovieData(detailData);
         }
-        setLoading(false);
+        setMovieLoading(false);
       } catch (err) {
         console.error(err);
-        setLoading(false);
+        setMovieLoading(false);
       }
     };
 
     fetchMovieData();
   }, []);
 
-  if (loading) return <div>로딩 중...</div>;
   if (!movieData) return <div>영화 정보를 찾을 수 없습니다.</div>;
 
-  // 연도 추출 함수
+  // 연도를 추출하는 함수입니다.
   const getYear = (date: string) => new Date(date).getFullYear();
 
-  // 평점 변환 (10점 만점을 5점 만점으로)
+  // 평점 10점 만점을 5점 만점으로 변환합니다.
   const getRating = (vote: number) => (vote / 2).toFixed(1);
 
+  const handleMusicPlay = async () => {
+    setShowPlayer(true);
+  };
+
+  const handleLikeButton = () => {
+    setIsLiked(!isLiked);
+    // 영화 찜하는 API를 호출해야 합니다.
+  };
+
+  // 영화 정보 로딩 시 보여지는 스켈레톤 컴포넌트입니다.
+  if (movieLoading)
+    return (
+      <S.Container>
+        <S.MovieDetailWrapper>
+          <S.MovieInfoContainerSkeleton>
+            <Skeleton animation="pulse" width="auto" height={60}></Skeleton>
+            <Skeleton animation="pulse" width="auto" height={60}></Skeleton>
+            <Skeleton animation="pulse" width="auto" height={160}></Skeleton>
+            <Skeleton animation="pulse" width="auto" height={90}></Skeleton>
+          </S.MovieInfoContainerSkeleton>
+          <S.RatingDistribution>
+            <Skeleton animation="pulse" width={300} height={300}></Skeleton>
+          </S.RatingDistribution>
+          <S.MovieImageWrapperSkeleton>
+            <Skeleton animation="pulse" width={270} height={390}></Skeleton>
+          </S.MovieImageWrapperSkeleton>
+        </S.MovieDetailWrapper>
+      </S.Container>
+    );
+
   return (
-    <Container>
-      <MovieDetailWrapper backdrop={movieData?.backdrop_path || ''}>
-        <MovieInfoContainer>
-          <MovieTitle>{movieData.title}</MovieTitle>
-          <MovieInfoWrapper>
-            <AgeRating>12</AgeRating>
-            <Division>ㆍ</Division>
-            <Year>{getYear(movieData.release_date)}</Year>
-            <Division>ㆍ</Division>
-            <RunningTime>
+    <S.Container>
+      <S.MovieDetailWrapper $backdrop={movieData?.backdrop_path || ''}>
+        <S.MovieInfoContainer>
+          <S.MovieTitle>{movieData.title}</S.MovieTitle>
+          <S.MovieInfoWrapper>
+            <S.AgeRating>12</S.AgeRating>
+            <S.Division>ㆍ</S.Division>
+            <S.Year>{getYear(movieData.release_date)}</S.Year>
+            <S.Division>ㆍ</S.Division>
+            <S.RunningTime>
               {movieData.runtime ? `${Math.floor(movieData.runtime / 60)}시간 ${movieData.runtime % 60}분` : '미정'}
-            </RunningTime>
-            <Division>ㆍ</Division>
-            <Genre>{movieData.genres && movieData.genres.length > 0 ? movieData.genres[0].name : '장르 미정'}</Genre>
-          </MovieInfoWrapper>
-          <MoviePlot>{movieData.overview}</MoviePlot>
-          <ReviewSection>
-            <Rating>
-              <Star>⭐</Star>
+            </S.RunningTime>
+            <S.Division>ㆍ</S.Division>
+            <S.Genre>
+              {movieData.genres && movieData.genres.length > 0 ? movieData.genres[0].name : '장르 미정'}
+            </S.Genre>
+          </S.MovieInfoWrapper>
+          <S.MoviePlot>{movieData.overview}</S.MoviePlot>
+          <S.ReviewSection>
+            <S.Rating>
+              <S.Star>⭐</S.Star>
               {getRating(movieData.vote_average)}
-            </Rating>
-            <ButtonBackground>
-              <LikeButton>
-                <EmptyHeart />
+            </S.Rating>
+            <S.ButtonBackground>
+              <S.LikeButton onClick={handleLikeButton}>
+                <S.Heart $clicked={isLiked} />
                 좋아요
-              </LikeButton>
-            </ButtonBackground>
-            <ButtonBackground>
-              <ReviewWriteButton>
+              </S.LikeButton>
+            </S.ButtonBackground>
+            <S.ButtonBackground>
+              <S.ReviewWriteButton>
                 <Pen />
                 리뷰 작성
-              </ReviewWriteButton>
-            </ButtonBackground>
-          </ReviewSection>
-        </MovieInfoContainer>
-        <RatingDistribution>
-          {/* <ResponsiveContainer width="100%" height="100%"> */}
-          <BarChart width={400} height={300} data={ratingData} margin={{ top: 5, right: 30, left: 20, bottom: 20 }}>
+              </S.ReviewWriteButton>
+            </S.ButtonBackground>
+          </S.ReviewSection>
+        </S.MovieInfoContainer>
+        <S.RatingDistribution>
+          <BarChart width={300} height={300} data={ratingData}>
             <XAxis dataKey="rating" tickLine={false} axisLine={false} tick={{ fill: theme.colors.text }} />
-            <YAxis
-              hide // Y축 숨기기
-            />
+            <YAxis hide />
             <Tooltip
               cursor={{ fill: `${theme.colors.grayDark}`, opacity: '0.5' }}
               formatter={(value) => `${value}%`}
@@ -386,14 +171,11 @@ function DetailMovieInfo() {
               dataKey="비율"
               activeBar={{ fill: `${theme.colors.primaryDark}` }}
               fill={theme.colors.primary}
-              radius={[4, 4, 0, 0]} // 위쪽 모서리만 둥글게
-              barSize={50} // 막대 두께
-              // animationDuration={500}
+              barSize={45}
             />
           </BarChart>
-          {/* </ResponsiveContainer> */}
-        </RatingDistribution>
-        <MovieImageWrapper
+        </S.RatingDistribution>
+        <S.MovieImageWrapper
           onMouseMove={(e) => {
             const rect = e.currentTarget.getBoundingClientRect();
             setCursorPosition({
@@ -403,28 +185,29 @@ function DetailMovieInfo() {
           }}
           onMouseEnter={() => setIsHovering(true)}
           onMouseLeave={() => setIsHovering(false)}
-          onClick={() => toast('🎧 OST가 재생돼요.', { autoClose: 2000 })}
+          onClick={handleMusicPlay}
         >
           <img
             src={movieData?.poster_path ? `https://image.tmdb.org/t/p/w500${movieData.poster_path}` : '포스터'}
             alt={movieData?.title}
           />
           {isHovering && (
-            <CustomCursor
-              isVisible={isHovering}
+            <S.CustomCursor
+              $isVisible={isHovering}
               style={{
                 left: `${cursorPosition.x}px`,
                 top: `${cursorPosition.y}px`,
               }}
             >
-              <StyledHeadphones>
+              <S.StyledHeadphones>
                 <Headphones color="white" />
-              </StyledHeadphones>
-            </CustomCursor>
+              </S.StyledHeadphones>
+            </S.CustomCursor>
           )}
-        </MovieImageWrapper>
-      </MovieDetailWrapper>
-    </Container>
+        </S.MovieImageWrapper>
+      </S.MovieDetailWrapper>
+      {showPlayer && <MoviePlayer movieTitle={movieData?.title || ''} onClose={() => setShowPlayer(false)} />}
+    </S.Container>
   );
 }
 
