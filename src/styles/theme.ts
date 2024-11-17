@@ -24,6 +24,7 @@ const colors = {
   diamond: '#06CBBA',
   master: '#FF033E',
   kakao: '#FEE500',
+  text: '#f0f0f0',
 };
 
 const fontSize = {
@@ -41,6 +42,8 @@ const fontSize = {
 const fontWeight = {
   light: 200,
   regular: 400,
+  medium: 500,
+  semibold: 600,
   bold: 700,
   header: 800,
 };

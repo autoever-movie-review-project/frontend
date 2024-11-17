@@ -4,9 +4,11 @@ import LogOut from 'assets/log-out.svg?react';
 
 export const HeaderWrapper = styled.header`
   position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   top: 0;
   left: 0;
-
   width: 100%;
   height: 80px;
   z-index: 9999;
@@ -14,21 +16,17 @@ export const HeaderWrapper = styled.header`
 `;
 
 export const HeaderContainer = styled.div`
-  width: 100%;
-  height: 80px;
   display: flex;
-  //justify-content: space-between;
-  align-items: center;
-  padding: 0 60px;
-  background-color: black;
+  justify-content: center;
+  width: 100%;
   gap: 30px;
 `;
 
 export const HeaderLogo = styled.img`
   display: flex;
   align-items: center;
-  width: 55px;
-  height: 55px;
+  width: 40px;
+  height: 40px;
   cursor: pointer;
   margin: 10px;
 `;
@@ -43,13 +41,14 @@ export const MenuWrapper = styled.div`
 
 export const MenuContainer = styled.div`
   display: flex;
+  align-items: center;
 `;
 
 export const MenuButton = styled.button<{ $active: boolean }>`
   display: flex;
   border: none;
   background: none;
-  padding: 6px 12px;
+  padding: 4px 1rem;
   justify-content: center;
   align-items: center;
   cursor: pointer;
@@ -88,7 +87,7 @@ export const RightMenu = styled.div`
   display: flex;
   align-items: center;
   justify-self: end;
-  gap: 30px;
+  gap: 20px;
 `;
 
 export const MenuLogin = styled.button`
@@ -114,7 +113,8 @@ export const UserProfile = styled.div`
   align-items: center;
   gap: 15px;
   color: #fff;
-  font-size: ${theme.fontSize.lg};
+  font-size: ${theme.fontSize.md};
+  font-weight: ${theme.fontWeight.semibold};
 `;
 
 export const Profile = styled.img`
@@ -127,13 +127,8 @@ export const Profile = styled.img`
   cursor: pointer;
 `;
 
-export const LogoutButtonWrapper = styled.div`
-  width: 100%;
-  height: 100%;
-`;
-
 export const LogoutButton = styled(LogOut)`
-  color: white;
+  color: ${theme.colors.neutral500};
   width: 15px;
   height: 15px;
   cursor: pointer;
@@ -144,4 +139,15 @@ export const ProfileWrapper = styled.div`
   justify-content: center;
   align-items: center;
   cursor: pointer;
+`;
+
+export const LogoutModalSection = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color: ${theme.colors.text};
+  gap: 40px;
+  margin-top: 10px;
+  font-size: ${theme.fontSize.lg};
 `;
