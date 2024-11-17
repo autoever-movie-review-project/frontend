@@ -6,7 +6,8 @@ services:
     env_file:
       - ./client/.env
     ports:
-      - "80:80" # Nginx가 80번 포트로 리액트 앱을 서빙
+      - "80:80"
+      - "443:443"
     depends_on:
       - server # 서버가 먼저 시작되도록 설정
     networks:
