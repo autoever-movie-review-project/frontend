@@ -8,6 +8,8 @@ services:
       - server
     networks:
       - app-network
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt:ro
 
   server:
     image: vinivin153/movie-review-server:latest
