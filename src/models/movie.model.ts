@@ -1,4 +1,4 @@
-interface Movie {
+export interface Movie {
   movieId: number; // 영화 ID
   title: string; // 번역된 제목
   tagline: string; // 영화 명언(대표 문구)
@@ -17,4 +17,14 @@ interface Movie {
   genre: Array<string>; //MovieGenres 영화 장르
 }
 
-export default Movie;
+export interface BoxOfficeListResDto {
+  movieId: number;
+  rank: string; // 순위
+  audience: string; //관객수 number?
+  mainImg: string;
+  rating: number;
+  title: string;
+  genre: Array<string>;
+  ageRating: string;
+  tagline: string;
+}

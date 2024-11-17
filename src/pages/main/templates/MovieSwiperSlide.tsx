@@ -7,7 +7,7 @@ import { useRef } from 'react';
 import { Swiper as SwiperType } from 'swiper';
 import { NavigationOptions } from 'swiper/types';
 import { useNavigate } from 'react-router-dom';
-import Movie from 'models/movie.model';
+import { Movie } from 'models/movie.model';
 
 const SlideContent = styled.div`
   display: flex;
@@ -107,7 +107,7 @@ function MovieSwiperSlide(props: MovieSwiperSlideProps) {
           {movies.map((movie, index) => (
             <StyledSwiperSlide key={index}>
               <SlideContent onClick={() => handleCardClick(movie.movieId)}>
-                <Image src={movie.mainImg} alt={`${index}번째 영화`} />
+                <Image src={movie.backdropImg} alt={`${index}번째 영화`} />
               </SlideContent>
             </StyledSwiperSlide>
           ))}

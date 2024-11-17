@@ -159,7 +159,7 @@ function DetailPage() {
   //       const response = await axios.get(`https://www.googleapis.com/youtube/v3/search`, {
   //         params: {
   //           part: 'snippet',
-  //           q: `${movieTitle} 예고편`,
+  //           q: `영화 ${movieTitle} 예고편`,
   //           key: import.meta.env.VITE_YOUTUBE_API_KEY,
   //           type: 'video',
   //           maxResults: 1,
@@ -182,7 +182,7 @@ function DetailPage() {
   //       const response = await axios.get('https://www.googleapis.com/youtube/v3/search', {
   //         params: {
   //           part: 'snippet',
-  //           q: `${movieTitle} 쇼츠`,
+  //           q: `영화 ${movieTitle} 쇼츠`,
   //           key: import.meta.env.VITE_YOUTUBE_API_KEY,
   //           type: 'video',
   //           maxResults: 3,

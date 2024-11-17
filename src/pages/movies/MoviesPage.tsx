@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
-import Movie from 'models/movie.model';
+import { Movie } from 'models/movie.model';
 
 const Container = styled.div`
   width: 100%;

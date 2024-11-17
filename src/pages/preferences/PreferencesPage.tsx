@@ -5,6 +5,7 @@ import testimg from 'assets/temp.svg';
 import { theme } from 'styles/theme';
 import { client } from 'api/client';
 import { useNavigate } from 'react-router-dom';
+import { Movie } from 'models/movie.model';
 
 const Layout = styled.div`
   width: 100vw;
@@ -110,24 +111,6 @@ const CompleteButton = styled.button`
   font-size: 20px;
 `;
 
-interface Movie {
-  movieId: number; // 영화 ID
-  mainImg: string; // 메인 포스터 이미지 URL
-  backdropImg: string; // 배경 포스터 이미지 URL
-  title: string; // 영화 제목
-  genre: string[]; // 장르 목록
-  directorName: string[]; // 감독 이름 목록
-  actorName: string[]; // 배우 이름 목록
-  actorImg: string[]; // 배우 프로필 이미지 URL 목록
-  releaseDate: string; // 개봉일 (형식: YYYY-MM-DD)
-  rating: number; // 평점
-  ageRating: string; // 관람 등급
-  runtime: number; // 러닝타임 (분 단위)
-  language: string; // 언어
-  reviewCount: number; // 리뷰 수
-  plot: string; // 줄거리
-}
-
 //더미
 const initialMovies: Movie[] = [
   {
@@ -139,47 +122,50 @@ const initialMovies: Movie[] = [
     directorName: ['Director 1'],
     actorName: ['Actor 1', 'Actor 2'],
     actorImg: ['assets/actor1.jpg', 'assets/actor2.jpg'],
-    releaseDate: '2023-01-01',
+    releaseDate: new Date(),
     rating: 8.5,
     ageRating: 'PG-13',
     runtime: 120,
     language: 'English',
     reviewCount: 100,
     plot: 'This is the plot for Movie Title 1.',
+    tagline: '코미디',
   },
   {
     movieId: 2,
     mainImg: testimg,
-    backdropImg: 'assets/backdrop2.jpg',
-    title: 'Movie Title 2',
-    genre: ['Comedy'],
-    directorName: ['Director 2'],
-    actorName: ['Actor 3', 'Actor 4'],
-    actorImg: ['assets/actor3.jpg', 'assets/actor4.jpg'],
-    releaseDate: '2023-02-01',
-    rating: 7.2,
-    ageRating: 'R',
-    runtime: 90,
-    language: 'French',
-    reviewCount: 50,
-    plot: 'This is the plot for Movie Title 2.',
+    backdropImg: 'assets/backdrop1.jpg',
+    title: 'Movie Title 1',
+    genre: ['Drama', 'Adventure'],
+    directorName: ['Director 1'],
+    actorName: ['Actor 1', 'Actor 2'],
+    actorImg: ['assets/actor1.jpg', 'assets/actor2.jpg'],
+    releaseDate: new Date(),
+    rating: 8.5,
+    ageRating: 'PG-13',
+    runtime: 120,
+    language: 'English',
+    reviewCount: 100,
+    plot: 'This is the plot for Movie Title 1.',
+    tagline: '코미디',
   },
   {
     movieId: 3,
     mainImg: testimg,
-    backdropImg: 'assets/backdrop3.jpg',
-    title: 'Movie Title 3',
-    genre: ['Action', 'Thriller'],
-    directorName: ['Director 3'],
-    actorName: ['Actor 5', 'Actor 6'],
-    actorImg: ['assets/actor5.jpg', 'assets/actor6.jpg'],
-    releaseDate: '2023-03-01',
-    rating: 6.9,
-    ageRating: 'PG',
-    runtime: 110,
-    language: 'Spanish',
-    reviewCount: 75,
-    plot: 'This is the plot for Movie Title 3.',
+    backdropImg: 'assets/backdrop1.jpg',
+    title: 'Movie Title 1',
+    genre: ['Drama', 'Adventure'],
+    directorName: ['Director 1'],
+    actorName: ['Actor 1', 'Actor 2'],
+    actorImg: ['assets/actor1.jpg', 'assets/actor2.jpg'],
+    releaseDate: new Date(),
+    rating: 8.5,
+    ageRating: 'PG-13',
+    runtime: 120,
+    language: 'English',
+    reviewCount: 100,
+    plot: 'This is the plot for Movie Title 1.',
+    tagline: '코미디',
   },
 ];
 
