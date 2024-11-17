@@ -1,20 +1,18 @@
 services:
   client:
-    build:
-      context: ./client
+    image: vinivin153/movie-review-client:latest
     ports:
       - "80:80"
       - "443:443"
     depends_on:
-      - server # 서버가 먼저 시작되도록 설정
+      - server
     networks:
       - app-network
 
   server:
-    build:
-      context: ./server
+    image: vinivin153/movie-review-server:latest
     ports:
-      - "5000:5000" # Express 서버가 5000번 포트로 실행
+      - "5000:5000"
     networks:
       - app-network
 
