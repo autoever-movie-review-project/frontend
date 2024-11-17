@@ -1,0 +1,48 @@
+import express from "express";
+import { createServer } from "node:http";
+import { Server } from "socket.io";
+import cors from "cors";
+
+const app = express();
+const server = createServer(app);
+
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST"],
+    allowedHeaders: ["Content-Type"],
+    credentials: true,
+  })
+);
+
+// WebSocket 프로토콜을 활용한 실시간 통신 기능
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST"],
+    credentials: true,
+  },
+});
+
+io.on("connection", (socket) => {
+  console.log("a user connected");
+
+  socket.on("joinRoom", (gameId, userName) => {
+    socket.join(gameId);
+    console.log(`${userName}이 ${gameId}번 방에 참가`);
+  });
+
+  socket.on("chatMessage", (gameId, message, userName) => {
+    console.log(gameId, message, userName);
+    io.to(gameId).emit(userName, message);
+  });
+
+  socket.on("leaveRoom", (gameId) => {
+    socket.leave(gameId);
+    console.log(`${gameId}번 게임방을 나갑니다`);
+  });
+});
+
+server.listen(5000, () => {
+  console.log("server running at http://localhost:5000");
+});
