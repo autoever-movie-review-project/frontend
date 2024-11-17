@@ -13,6 +13,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Copy docker-compose.yml to EC2
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ec2-user
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          source: "docker-compose.yml"
+          target: "/home/ec2-user/movie-review"
+
       - name: Create .env file
         run: |
           echo "VITE_BASE_URL=${{ secrets.VITE_BASE_URL }}" >> client/.env
@@ -49,6 +58,6 @@ jobs:
           username: ec2-user
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
-            cd /path/to/your/app
+            cd /home/ec2-user/movie-review
             docker-compose pull
             docker-compose up -d
