@@ -27,7 +27,7 @@ const Title = styled.h1`
   margin-bottom: 20px;
 `;
 
-function MediaContainer() {
+function MediaContainer({ movieTitle }) {
   return (
     <Container>
       <TrailerWrapper>

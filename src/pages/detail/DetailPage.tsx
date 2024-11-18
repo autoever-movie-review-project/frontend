@@ -3,6 +3,10 @@ import styled from 'styled-components';
 import DetailMovieInfo from './templates/DetailMovieInfo';
 import MediaContainer from './templates/MediaContainer';
 import ActorContainer from './templates/ActorContainer';
+import Loading from 'components/Loading';
+import { useParams } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { movieApi } from 'api/movie/movieApi';
 
 const Container = styled.div`
   width: 100vm;
@@ -11,7 +15,7 @@ const Container = styled.div`
   background-color: black;
 `;
 
-const Title = styled.h1`
+const Review = styled.h1`
   width: 500px;
   height: 20px;
   font-size: 20px;
@@ -30,27 +34,45 @@ const Wrapper = styled.div`
 `;
 
 function DetailPage() {
+  const { movieId } = useParams<{ movieId: string }>();
+
+  const {
+    data: movie,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ['movie', movieId],
+    queryFn: () => movieApi.getMovieDetail(Number(movieId)),
+    staleTime: 1000 * 60 * 5, // 5분
+    gcTime: 1000 * 60 * 30, // 30분
+  });
+
+  const getImageUrl = (path: string) => {
+    return path ? `https://image.tmdb.org/t/p/w500${path}` : '/default-image.jpg'; // 기본 이미지 경로 지정
+  };
+
+  if (isLoading) return <Loading />;
+  if (error) return <div>오류가 발생했습니다. </div>;
+  if (!movie) return <div>영화 정보를 찾을 수 없습니다.</div>;
+
   return (
     <Container>
       <Wrapper>
-        <DetailMovieInfo />
+        <DetailMovieInfo movie={movie} />
       </Wrapper>
       <Wrapper>
-        <MediaContainer />
+        <MediaContainer movieTitle={movie.title} />
       </Wrapper>
       <Wrapper>
         <ActorContainer
-          actors={[
-            { src: 'image1.jpg', name: '김배우' },
-            { src: 'image1.jpg', name: '김배우' },
-            { src: 'image1.jpg', name: '김배우' },
-            { src: 'image1.jpg', name: '김배우' },
-            { src: 'image2.jpg', name: '이배우' }, //axios 배우리스트
-          ]}
+          actors={movie.actorName.map((name, index) => ({
+            name,
+            src: getImageUrl(movie.actorImg[index]),
+          }))}
         />
       </Wrapper>
       <Wrapper>
-        <Title>리뷰</Title>
+        <Review>리뷰 ({movie.reviewCount})</Review>
       </Wrapper>
     </Container>
   );

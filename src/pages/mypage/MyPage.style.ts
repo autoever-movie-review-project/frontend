@@ -242,10 +242,11 @@ export const MenuBarItemText = styled.div`
 
 export const LikedMovieSection = styled.div`
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
 
   img {
-    width: 280px;
+    width: calc(100% / 1 / 4 - 10px);
     height: 330px;
     border-radius: 12px;
   }

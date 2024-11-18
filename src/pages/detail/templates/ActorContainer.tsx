@@ -50,20 +50,20 @@ const ActorName = styled.span`
   color: #ececec;
 `;
 
-const ActorContainer: React.FC<ActorContainerProps> = ({ actors }) => {
+function ActorContainer({ actors }: ActorContainerProps) {
   return (
     <Container>
       <Title>출연진</Title>
       <ActorList>
         {actors.map((actor, index) => (
           <ActorItem key={index}>
-            <ActorImage src={testactor} alt={actor.name} />
+            <ActorImage src={actor.src} alt={actor.name} />
             <ActorName>{actor.name}</ActorName>
           </ActorItem>
         ))}
       </ActorList>
     </Container>
   );
-};
+}
 
 export default ActorContainer;

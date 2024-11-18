@@ -258,7 +258,7 @@ const EditProfileModal = ({ isOpen, onClose, currentUser, onSubmit }: EditProfil
       await onSubmit(submitData);
       onClose();
     } catch (error) {
-      console.error('프로필 수정 실패:', error);
+      console.error('프로필 수정 실패: ', error);
       toast.error('프로필을 수정하지 못했어요.');
     }
   };

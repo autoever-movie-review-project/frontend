@@ -29,7 +29,7 @@ const ReviewCard = ({
   profile,
   nickname,
   rank,
-  spoilerCount = 5,
+  spoilerCount = 4,
   onSpoilerReport,
 }: ReviewCardProps) => {
   const [isLiked, setIsLiked] = useState(initialIsLiked);

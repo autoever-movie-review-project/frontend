@@ -21,6 +21,7 @@ export const MovieInfoContainer = styled.div`
 `;
 
 export const MovieInfoContainerSkeleton = styled(MovieInfoContainer)`
+  margin-top: 80px;
   gap: 20px;
 `;
 
@@ -209,7 +210,7 @@ export const ReviewWriteButton = styled.div`
 
 export const RatingDistribution = styled.div`
   height: 300px;
-  margin-top: 180px;
+  margin-top: 190px;
   color: ${theme.colors.text};
 `;
 
@@ -255,7 +256,7 @@ export const MovieImageWrapper = styled.div`
 `;
 
 export const MovieImageWrapperSkeleton = styled.div`
-  margin-top: 100px;
+  margin-top: 70px;
 `;
 
 export const StyledHeadphones = styled.div`
