@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
-import { Movie, MovieArray } from 'models/movie.model';
+import { Movie, MovieArray } from 'types/movie';
 import Button from 'components/Button';
 import { fetchSearchMovieList } from 'api/movie/movieApi';
 

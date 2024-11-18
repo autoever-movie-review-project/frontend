@@ -4,7 +4,7 @@ import * as S from './MainPage.style';
 import BoxofficeSlider from './templates/BoxofficeSlider';
 import MovieSwiperSlide from './templates/MovieSwiperSlide';
 import { useAuth } from 'hooks/useAuth';
-import { Movie } from 'models/movie.model';
+import { Movie } from 'types/movie';
 import { fetchBoxOfficeMovieList, fetchPopularMovieList, fetchUpcomingMovieList } from 'api/movie/movieApi';
 
 function MainPage() {

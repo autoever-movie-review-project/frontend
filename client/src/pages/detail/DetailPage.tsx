@@ -11,7 +11,7 @@ import { theme } from 'styles/theme';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { fetchReviewsByMovieId } from 'api/review/reviewApi';
-import { ReviewResponseArray } from 'models/review.model';
+import { ReviewResponseArray } from 'types/review';
 import { useQuery } from '@tanstack/react-query';
 import { movieApi } from 'api/movie/movieApi';
 import Loading from 'components/Loading';
