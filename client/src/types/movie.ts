@@ -15,14 +15,13 @@ export interface Movie {
   reviewCount: number; // 리뷰수
   plot: string; // 줄거리
   tagline: string; // 영화 대표 문구
+  liked: boolean; // 좋아요 여부
 }
 
 export interface Actor {
   actorName: string;
   actorImg: string;
 }
-
-export type MovieArray = Movie[];
 
 export interface BoxOfficeListResDto {
   movieId: number;

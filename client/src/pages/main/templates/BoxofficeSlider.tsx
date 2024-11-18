@@ -8,6 +8,7 @@ import { Swiper as SwiperType } from 'swiper';
 import { NavigationOptions } from 'swiper/types';
 import { useNavigate } from 'react-router-dom';
 import { Movie } from 'types/movie';
+import testImg from 'assets/temp.svg';
 
 const SwiperContainer = styled.div`
   position: relative;
@@ -62,6 +63,12 @@ const Image = styled.img`
   height: 240px;
   object-fit: cover;
   cursor: pointer;
+
+  &:hover {
+    transform: scale(1.05);
+    transition: 0.3s ease-in-out;
+    opacity: 0.8;
+  }
 `;
 
 const Ranking = styled.div`
@@ -102,7 +109,6 @@ function BoxofficeSlider({ title, movies }: MovieSwiperSlideProps) {
     navigate(`/movies/${movieId}`);
   };
 
-  const [asd, setasd] = useState('3');
   return (
     <>
       <h1>{title}</h1>
@@ -119,7 +125,7 @@ function BoxofficeSlider({ title, movies }: MovieSwiperSlideProps) {
             <SwiperSlide key={index} style={{ minWidth: '270px' }}>
               <SlideContent>
                 <Ranking>{index + 1}</Ranking>
-                <Image src={movie.mainImg} alt={`${index}번째 영화`} onClick={() => handleCardClick(movie.movieId)} />
+                <Image src={testImg} alt={`${index}번째 영화`} onClick={() => handleCardClick(movie.movieId)} />
               </SlideContent>
             </SwiperSlide>
           ))}

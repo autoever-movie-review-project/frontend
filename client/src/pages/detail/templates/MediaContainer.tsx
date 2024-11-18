@@ -39,7 +39,7 @@ const ShortsPlayer = styled.div`
 const Title = styled.h1`
   width: 500px;
   height: 20px;
-  font-size: 20px;
+  font-size: 24px;
   font-weight: 600;
   color: #ececec;
   margin-bottom: 20px;

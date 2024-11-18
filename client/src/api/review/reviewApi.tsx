@@ -12,7 +12,7 @@ export const fetchReviewsByMovieId = async (movieId: number) => {
 };
 
 // 내가 쓴 리뷰 Get
-export const fetchReviewByUser = async () => {
+export const fetchMyReviews = async () => {
   try {
     const response = await client.get('/review/my');
     return response.data;
