@@ -1,0 +1,128 @@
+import { memo, useCallback, useState } from 'react';
+import * as S from './ReviewCard.style';
+
+type RankType = 'Master' | 'Diamond' | 'Gold' | 'Silver' | 'Bronze';
+
+interface ReviewCardProps {
+  reviewId?: number;
+  userId?: number; // 리뷰 작성자의 userId
+  currentUserId?: number; // 현재 로그인한 사용자 ID
+  rating: number;
+  content: string;
+  likesCount?: number;
+  isLiked?: boolean;
+  profile?: string;
+  nickname?: string;
+  rank?: RankType;
+  spoilerCount?: number;
+  onSpoilerReport?: (reviewId: number) => void;
+}
+
+const ReviewCard = ({
+  reviewId = 0,
+  userId,
+  currentUserId,
+  rating,
+  content,
+  likesCount = 0,
+  isLiked: initialIsLiked = false,
+  profile,
+  nickname,
+  rank,
+  spoilerCount = 4,
+  onSpoilerReport,
+}: ReviewCardProps) => {
+  const [isLiked, setIsLiked] = useState(initialIsLiked);
+  const [likeCount, setLikeCount] = useState(likesCount);
+  const [isBlurred, setIsBlurred] = useState(spoilerCount >= 5);
+  const [reportCount, setReportCount] = useState(spoilerCount);
+  const [hasReported, setHasReported] = useState(false);
+
+  const isMyReview = userId === currentUserId;
+
+  const renderStars = () => {
+    const stars = [];
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 >= 0.5;
+
+    for (let i = 0; i < 5; i++) {
+      if (i < fullStars) {
+        stars.push(<S.Star key={i} $filled />);
+      } else if (i === fullStars && hasHalfStar) {
+        stars.push(<S.HalfStar key={i} $filled />);
+      } else {
+        stars.push(<S.Star key={i} />);
+      }
+    }
+    return stars;
+  };
+
+  const handleLikeClick = useCallback(() => {
+    setIsLiked((prev) => !prev);
+    setLikeCount((prev) => (isLiked ? prev - 1 : prev + 1));
+  }, [isLiked]);
+
+  const handleSpoilerReport = useCallback(() => {
+    if (!hasReported) {
+      const newCount = reportCount + 1;
+      setReportCount(newCount);
+      setIsBlurred(newCount >= 5);
+      setHasReported(true);
+      onSpoilerReport?.(reviewId);
+    }
+  }, [hasReported, reportCount, reviewId, onSpoilerReport]);
+
+  const handleRevealContent = () => {
+    setIsBlurred(false);
+  };
+
+  return (
+    <S.Card>
+      <S.StarsContainer>
+        <S.StarGroup>{renderStars()}</S.StarGroup>
+        {!isMyReview && (
+          <S.ReportButton
+            onClick={handleSpoilerReport}
+            $hasReported={hasReported}
+            title={hasReported ? '이미 신고하셨습니다' : '스포일러 신고하기'}
+          >
+            <S.ReportIcon />
+          </S.ReportButton>
+        )}
+      </S.StarsContainer>
+      <S.ReviewContainer>
+        {isBlurred && (
+          <S.SpoilerOverlay>
+            <S.SpoilerText>스포일러가 포함된 리뷰에요</S.SpoilerText>
+            <S.RevealButton onClick={handleRevealContent}>리뷰 보기</S.RevealButton>
+          </S.SpoilerOverlay>
+        )}
+        <S.ReviewText $isBlurred={isBlurred}>{content}</S.ReviewText>
+      </S.ReviewContainer>
+      <S.UserSection>
+        <S.UserInfo>
+          <img
+            src={profile}
+            alt={nickname}
+            style={{
+              width: '40px',
+              height: '40px',
+              borderRadius: '50%',
+              objectFit: 'cover',
+            }}
+          />
+          <S.UserDetails>
+            <S.Nickname>{nickname}</S.Nickname>
+            <S.Rank $rank={rank}>{rank}</S.Rank>
+          </S.UserDetails>
+        </S.UserInfo>
+        <S.LikeButton onClick={handleLikeClick}>
+          <S.HeartIcon $isLiked={isLiked} />
+          <S.LikeCount>{likeCount}</S.LikeCount>
+        </S.LikeButton>
+      </S.UserSection>
+    </S.Card>
+  );
+};
+
+export default memo(ReviewCard);

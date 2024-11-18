@@ -1,11 +1,11 @@
-import styled from 'styled-components';
-import star from 'assets/star.svg?react';
-import like from 'assets/redheart.svg';
-import unlike from 'assets/emptyheart.svg';
-import kakaoshare from 'assets/kakaoshare.svg';
+import styled from "styled-components";
+import star from "assets/star.svg?react";
+import like from "assets/redheart.svg";
+import unlike from "assets/emptyheart.svg";
+import kakaoshare from "assets/kakaoshare.svg";
 
-import testimg from 'assets/testimg.svg';
-import { theme } from 'styles/theme';
+import testimg from "assets/testimg.svg";
+import { theme } from "styles/theme";
 
 const MovieInfoContainer = styled.div`
   width: 50%;
@@ -170,9 +170,11 @@ function DetailMovieInfo() {
             <Genre>코미디</Genre>
           </MovieInfoWrapper>
           <MoviePlot>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo beatae iste tempora tempore, sit, eligendi
-            eaque ullam facere error aliquam nostrum minus asperiores! Cum optio provident voluptate sed fugiat,
-            temporibus est nam, qui tempora, quisquam quidem quibusdam minima amet deleniti.
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo
+            beatae iste tempora tempore, sit, eligendi eaque ullam facere error
+            aliquam nostrum minus asperiores! Cum optio provident voluptate sed
+            fugiat, temporibus est nam, qui tempora, quisquam quidem quibusdam
+            minima amet deleniti.
           </MoviePlot>
         </MovieInfoContainer>
         <ButtonWrapper>
