@@ -7,6 +7,7 @@ import { lazy, Suspense } from 'react';
 import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
 import { GameLobby } from 'pages/game/gameLobby/GameLobby';
 import { GameRoom } from 'pages/game/gameRoom/GameRoom';
+import { Test } from 'Test';
 import Loading from 'components/Loading';
 
 const loadingComp = <Loading />;
@@ -47,7 +48,7 @@ function App() {
             element: <MyPage />,
           },
           {
-            path: '/detail/:movieId',
+            path: '/detail/:postId',
             element: (
               <>
                 <Detail />
@@ -69,6 +70,10 @@ function App() {
           {
             path: '/gameroom/:roomId',
             element: <GameRoom />,
+          },
+          {
+            path: '/test',
+            element: <Test />,
           },
         ],
       },
