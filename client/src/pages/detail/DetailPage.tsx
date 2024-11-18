@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { theme } from 'styles/theme';
 import DetailMovieInfo from './templates/DetailMovieInfo';
 import MediaContainer from './templates/MediaContainer';
 import ActorContainer from './templates/ActorContainer';
@@ -7,17 +8,17 @@ import ReviewCard from 'components/ReviewCard';
 import { useModal } from 'hooks/useModal';
 import { Modal } from 'components/Modal/Modal';
 import ReviewRating from './templates/ReviewRating';
-import { theme } from 'styles/theme';
-import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { fetchReviewsByMovieId } from 'api/review/reviewApi';
-import { ReviewResponseArray } from 'models/review.model';
+import { ReviewResponseArray } from 'types/review';
 import { useQuery } from '@tanstack/react-query';
 import { movieApi } from 'api/movie/movieApi';
-import Loading from 'components/Loading';
+import { youtubeApi } from 'api/youtube/youtubeApi';
+import * as S from './templates/DetailMovieInfo.style';
+import Skeleton from 'components/Skeleton/Skeleton';
 
 const Container = styled.div`
-  width: 100vm;
+  width: 100vw;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -29,7 +30,7 @@ const Container = styled.div`
 const Title = styled.h1`
   width: 500px;
   height: 20px;
-  font-size: 20px;
+  font-size: 24px;
   font-weight: 600;
   color: #ececec;
   margin-bottom: 20px;
@@ -41,7 +42,7 @@ const Wrapper = styled.div`
   height: 100%;
   display: flex;
   justify-content: space-between;
-  margin-bottom: 150px;
+  margin-bottom: 100px;
 `;
 
 const ReviewTitleWrapper = styled.div`
@@ -55,7 +56,7 @@ const ReviewTitleWrapper = styled.div`
 
 const ReviewWrapper = styled.div`
   width: 90%;
-  margin: 0 auto;
+  margin-bottom: 50px;
   display: flex;
   flex-wrap: wrap;
   gap: 30px;
@@ -122,16 +123,11 @@ const ReviewSubmitButton = styled.button`
 
 function DetailPage() {
   const { movieId } = useParams<{ movieId: string }>();
-
   const numericMovieId = Number(movieId);
-  const [actorList, setActorList] = useState([]);
   const [reviews, setReviews] = useState<ReviewResponseArray>([]); // 리뷰 데이터
-  const [movieDetails, setMovieDetails] = useState(null); //영화 디테일 데이터
   const { openModal, closeModal, isModalOpen } = useModal(); // 리뷰모달 hook
   const [rating, setRating] = useState(0); // 리뷰별점 post용
   const [reviewContent, setReviewContent] = useState(''); // 리뷰내용 post용
-  const [trailerId, setTrailerId] = useState(''); // 유튜브 예고편 videoId값
-  const [shorts, setShorts] = useState([]); // 쇼츠 3개 배열 videoId값
   const {
     data: movie,
     isLoading,
@@ -142,22 +138,18 @@ function DetailPage() {
     staleTime: 1000 * 60 * 5, // 5분
     gcTime: 1000 * 60 * 30, // 30분
   });
+  const {
+    trailerId,
+    shorts,
+    error: youtubeError,
+    isLoading: youtubeLoading,
+  } = youtubeApi.useYoutube(movie?.title || '');
 
   const getImageUrl = (path: string) => {
     return path ? `https://image.tmdb.org/t/p/w500${path}` : '/default-image.jpg'; // 기본 이미지 경로 지정
   };
 
   useEffect(() => {
-    const fetchMovieDetails = async () => {
-      try {
-        const response = await axios.get(`/api/movie/${movieId}`);
-        setMovieDetails(response.data);
-        setActorList(response.data.actors);
-      } catch (error) {
-        console.error('Error fetching movie details:', error);
-      }
-    };
-
     const getReviews = async () => {
       try {
         const reviewData = await fetchReviewsByMovieId(numericMovieId);
@@ -167,59 +159,8 @@ function DetailPage() {
       }
     };
 
-    fetchMovieDetails();
     getReviews();
   }, [movieId]);
-
-  if (isLoading) return <Loading />;
-  if (error) return <div>오류가 발생했습니다. </div>;
-  if (!movie) return <div>영화 정보를 찾을 수 없습니다.</div>;
-
-  // useEffect(() => {
-  //   const fetchTrailer = async (movieTitle: string) => {
-  //     try {
-  //       const response = await axios.get(`https://www.googleapis.com/youtube/v3/search`, {
-  //         params: {
-  //           part: 'snippet',
-  //           q: `영화 ${movieTitle} 예고편`,
-  //           key: import.meta.env.VITE_YOUTUBE_API_KEY,
-  //           type: 'video',
-  //           maxResults: 1,
-  //         },
-  //       });
-  //       const videoId = response.data.items[0]?.id.videoId;
-  //       setTrailerId(videoId);
-  //     } catch (error) {
-  //       setTrailerId('fail');
-  //       console.error('YouTube API Error:', error);
-  //     }
-  //   };
-
-  //   fetchTrailer('파일럿'); //movieDetails.title
-  // }, [[movieId]]);
-
-  // useEffect(() => {
-  //   const fetchShorts = async (movieTitle: string) => {
-  //     try {
-  //       const response = await axios.get('https://www.googleapis.com/youtube/v3/search', {
-  //         params: {
-  //           part: 'snippet',
-  //           q: `영화 ${movieTitle} 쇼츠`,
-  //           key: import.meta.env.VITE_YOUTUBE_API_KEY,
-  //           type: 'video',
-  //           maxResults: 3,
-  //         },
-  //       });
-  //       const videoIds = response.data.items.map((item: { id: { videoId: string } }) => item.id.videoId);
-  //       setShorts(videoIds);
-  //     } catch (error) {
-  //       console.error('YouTube API Error:', error);
-  //       setShorts([]);
-  //     }
-  //   };
-
-  //   fetchShorts('파일럿'); //movieDetails.title
-  // }, [movieId]);
 
   const submitReview = () => {
     if (reviewContent === '') {
@@ -240,10 +181,31 @@ function DetailPage() {
     closeModal();
   };
 
+  if (error) return <div>오류가 발생했습니다. </div>;
+  if (!movie) return <div>영화 정보를 찾을 수 없습니다.</div>;
+
   return (
     <Container>
+      {isLoading && (
+        <Container>
+          <S.MovieDetailWrapper>
+            <S.MovieInfoContainerSkeleton>
+              <Skeleton animation="pulse" width="auto" height={60}></Skeleton>
+              <Skeleton animation="pulse" width="auto" height={60}></Skeleton>
+              <Skeleton animation="pulse" width="auto" height={160}></Skeleton>
+              <Skeleton animation="pulse" width="auto" height={90}></Skeleton>
+            </S.MovieInfoContainerSkeleton>
+            <S.RatingDistribution>
+              <Skeleton animation="pulse" width={300} height={300}></Skeleton>
+            </S.RatingDistribution>
+            <S.MovieImageWrapperSkeleton>
+              <Skeleton animation="pulse" width={270} height={390}></Skeleton>
+            </S.MovieImageWrapperSkeleton>
+          </S.MovieDetailWrapper>
+        </Container>
+      )}
       <Wrapper>
-        <DetailMovieInfo movie={movie} />
+        <DetailMovieInfo openModal={openModal} isLoading={isLoading} movie={movie} />
       </Wrapper>
       <Wrapper>
         <MediaContainer trailerId={trailerId} shorts={shorts} />
@@ -301,7 +263,6 @@ function DetailPage() {
           </ModalContainer>
         </Modal>
       )}
-      <button onClick={openModal}>임시모달버튼..</button>
     </Container>
   );
 }

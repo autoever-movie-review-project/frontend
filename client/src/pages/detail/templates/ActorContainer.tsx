@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { theme } from 'styles/theme';
 
 interface Actor {
   src: string;
@@ -20,33 +21,36 @@ const Title = styled.h1`
   height: 20px;
   font-size: 20px;
   font-weight: 600;
-  color: #ececec;
+  color: ${theme.colors.text};
   margin-bottom: 20px;
 `;
 
 const ActorList = styled.div`
   display: flex;
   flex-wrap: wrap;
+  gap: 30px;
 `;
 
 const ActorItem = styled.div`
   display: flex;
   align-items: center;
   gap: 20px;
-  width: 20%;
   margin-bottom: 20px;
+  padding-bottom: 10px;
+  padding: 10px;
+  border-bottom: 2px solid ${theme.colors.grayDark};
 `;
 
 const ActorImage = styled.img`
-  width: 50px;
-  height: 50px;
+  width: 65px;
+  height: 65px;
   border-radius: 50%;
   object-fit: cover;
 `;
 
 const ActorName = styled.span`
   font-size: 16px;
-  color: #ececec;
+  color: ${theme.colors.text};
 `;
 
 function ActorContainer({ actors }: ActorContainerProps) {

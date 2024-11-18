@@ -6,9 +6,12 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip } from 'recharts';
 import MoviePlayer from './MusicPlayer';
 import * as S from './DetailMovieInfo.style';
 import { Movie } from 'types/movie';
+import Skeleton from 'components/Skeleton/Skeleton';
 
 interface DetailMovieInfoProps {
   movie: Movie;
+  isLoading?: boolean;
+  openModal: () => void;
 }
 
 const ratingData = [
@@ -19,7 +22,7 @@ const ratingData = [
   { rating: '5점', count: 1245, 비율: 45 },
 ];
 
-function DetailMovieInfo({ movie }: DetailMovieInfoProps) {
+function DetailMovieInfo({ movie, isLoading = false, openModal }: DetailMovieInfoProps) {
   const [isLiked, setIsLiked] = useState(false);
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
@@ -35,6 +38,26 @@ function DetailMovieInfo({ movie }: DetailMovieInfoProps) {
     setIsLiked(!isLiked);
     // TODO: 영화 찜하기 API 호출
   };
+
+  if (isLoading)
+    return (
+      <S.Container>
+        <S.MovieDetailWrapper>
+          <S.MovieInfoContainerSkeleton>
+            <Skeleton animation="pulse" width="auto" height={60}></Skeleton>
+            <Skeleton animation="pulse" width="auto" height={60}></Skeleton>
+            <Skeleton animation="pulse" width="auto" height={160}></Skeleton>
+            <Skeleton animation="pulse" width="auto" height={90}></Skeleton>
+          </S.MovieInfoContainerSkeleton>
+          <S.RatingDistribution>
+            <Skeleton animation="pulse" width={300} height={300}></Skeleton>
+          </S.RatingDistribution>
+          <S.MovieImageWrapperSkeleton>
+            <Skeleton animation="pulse" width={270} height={390}></Skeleton>
+          </S.MovieImageWrapperSkeleton>
+        </S.MovieDetailWrapper>
+      </S.Container>
+    );
 
   return (
     <S.Container>
@@ -65,7 +88,7 @@ function DetailMovieInfo({ movie }: DetailMovieInfoProps) {
               </S.LikeButton>
             </S.ButtonBackground>
             <S.ButtonBackground>
-              <S.ReviewWriteButton>
+              <S.ReviewWriteButton onClick={openModal}>
                 <Pen />
                 리뷰 작성
               </S.ReviewWriteButton>

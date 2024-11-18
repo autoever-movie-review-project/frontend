@@ -5,9 +5,10 @@ import EmptyHeart from 'assets/empty-heart.svg?react';
 export const Container = styled.div`
   display: flex;
   position: relative;
+  background-color: #000;
   width: 100vw;
   height: 100%;
-  margin: 0px calc(-50vw + 50%) 60px calc(-50vw + 50%);
+  margin: 0px calc(-50vw + 50%) 0px calc(-50vw + 50%);
 `;
 
 export const MovieInfoContainer = styled.div`
@@ -39,7 +40,7 @@ export const MovieDetailWrapper = styled.div<{ $backdrop?: string }>`
   position: relative;
   display: flex;
   justify-content: space-between;
-  padding: 0 10%;
+  padding: 0 5%;
 
   &::before {
     content: '';
@@ -99,17 +100,6 @@ export const Division = styled.div`
   align-items: center;
 `;
 
-export const Rating = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  border-radius: 10000px;
-  gap: 5px;
-  /* background-color: ${theme.colors.grayDark}; */
-  font-size: 40px;
-`;
-
 export const Year = styled.div`
   width: 40px;
   display: flex;
@@ -141,7 +131,7 @@ export const MoviePlot = styled.div`
 
 export const Star = styled.div`
   color: yellow;
-  font-size: 35px;
+  font-size: 45px;
 `;
 
 interface LikeButtonProps {
@@ -159,9 +149,8 @@ export const Heart = styled(EmptyHeart)<LikeButtonProps>`
 
 export const ReviewSection = styled.div`
   display: flex;
-  justify-content: space-between;
   color: ${theme.colors.text};
-  margin: 0px 10px;
+  /* margin: 0px 10px; */
 `;
 
 export const ButtonBackground = styled.div`
@@ -179,6 +168,18 @@ export const ButtonBackground = styled.div`
   }
 `;
 
+export const Rating = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  border-radius: 10000px;
+  gap: 5px;
+  /* background-color: ${theme.colors.grayDark}; */
+  font-size: 50px;
+  margin-right: 130px;
+`;
+
 export const LikeButton = styled.div`
   display: flex;
   justify-content: center;
@@ -187,10 +188,11 @@ export const LikeButton = styled.div`
   gap: 10px;
   white-space: nowrap;
   font-size: ${theme.fontSize.lg};
+  margin-right: 160px;
 
   svg {
-    width: 30px;
-    height: 30px;
+    width: 50px;
+    height: 50px;
   }
 `;
 
@@ -201,8 +203,8 @@ export const ReviewWriteButton = styled.div`
   flex-direction: column;
   gap: 10px;
   svg {
-    width: 30px;
-    height: 30px;
+    width: 50px;
+    height: 50px;
   }
   white-space: nowrap;
   font-size: ${theme.fontSize.lg};
@@ -232,7 +234,7 @@ export const CustomCursor = styled.div<{ $isVisible: boolean }>`
 export const MovieImageWrapper = styled.div`
   width: 270px;
   height: 390px;
-  margin-top: 60px;
+  margin-top: 90px;
   margin-left: 30px;
   position: relative;
   cursor: pointer;
@@ -246,6 +248,8 @@ export const MovieImageWrapper = styled.div`
 
   &:hover {
     img {
+      transition: 0.2s ease-in-out;
+      transform: scale(1.03);
       filter: brightness(0.7);
     }
 
