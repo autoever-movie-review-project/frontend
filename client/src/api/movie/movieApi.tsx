@@ -2,6 +2,7 @@ import { client } from 'api/client';
 import axios, { AxiosResponse } from 'axios';
 import { Movie } from 'types/movie';
 
+//영화 상세정보 가져오기
 export const movieApi = {
   getMovieDetail: async (movieId: number): Promise<Movie> => {
     try {
