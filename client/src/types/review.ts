@@ -8,13 +8,14 @@ export interface ReviewRequest {
 export interface ReviewResponse {
   reviewId: number;
   userId: number;
-  nickname: string;
+  writerNickname: string;
   profile: string;
   rankImg: string;
   content: string;
   likesCount: number;
   rating: number;
   createdAt: string;
+  liked: boolean;
   modifiedAt: string;
   liked: boolean;
 }

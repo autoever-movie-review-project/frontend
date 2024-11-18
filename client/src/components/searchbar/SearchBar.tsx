@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import SearchBarInput from './SearchBarInput';
 import SearchBarButton from './SearchBarButton';
 import styled from 'styled-components';
+import ScrollToTop from 'util/ScrollToTop';
 
 const SearchBarContainer = styled.div`
   width: 300px;

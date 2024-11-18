@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
 import { Movie, MovieArray } from 'types/movie';
 import { fetchSearchMovieList, fetchUpcomingMovieList } from 'api/movie/movieApi';
 import BoxofficeSlider from 'pages/main/templates/BoxofficeSlider';
+import Skeleton from 'components/Skeleton/Skeleton';
+import ScrollToTop from 'util/ScrollToTop';
 
 const Container = styled.div`
   width: 100%;
@@ -121,13 +123,44 @@ const BoxofficeSliderWrapper = styled.div`
 
 const genreList = ['액션', '드라마', '코미디', '스페셜', '다큐멘터리', '범죄', 'SF', '로맨스', '공포', '판타지'];
 
+interface MoviesState {
+  movies: MovieArray;
+  page: number;
+  hasMore: boolean;
+  loading: boolean;
+}
+
 const MoviesPage: React.FC = () => {
   const location = useLocation();
   const searchData = location.state?.searchData || '';
-  const [movies, setMovies] = useState<MovieArray>();
   const navigate = useNavigate();
   const [swiperData, setSwiperData] = useState<Array<Movie>>([]);
   const [refresh, setRefresh] = useState(false);
+
+  const [state, setState] = useState<MoviesState>({
+    movies: [],
+    page: 0,
+    hasMore: true,
+    loading: false,
+  });
+
+  const observer = useRef<IntersectionObserver>();
+  const lastMovieElementRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      if (state.loading) return;
+
+      if (observer.current) observer.current.disconnect();
+
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && state.hasMore) {
+          handleFetchSearchMovies(state.page + 1, false);
+        }
+      });
+
+      if (node) observer.current.observe(node);
+    },
+    [state.loading, state.hasMore]
+  );
 
   useEffect(() => {
     const fetchData = async () => {
@@ -141,26 +174,40 @@ const MoviesPage: React.FC = () => {
     fetchData();
   }, []);
 
-  const handleFetchSearchMovies = async () => {
+  const handleFetchSearchMovies = async (page: number, isNewSearch: boolean = false) => {
     try {
-      const fetchedMovies = await fetchSearchMovieList(searchData);
+      setState((prev) => ({ ...prev, loading: true }));
 
-      // 중복 제거 (movieId 기준)
+      const fetchedMovies = await fetchSearchMovieList(searchData, page);
+
       const uniqueMovies = fetchedMovies.filter(
         (movie: Movie, index: number, self: MovieArray) => self.findIndex((m) => m.movieId === movie.movieId) === index
       );
 
-      setMovies(uniqueMovies);
-      console.log('중복 제거 후 데이터:', uniqueMovies);
+      setState((prev) => ({
+        movies: isNewSearch ? uniqueMovies : [...prev.movies, ...uniqueMovies],
+        page: page,
+        hasMore: uniqueMovies.length > 0,
+        loading: false,
+      }));
     } catch (error) {
       console.error('검색 실패:', error);
+      setState((prev) => ({ ...prev, loading: false, hasMore: false }));
     }
   };
 
+  // searchData가 변경될 때 데이터를 초기화하고 새로운 검색 시작
   useEffect(() => {
     if (searchData) {
-      setMovies([]);
-      handleFetchSearchMovies();
+      // 검색어가 변경되면 상태를 완전히 초기화
+      setState({
+        movies: [],
+        page: 0,
+        hasMore: true,
+        loading: false,
+      });
+      window.scrollTo(0, 0);
+      handleFetchSearchMovies(0, true);
     }
   }, [searchData, refresh]);
 
@@ -172,7 +219,7 @@ const MoviesPage: React.FC = () => {
     if (!location.state?.searchData) {
       navigate(location.pathname, {
         state: { ...location.state, searchData: title },
-        replace: true, // 브라우저 기록을 덮어씀
+        replace: true,
       });
     } else {
       location.state.searchData = title;
@@ -188,13 +235,27 @@ const MoviesPage: React.FC = () => {
             <Text>"{searchData}" 에 대한 검색 결과 입니다</Text>
           </TextWrapper>
           <ContentsContainer>
-            {movies &&
-              movies.map((movie: Movie) => (
-                <CardWrapper key={movie.movieId} onClick={() => handleCardClick(movie.movieId)}>
+            {state.movies.map((movie: Movie, index: number) => {
+              if (state.movies.length === index + 1) {
+                return (
+                  <CardWrapper
+                    ref={lastMovieElementRef}
+                    key={`${movie.movieId}-${index}`}
+                    onClick={() => handleCardClick(movie.movieId)}
+                  >
+                    <CardImage src={movie.mainImg} alt={movie.title} />
+                  </CardWrapper>
+                );
+              }
+
+              return (
+                <CardWrapper key={`${movie.movieId}-${index}`} onClick={() => handleCardClick(movie.movieId)}>
                   <CardImage src={movie.mainImg} alt={movie.title} />
                 </CardWrapper>
-              ))}
+              );
+            })}
           </ContentsContainer>
+          {state.loading && <Skeleton />}
         </>
       ) : (
         <>

@@ -146,7 +146,7 @@ function DetailPage() {
     error: reviewsError,
   } = useQuery({
     queryKey: ['reviews', movieId],
-    queryFn: () => fetchReviewsByMovieId(numericMovieId),
+    queryFn: () => fetchReviewsByMovieId(Number(movieId)),
     staleTime: 1000 * 60 * 5, // 5분
     gcTime: 1000 * 60 * 30, // 30분
   });
@@ -281,7 +281,7 @@ function DetailPage() {
               rating={review.rating}
               content={review.content}
               likesCount={review.likesCount}
-              nickname={review.nickname}
+              nickname={review.writerNickname}
               rank={review.rankImg as '마스터' | '다이아' | '골드' | '실버' | '브론즈'}
               profile={review.profile}
               liked={review.liked}
