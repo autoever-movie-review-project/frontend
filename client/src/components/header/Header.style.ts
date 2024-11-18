@@ -19,7 +19,6 @@ export const HeaderContainer = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
-  gap: 30px;
 `;
 
 export const HeaderLogo = styled.img`
@@ -27,8 +26,14 @@ export const HeaderLogo = styled.img`
   align-items: center;
   width: 40px;
   height: 40px;
-  cursor: pointer;
   margin: 10px;
+  cursor: pointer;
+  margin-right: 20px;
+`;
+
+export const MenuContainer = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 export const MenuWrapper = styled.div`
@@ -39,16 +44,11 @@ export const MenuWrapper = styled.div`
   justify-content: space-between;
 `;
 
-export const MenuContainer = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
 export const MenuButton = styled.button<{ $active: boolean }>`
   display: flex;
   border: none;
   background: none;
-  padding: 4px 1rem;
+  padding: 15px;
   justify-content: center;
   align-items: center;
   cursor: pointer;

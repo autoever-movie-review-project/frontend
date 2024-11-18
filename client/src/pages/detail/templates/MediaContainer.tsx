@@ -1,22 +1,24 @@
 import React from 'react';
 import styled from 'styled-components';
+import { theme } from 'styles/theme';
 
 const Container = styled.div`
   display: flex;
   width: 100%;
   height: 400px;
   justify-content: space-between;
+  gap: 20px;
 `;
 
 const TrailerWrapper = styled.div`
-  width: 45%;
+  width: 50%;
   height: 400px;
 `;
 
 const ShortsWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 45%;
+  width: 50%;
   height: 400px;
 `;
 
@@ -55,7 +57,7 @@ function MediaContainer({ trailerId, shorts }: { trailerId: string; shorts: Arra
         )}
       </TrailerWrapper>
       <ShortsWrapper>
-        <Title>Shorts</Title>
+        <Title># Shorts</Title>
         <ShortsPlayer>
           {shorts.map((shortId, index) => (
             <div key={index}>

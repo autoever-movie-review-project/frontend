@@ -52,7 +52,7 @@ export const authApi = {
 
         // accessToken이 존재하면 쿠키에 저장 (refreshToken은 HttpOnly 쿠키로 자동 저장됨)
         if (accessToken) {
-          setCookie('accessToken', accessToken, 30);
+          setCookie('accessToken', accessToken, 60);
         }
 
         return response.data;
