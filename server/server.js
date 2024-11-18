@@ -32,14 +32,14 @@ io.on("connection", (socket) => {
     console.log(`${userName}이 ${gameId}번 방에 참가`);
   });
 
+  socket.on("gameRoomUpdate", () => {
+    console.log("대기방 있는 사람들에게 알림");
+    io.emit("gameRoomUpdate");
+  });
+
   socket.on("chatMessage", (gameId, message, userName) => {
     console.log(gameId, message, userName);
     io.to(gameId).emit(userName, message);
-  });
-
-  socket.on("leaveRoom", (gameId) => {
-    socket.leave(gameId);
-    console.log(`${gameId}번 게임방을 나갑니다`);
   });
 });
 
