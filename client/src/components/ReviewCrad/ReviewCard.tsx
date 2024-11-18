@@ -1,7 +1,7 @@
 import { memo, useCallback, useState } from 'react';
 import * as S from './ReviewCard.style';
-
-type RankType = 'Master' | 'Diamond' | 'Gold' | 'Silver' | 'Bronze';
+import { RankType } from 'types/rank';
+import Profile from 'components/Profile';
 
 interface ReviewCardProps {
   reviewId?: number;
@@ -101,16 +101,7 @@ const ReviewCard = ({
       </S.ReviewContainer>
       <S.UserSection>
         <S.UserInfo>
-          <img
-            src={profile}
-            alt={nickname}
-            style={{
-              width: '40px',
-              height: '40px',
-              borderRadius: '50%',
-              objectFit: 'cover',
-            }}
-          />
+          <Profile width="45px" height="45px"></Profile>
           <S.UserDetails>
             <S.Nickname>{nickname}</S.Nickname>
             <S.Rank $rank={rank}>{rank}</S.Rank>

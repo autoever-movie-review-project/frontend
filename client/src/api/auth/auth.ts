@@ -1,3 +1,5 @@
+import { RankType } from 'types/rank';
+
 export interface EmailRequest {
   email: string;
 }
@@ -26,11 +28,12 @@ export interface LoginRequest {
 }
 
 export interface User {
+  userId?: number;
   email?: string;
   nickname?: string;
   profile?: string;
   points?: number;
-  rankName?: 'Bronze' | 'Silver' | 'Gold' | 'Diamond' | 'Master';
+  rankName?: RankType;
   rankImg?: string;
 }
 
