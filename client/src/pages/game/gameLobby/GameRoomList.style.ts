@@ -65,7 +65,7 @@ export const RoomStatusWapper = styled.div`
   align-items: center;
 `;
 
-export const RoomStatus = styled.span<{ $isPlaying: boolean }>`
+export const RoomStatus = styled.span<{ $isPlaying: 'WAITING' | 'PLAYING' }>`
   font-family: Galmuri11;
   font-size: 24px;
   font-weight: bold;
@@ -74,7 +74,7 @@ export const RoomStatus = styled.span<{ $isPlaying: boolean }>`
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   ${({ $isPlaying }) =>
-    $isPlaying &&
+    $isPlaying === 'PLAYING' &&
     css`
       background: linear-gradient(180deg, #fe5489 0%, #872d49 94.74%);
     `}
