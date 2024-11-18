@@ -1,0 +1,15 @@
+.rating {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  justify-content: center;
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.App {
+  text-align: center;
+  margin: 0 auto;
+  padding-top: 50px;
+}

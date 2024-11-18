@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
+import { Movie, MovieArray } from 'models/movie.model';
+import Button from 'components/Button';
+import { fetchSearchMovieList } from 'api/movie/movieApi';
 
 const Container = styled.div`
   width: 100%;
@@ -16,7 +19,7 @@ const Container = styled.div`
 
 const TextWrapper = styled.div`
   padding-top: 50px;
-  margin-left: 50px;
+  margin-left: 100px;
   width: 100%;
   height: 100%;
   display: flex;
@@ -46,72 +49,39 @@ const CardWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  display: flex;
   gap: 20px;
   border-radius: 5px;
 `;
 
 const CardImage = styled.img`
   width: 100%;
-  height: 240px;
-  object-fit: cover;
+  height: 100%;
+  object-fit: fill;
 `;
-
-const CardTitle = styled.h2`
-  font-size: 18px;
-  color: white;
-  text-align: center;
-  padding: 10px;
-`;
-
-const initData = [
-  {
-    movieId: 0,
-    mainImg: '',
-    backdropImg: '',
-    title: '제목',
-    genre: '장르',
-    director: '디렉터',
-    releaseDate: '',
-    rating: 0,
-  },
-  {
-    movieId: 0,
-    mainImg: '',
-    backdropImg: '',
-    title: '제목',
-    genre: '장르',
-    director: '디렉터',
-    releaseDate: '',
-    rating: 0,
-  },
-];
 
 const MoviesPage: React.FC = () => {
   const location = useLocation();
   const searchData = location.state?.searchData || '';
-  const [movies, setMovies] = useState(initData);
+  const [movies, setMovies] = useState<MovieArray>();
   const navigate = useNavigate();
-  useEffect(() => {
-    if (searchData) {
-      const fetchMovies = async () => {
-        try {
-          const response = await axios.get('http://localhost:5173/api/movie/search', {
-            params: { title: searchData, genre: searchData },
-          });
-          setMovies(response.data);
-          console.log(response.data);
-        } catch (error) {
-          setMovies([]);
-          console.log('검색 get 실패', error);
-        }
-      };
-      // fetchMovies();
+
+  const handleFetchSearchMovies = async () => {
+    try {
+      const fetchedMovies = await fetchSearchMovieList(searchData);
+      setMovies(fetchedMovies);
+      console.log(fetchedMovies);
+    } catch (error) {
+      console.error('검색 실패:', error);
     }
+  };
+
+  useEffect(() => {
+    setMovies([]);
+    if (searchData) handleFetchSearchMovies();
   }, [searchData]);
 
   const handleCardClick = (movieId: number) => {
-    navigate(`/detail/${movieId}`);
+    navigate(`/movies/${movieId}`);
   };
 
   return (
@@ -122,17 +92,19 @@ const MoviesPage: React.FC = () => {
             <Text>"{searchData}" 에 대한 검색 결과 입니다</Text>
           </TextWrapper>
           <ContentsContainer>
-            {movies.map((movie) => (
-              <CardWrapper key={movie.movieId} onClick={() => handleCardClick(movie.movieId)}>
-                <CardImage src={movie.mainImg} alt={movie.title} />
-                <CardTitle>{movie.title}</CardTitle>
-              </CardWrapper>
-            ))}
+            {movies &&
+              movies.map((movie: Movie) => (
+                <CardWrapper key={movie.movieId} onClick={() => handleCardClick(movie.movieId)}>
+                  <CardImage src={movie.mainImg} alt={movie.title} />
+                </CardWrapper>
+              ))}
           </ContentsContainer>
         </>
       ) : (
         <TextWrapper>
-          <Text>검색어를 입력 해 주세요 !!</Text>
+          <Text>키워드를 입력해 주세요!</Text>
+          <Text>이런 장르는 어떠신가요?</Text>
+          <Button text={'ㅎㅇ'}>하이</Button>
         </TextWrapper>
       )}
     </Container>

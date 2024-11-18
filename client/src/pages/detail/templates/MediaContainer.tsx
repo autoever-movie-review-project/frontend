@@ -14,8 +14,24 @@ const TrailerWrapper = styled.div`
 `;
 
 const ShortsWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
   width: 45%;
   height: 400px;
+`;
+
+const ShortsPlayer = styled.div`
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 9 / 16;
+  display: flex;
+  gap: 12px;
+  iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    object-fit: cover;
+  }
 `;
 
 const Title = styled.h1`
@@ -27,23 +43,32 @@ const Title = styled.h1`
   margin-bottom: 20px;
 `;
 
-function MediaContainer({ movieTitle }) {
+function MediaContainer({ trailerId, shorts }: { trailerId: string; shorts: Array<string> }) {
   return (
     <Container>
       <TrailerWrapper>
         <Title>예고편</Title>
-        <iframe
-          width="100%"
-          height="100%"
-          src="https://www.youtube.com/embed/lQ2FIaPGVKY?loop=1&mute=1&autoplay=1"
-        ></iframe>
+        {trailerId !== 'fail' ? (
+          <iframe width="100%" height="100%" src={`https://www.youtube.com/embed/${trailerId}?loop=1`}></iframe>
+        ) : (
+          <iframe width="100%" height="100%" src="https://www.youtube.com/embed/lQ2FIaPGVKY?loop=1&mute=1&"></iframe>
+        )}
       </TrailerWrapper>
       <ShortsWrapper>
         <Title>Shorts</Title>
-        <iframe width="20%" height="100%" src="https://youtube.com//embed/9dXRiw2Q0b4?si=nJUYr-TsDaFMwlQz"></iframe>
+        <ShortsPlayer>
+          {shorts.map((shortId, index) => (
+            <div key={index}>
+              <iframe
+                src={`https://www.youtube.com/embed/${shortId}?theme=dark&autoplay=0&autohide=0&cc_load_policy=1&modestbranding=1&fs=0&showinfo=0&rel=0&iv_load_policy=3&mute=0&loop=1`}
+                allow="encrypted-media"
+                title="Shorts"
+              ></iframe>
+            </div>
+          ))}
+        </ShortsPlayer>
       </ShortsWrapper>
     </Container>
   );
 }
-
 export default MediaContainer;

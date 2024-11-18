@@ -60,3 +60,7 @@ client.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+export const publicClient = axios.create({
+  baseURL: `${import.meta.env.VITE_BASE_URL}/api`,
+});

@@ -7,6 +7,7 @@ import { theme } from 'styles/theme';
 import { Swiper as SwiperType } from 'swiper';
 import { NavigationOptions } from 'swiper/types';
 import { useNavigate } from 'react-router-dom';
+import Movie from 'models/movie.model';
 
 const SwiperContainer = styled.div`
   position: relative;
@@ -78,10 +79,10 @@ const Ranking = styled.div`
 
 interface MovieSwiperSlideProps {
   title: string;
-  images: string[];
+  movies: Movie[];
 }
 
-function BoxofficeSlider({ title, images }: MovieSwiperSlideProps) {
+function BoxofficeSlider({ title, movies }: MovieSwiperSlideProps) {
   const navigate = useNavigate();
   const nextButtonRef = useRef<HTMLButtonElement | null>(null);
   const prevButtonRef = useRef<HTMLButtonElement | null>(null);
@@ -97,7 +98,7 @@ function BoxofficeSlider({ title, images }: MovieSwiperSlideProps) {
   };
 
   const handleCardClick = (movieId: number) => {
-    navigate(`/detail/${movieId}`);
+    navigate(`/movies/${movieId}`);
   };
 
   const [asd, setasd] = useState('3');
@@ -113,11 +114,11 @@ function BoxofficeSlider({ title, images }: MovieSwiperSlideProps) {
           modules={[Pagination, Navigation, Autoplay]}
           onSwiper={handleSwiper}
         >
-          {images.map((image, index) => (
-            <SwiperSlide key={index}>
+          {movies.map((movie, index) => (
+            <SwiperSlide key={index} style={{ minWidth: '270px' }}>
               <SlideContent>
                 <Ranking>{index + 1}</Ranking>
-                <Image src={image} alt={`${index}번째 영화`} onClick={() => handleCardClick(index + 1)} />
+                <Image src={movie.mainImg} alt={`${index}번째 영화`} onClick={() => handleCardClick(movie.movieId)} />
               </SlideContent>
             </SwiperSlide>
           ))}

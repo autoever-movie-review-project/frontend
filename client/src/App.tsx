@@ -1,4 +1,4 @@
-import ScrollToTop from 'components/common/ScrollToTop';
+import ScrollToTop from 'util/ScrollToTop';
 import LoginPage from 'pages/auth/LoginPage';
 import RegisterPage from 'pages/auth/RegisterPage';
 import MyPage from 'pages/mypage/MyPage';
@@ -14,6 +14,7 @@ const loadingComp = <Loading />;
 const Main = lazy(() => import('pages/main/MainPage'));
 const Detail = lazy(() => import('pages/detail/DetailPage'));
 const Movies = lazy(() => import('pages/movies/MoviesPage'));
+const Preferences = lazy(() => import('pages/preferences/PreferencesPage'));
 
 function App() {
   const router = createBrowserRouter(
@@ -48,7 +49,8 @@ function App() {
             element: <MyPage />,
           },
           {
-            path: '/detail/:movieId',
+            path: '/movies/:movieId',
+
             element: (
               <>
                 <Detail />
@@ -70,6 +72,14 @@ function App() {
           {
             path: '/gameroom/:roomId',
             element: <GameRoom />,
+          },
+          {
+            path: '/preferences',
+            element: (
+              <>
+                <Preferences />
+              </>
+            ),
           },
           {
             path: '/test',
