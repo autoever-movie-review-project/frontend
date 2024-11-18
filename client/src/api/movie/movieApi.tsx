@@ -58,14 +58,21 @@ export const fetchUpcomingMovieList = async () => {
 };
 
 //영화 검색 결과 Get
-export const fetchSearchMovieList = async (searchData: string) => {
-  try {
-    const response = await client.get('/movie/search', {
-      params: { keyword: searchData },
-    });
-    return response.data;
-  } catch (error) {
-    console.error('검색 API 호출 실패: ', error);
-    throw error;
-  }
+// export const fetchSearchMovieList = async (searchData: string) => {
+//   try {
+//     const response = await client.get('/movie/search', {
+//       params: { keyword: searchData },
+//     });
+//     return response.data;
+//   } catch (error) {
+//     console.error('검색 API 호출 실패: ', error);
+//     throw error;
+//   }
+// };
+
+export const fetchSearchMovieList = async (keyword: string, page: number) => {
+  const response = await client.get('/movie/search', {
+    params: { keyword: keyword, page: page },
+  });
+  return response.data; // data에는 movies 목록만 반환됨
 };

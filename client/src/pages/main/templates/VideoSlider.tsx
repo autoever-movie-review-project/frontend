@@ -65,7 +65,6 @@ function VideoSlider() {
       loop={true}
       autoplay={{ delay: 60000, disableOnInteraction: false }}
       navigation
-      pagination={{ clickable: true }}
       modules={[Pagination, Navigation, Autoplay]}
       style={{ width: '100%', height: 'calc(100vh - 80px)' }}
     >
