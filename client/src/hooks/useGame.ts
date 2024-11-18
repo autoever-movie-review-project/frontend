@@ -90,7 +90,7 @@ export const useJoinGameRoomMutation = () =>
 // 게임방 랜덤 참여
 export const useJoinRandomRoomMutation = () =>
   useMutation({
-    mutationFn: () => client.post('/game/fastjoin'),
+    mutationFn: () => client.post<{ gameId: number }>('/game/fastjoin'),
   });
 
 // 게임방 나가기
