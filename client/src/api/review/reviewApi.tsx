@@ -10,3 +10,20 @@ export const fetchReviewsByMovieId = async (movieId: number) => {
     throw error;
   }
 };
+
+export const postReview = async ({
+  movieId,
+  rating,
+  content,
+}: {
+  movieId: number;
+  rating: number;
+  content: string;
+}) => {
+  const response = await client.post('/api/reviews', {
+    movieId,
+    rating,
+    content,
+  });
+  return response.data;
+};

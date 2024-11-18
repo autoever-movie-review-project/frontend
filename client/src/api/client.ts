@@ -41,7 +41,7 @@ client.interceptors.response.use(
 
         // 새로운 accessToken을 쿠키에 저장
         const newAccessToken = response.data.accessToken;
-        setCookie('accessToken', newAccessToken, 5); // 5분
+        setCookie('accessToken', newAccessToken, 60); // 1시간
 
         // 새로운 토큰으로 헤더 업데이트
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;

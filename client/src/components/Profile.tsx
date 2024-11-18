@@ -2,8 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { theme } from 'styles/theme';
 import DefaultProfile from 'assets/default-profile.png';
-
-type RankType = 'Master' | 'Diamond' | 'Gold' | 'Silver' | 'Bronze';
+import { RankType } from 'types/rank';
 
 interface ProfileProps {
   width?: string;
@@ -13,11 +12,11 @@ interface ProfileProps {
 }
 
 const rankColors: Record<RankType, string> = {
-  Master: theme.colors.master,
-  Diamond: theme.colors.diamond,
-  Gold: theme.colors.gold,
-  Silver: theme.colors.silver,
-  Bronze: theme.colors.bronze,
+  마스터: theme.colors.master,
+  다이아: theme.colors.diamond,
+  골드: theme.colors.gold,
+  실버: theme.colors.silver,
+  브론즈: theme.colors.bronze,
 };
 
 const ProfileWrap = styled.div<ProfileProps>`
@@ -27,7 +26,7 @@ const ProfileWrap = styled.div<ProfileProps>`
   width: ${(props) => props.width || '100px'};
   height: ${(props) => props.height || '100px'};
   border-radius: 9999px;
-  background-color: ${(props) => (props.rank ? rankColors[props.rank] : rankColors.Bronze)};
+  background-color: ${(props) => (props.rank ? rankColors[props.rank] : rankColors.브론즈)};
   overflow: hidden;
 `;
 
@@ -38,12 +37,12 @@ const ProfileImage = styled.img`
   border-radius: 9999px;
 `;
 
-function Profile({ width, height, rank = 'Bronze', src = DefaultProfile }: ProfileProps) {
+function Profile({ width, height, rank = '브론즈', src = DefaultProfile }: ProfileProps) {
   return (
     <ProfileWrap width={width} height={height} rank={rank}>
       <ProfileImage
         src={src || DefaultProfile}
-        alt={`${rank || 'Bronze'}`}
+        alt={`${rank || '브론즈'}`}
         onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
           e.currentTarget.src = DefaultProfile;
         }}

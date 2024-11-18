@@ -4,8 +4,7 @@ import Heart from 'assets/heart.svg?react';
 import StarImg from 'assets/star.svg?react';
 import StarHalfImg from 'assets/star-half.svg?react';
 import Alert from 'assets/siren.svg?react';
-
-type RankType = 'Master' | 'Diamond' | 'Gold' | 'Silver' | 'Bronze';
+import { RankType } from 'types/rank';
 
 export const Card = styled.div`
   width: 275px;
@@ -128,7 +127,6 @@ export const UserDetails = styled.div`
 `;
 
 export const Nickname = styled.p`
-  margin-left: 4px;
   font-weight: ${theme.fontWeight.regular};
 `;
 
@@ -159,21 +157,21 @@ export const LikeCount = styled.span`
 
 export const Rank = styled.span<{ $rank?: RankType }>`
   display: flex;
-  width: auto;
+  width: fit-content;
   font-size: 0.875rem;
   padding: 0.125rem 0.5rem;
   border-radius: 10px;
   background-color: ${({ $rank }) => {
-    switch ($rank?.toLowerCase()) {
-      case 'master':
+    switch ($rank) {
+      case '마스터':
         return theme.colors.master;
-      case 'diamond':
+      case '다이아':
         return theme.colors.diamond;
-      case 'gold':
+      case '골드':
         return theme.colors.gold;
-      case 'silver':
+      case '실버':
         return theme.colors.silver;
-      case 'bronze':
+      case '브론즈':
       default:
         return theme.colors.bronze;
     }
