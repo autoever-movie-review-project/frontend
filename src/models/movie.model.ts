@@ -17,6 +17,8 @@ export interface Movie {
   genre: Array<string>; //MovieGenres 영화 장르
 }
 
+export type MovieArray = Movie[];
+
 export interface BoxOfficeListResDto {
   movieId: number;
   rank: string; // 순위
