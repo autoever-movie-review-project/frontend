@@ -7,7 +7,7 @@ import { theme } from 'styles/theme';
 import { Swiper as SwiperType } from 'swiper';
 import { NavigationOptions } from 'swiper/types';
 import { useNavigate } from 'react-router-dom';
-import Movie from 'models/movie.model';
+import { Movie } from 'types/movie';
 
 const SwiperContainer = styled.div`
   position: relative;
@@ -75,6 +75,7 @@ const Ranking = styled.div`
   border-radius: 5px;
   font-weight: 900;
   letter-spacing: -5px;
+  padding-right: 4px;
 `;
 
 interface MovieSwiperSlideProps {

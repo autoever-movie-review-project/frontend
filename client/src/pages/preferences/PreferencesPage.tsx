@@ -5,7 +5,7 @@ import testimg from 'assets/temp.svg';
 import { theme } from 'styles/theme';
 import { client } from 'api/client';
 import { useNavigate } from 'react-router-dom';
-import { Movie } from 'models/movie.model';
+import { Movie } from 'types/movie';
 
 const Layout = styled.div`
   width: 100vw;
@@ -122,11 +122,11 @@ const initialMovies: Movie[] = [
     directorName: ['Director 1'],
     actorName: ['Actor 1', 'Actor 2'],
     actorImg: ['assets/actor1.jpg', 'assets/actor2.jpg'],
-    releaseDate: new Date(),
+    releaseDate: '2024-11-11',
     rating: 8.5,
     ageRating: 'PG-13',
     runtime: 120,
-    language: 'English',
+    language: 'en',
     reviewCount: 100,
     plot: 'This is the plot for Movie Title 1.',
     tagline: '코미디',
@@ -140,11 +140,11 @@ const initialMovies: Movie[] = [
     directorName: ['Director 1'],
     actorName: ['Actor 1', 'Actor 2'],
     actorImg: ['assets/actor1.jpg', 'assets/actor2.jpg'],
-    releaseDate: new Date(),
+    releaseDate: '2024-11-11',
     rating: 8.5,
     ageRating: 'PG-13',
     runtime: 120,
-    language: 'English',
+    language: 'en',
     reviewCount: 100,
     plot: 'This is the plot for Movie Title 1.',
     tagline: '코미디',
@@ -158,11 +158,11 @@ const initialMovies: Movie[] = [
     directorName: ['Director 1'],
     actorName: ['Actor 1', 'Actor 2'],
     actorImg: ['assets/actor1.jpg', 'assets/actor2.jpg'],
-    releaseDate: new Date(),
+    releaseDate: '2024-11-11',
     rating: 8.5,
     ageRating: 'PG-13',
     runtime: 120,
-    language: 'English',
+    language: 'en',
     reviewCount: 100,
     plot: 'This is the plot for Movie Title 1.',
     tagline: '코미디',

@@ -11,10 +11,11 @@ import { theme } from 'styles/theme';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { fetchReviewsByMovieId } from 'api/review/reviewApi';
-import { ReviewResponseArray } from 'models/review.model';
+import { ReviewResponseArray } from 'types/review';
 import { useQuery } from '@tanstack/react-query';
 import { movieApi } from 'api/movie/movieApi';
 import Loading from 'components/Loading';
+import { fetchTrailer } from 'api/youtube/youtubeApi';
 
 const Container = styled.div`
   width: 100vm;
@@ -147,79 +148,9 @@ function DetailPage() {
     return path ? `https://image.tmdb.org/t/p/w500${path}` : '/default-image.jpg'; // 기본 이미지 경로 지정
   };
 
-  useEffect(() => {
-    const fetchMovieDetails = async () => {
-      try {
-        const response = await axios.get(`/api/movie/${movieId}`);
-        setMovieDetails(response.data);
-        setActorList(response.data.actors);
-      } catch (error) {
-        console.error('Error fetching movie details:', error);
-      }
-    };
-
-    const getReviews = async () => {
-      try {
-        const reviewData = await fetchReviewsByMovieId(numericMovieId);
-        setReviews(reviewData);
-      } catch (error) {
-        console.error('Failed to fetch reviews:', error);
-      }
-    };
-
-    fetchMovieDetails();
-    getReviews();
-  }, [movieId]);
-
   if (isLoading) return <Loading />;
   if (error) return <div>오류가 발생했습니다. </div>;
   if (!movie) return <div>영화 정보를 찾을 수 없습니다.</div>;
-
-  // useEffect(() => {
-  //   const fetchTrailer = async (movieTitle: string) => {
-  //     try {
-  //       const response = await axios.get(`https://www.googleapis.com/youtube/v3/search`, {
-  //         params: {
-  //           part: 'snippet',
-  //           q: `영화 ${movieTitle} 예고편`,
-  //           key: import.meta.env.VITE_YOUTUBE_API_KEY,
-  //           type: 'video',
-  //           maxResults: 1,
-  //         },
-  //       });
-  //       const videoId = response.data.items[0]?.id.videoId;
-  //       setTrailerId(videoId);
-  //     } catch (error) {
-  //       setTrailerId('fail');
-  //       console.error('YouTube API Error:', error);
-  //     }
-  //   };
-
-  //   fetchTrailer('파일럿'); //movieDetails.title
-  // }, [[movieId]]);
-
-  // useEffect(() => {
-  //   const fetchShorts = async (movieTitle: string) => {
-  //     try {
-  //       const response = await axios.get('https://www.googleapis.com/youtube/v3/search', {
-  //         params: {
-  //           part: 'snippet',
-  //           q: `영화 ${movieTitle} 쇼츠`,
-  //           key: import.meta.env.VITE_YOUTUBE_API_KEY,
-  //           type: 'video',
-  //           maxResults: 3,
-  //         },
-  //       });
-  //       const videoIds = response.data.items.map((item: { id: { videoId: string } }) => item.id.videoId);
-  //       setShorts(videoIds);
-  //     } catch (error) {
-  //       console.error('YouTube API Error:', error);
-  //       setShorts([]);
-  //     }
-  //   };
-
-  //   fetchShorts('파일럿'); //movieDetails.title
-  // }, [movieId]);
 
   const submitReview = () => {
     if (reviewContent === '') {
