@@ -2,6 +2,7 @@ import { memo, useCallback, useState } from 'react';
 import * as S from './ReviewCard.style';
 import { RankType } from 'types/rank';
 import Profile from 'components/Profile';
+import { fetchDeleteReviewLike, fetchPostReviewLike } from 'api/like/reviewLikeApi';
 
 interface ReviewCardProps {
   reviewId?: number;
@@ -57,10 +58,26 @@ const ReviewCard = ({
     return stars;
   };
 
-  const handleLikeClick = useCallback(() => {
-    setIsLiked((prev) => !prev);
-    setLikeCount((prev) => (isLiked ? prev - 1 : prev + 1));
-  }, [isLiked]);
+  const handleLikeClick = useCallback(
+    async (reviewId: number) => {
+      try {
+        if (isLiked) {
+          // 좋아요 취소
+          await fetchDeleteReviewLike(reviewId);
+          setIsLiked(false);
+          setLikeCount((prev) => prev - 1);
+        } else {
+          // 좋아요
+          await fetchPostReviewLike(reviewId);
+          setIsLiked(true);
+          setLikeCount((prev) => prev + 1);
+        }
+      } catch (error) {
+        console.error('좋아요 처리 중 오류 발생:', error);
+      }
+    },
+    [isLiked]
+  );
 
   const handleSpoilerReport = useCallback(() => {
     if (!hasReported) {
@@ -107,7 +124,7 @@ const ReviewCard = ({
             <S.Rank $rank={rank}>{rank}</S.Rank>
           </S.UserDetails>
         </S.UserInfo>
-        <S.LikeButton onClick={handleLikeClick}>
+        <S.LikeButton onClick={() => handleLikeClick(reviewId)}>
           <S.HeartIcon $isLiked={isLiked} />
           <S.LikeCount>{likeCount}</S.LikeCount>
         </S.LikeButton>
