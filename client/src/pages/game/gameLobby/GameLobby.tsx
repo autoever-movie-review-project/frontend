@@ -9,11 +9,13 @@ import { socket } from 'socket';
 import { useModal } from 'hooks/useModal';
 import { Modal } from 'components/Modal/Modal';
 import { CreateGameRoom } from './CreateGameRoom';
+import { useNavigate } from 'react-router-dom';
 
 export const GameLobby = () => {
   const joinRandomRoomMutation = useJoinRandomRoomMutation();
   const queryClient = useQueryClient();
   const { isModalOpen, openModal, closeModal } = useModal();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleGameRoomUpdate = () => {
@@ -29,7 +31,13 @@ export const GameLobby = () => {
   }, []);
 
   const handleJoinRandomRoomClick = () => {
-    joinRandomRoomMutation.mutate();
+    joinRandomRoomMutation.mutate(undefined, {
+      onSuccess: (data) => {
+        const gameId = data.data.gameId;
+        socket.emit('gameRoomUpdate');
+        navigate(`/gameroom/${gameId}`);
+      },
+    });
   };
 
   return (
