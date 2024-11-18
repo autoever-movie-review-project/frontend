@@ -1,5 +1,5 @@
 import React from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { theme } from 'styles/theme';
 
 interface ButtonStyleProps {
@@ -19,7 +19,7 @@ const StyledButton = styled.button<ButtonStyleProps>`
   align-items: center;
   width: ${({ width }) => width || '270px'};
   height: 36px;
-  border: 1px solid ${theme.colors.text};
+  /* border: 1px solid ${theme.colors.text}; */
   border-radius: 8px;
   padding: 12px;
   background-color: ${theme.colors.primary};

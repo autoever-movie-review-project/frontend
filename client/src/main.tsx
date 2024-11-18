@@ -16,8 +16,8 @@ createRoot(document.getElementById('root')!).render(
       <ThemeProvider theme={theme}>
         <App />
         <ToastContainer
-          position="bottom-right"
-          autoClose={5000}
+          position="top-center"
+          autoClose={2000}
           hideProgressBar={false}
           newestOnTop={true}
           closeOnClick

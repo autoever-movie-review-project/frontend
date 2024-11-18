@@ -1,7 +1,7 @@
 import styled, { keyframes } from 'styled-components';
-import { theme } from 'styles/theme';
+import { theme } from 'styles/theme.ts';
 
-export const rotate = keyframes`
+const rotate = keyframes`
   from {
     transform: rotate(0deg);
   }
@@ -10,20 +10,20 @@ export const rotate = keyframes`
   }
 `;
 
-export const LoadingOverlay = styled.div`
+const LoadingOverlay = styled.div`
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: ${theme.colors.modalBackground};
+  background: rgba(0, 0, 0, 0.8);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
 `;
 
-export const LoadingCircle = styled.div`
+const LoadingCircle = styled.div`
   width: 40px;
   height: 40px;
   border: 4px solid #fff;
@@ -31,3 +31,13 @@ export const LoadingCircle = styled.div`
   border-radius: 50%;
   animation: ${rotate} 1s linear infinite;
 `;
+
+function Loading() {
+  return (
+    <LoadingOverlay>
+      <LoadingCircle />
+    </LoadingOverlay>
+  );
+}
+
+export default Loading;

@@ -140,3 +140,14 @@ export const ProfileWrapper = styled.div`
   align-items: center;
   cursor: pointer;
 `;
+
+export const LogoutModalSection = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color: ${theme.colors.text};
+  gap: 40px;
+  margin-top: 10px;
+  font-size: ${theme.fontSize.lg};
+`;

@@ -1,189 +1,130 @@
-import styled from 'styled-components';
-import star from 'assets/star.svg';
-import like from 'assets/redheart.svg';
-import unlike from 'assets/emptyheart.svg';
-import kakaoshare from 'assets/kakaoshare.svg';
+import { useState } from 'react';
+import { theme } from 'styles/theme';
+import Pen from 'assets/pen.svg?react';
+import Headphones from 'assets/headphones.svg?react';
+import { BarChart, Bar, XAxis, YAxis, Tooltip } from 'recharts';
+import MoviePlayer from './MusicPlayer';
+import * as S from './DetailMovieInfo.style';
+import { Movie } from 'types/movie';
 
-import testimg from 'assets/testimg.svg';
+interface DetailMovieInfoProps {
+  movie: Movie;
+}
 
-const MovieInfoContainer = styled.div`
-  width: 50%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  margin-top: 60px;
-`;
+const ratingData = [
+  { rating: '1점', count: 89, 비율: 3 },
+  { rating: '2점', count: 156, 비율: 6 },
+  { rating: '3점', count: 421, 비율: 15 },
+  { rating: '4점', count: 856, 비율: 31 },
+  { rating: '5점', count: 1245, 비율: 45 },
+];
 
-const MovieDetailWrapper = styled.div`
-  width: 100%;
-`;
+function DetailMovieInfo({ movie }: DetailMovieInfoProps) {
+  const [isLiked, setIsLiked] = useState(false);
+  const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
+  const [isHovering, setIsHovering] = useState(false);
+  const [showPlayer, setShowPlayer] = useState(false);
 
-const MovieImageWrapper = styled.div`
-  width: 550px;
-  height: 300px;
-  margin-top: 60px;
-`;
+  const getYear = (date: string) => new Date(date).getFullYear();
 
-const MovieTitle = styled.div`
-  width: 200px;
-  height: 60px;
-  display: flex;
-  padding: 10px;
-  align-items: center;
-  gap: 10px;
-  font-size: 40px;
-  font-weight: bold;
-  color: #ececec;
-`;
+  const convertToFiveStarRating = (rating: number) => (rating / 2).toFixed(1);
 
-const MovieInfoWrapper = styled.div`
-  width: 100%;
-  display: flex;
-  color: #babac1;
-`;
+  const handleMusicPlay = () => setShowPlayer(true);
 
-const AgeRating = styled.div`
-  display: flex;
-  width: 40px;
-  height: 20px;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background: #2e2f31;
+  const handleLikeButton = () => {
+    setIsLiked(!isLiked);
+    // TODO: 영화 찜하기 API 호출
+  };
 
-  color: #ececec;
-  text-align: center;
-  font-size: 15px;
-`;
-
-const Division = styled.div`
-  display: flex;
-  width: 20px;
-  height: 20px;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
-
-const Rating = styled.div`
-  width: 40px;
-  img {
-  }
-  font-size: 16px;
-  display: flex;
-  justify-content: space-between;
-  color: #ececec;
-  align-items: center;
-`;
-
-const Year = styled.div`
-  width: 40px;
-  display: flex;
-  align-items: center;
-`;
-
-const RunningTime = styled.div`
-  width: 70px;
-  display: flex;
-  align-items: center;
-`;
-
-const Genre = styled.div`
-  width: 60px;
-  display: flex;
-  align-items: center;
-`;
-
-const MoviePlot = styled.div`
-  display: flex;
-  align-items: center;
-  width: 500px;
-  height: 80px;
-  color: #84868d;
-  font-size: 15px;
-  line-height: 20px;
-`;
-
-const ButtonWrapper = styled.div`
-  width: 500px;
-  height: 30px;
-  display: flex;
-  justify-content: space-between;
-  margin-top: auto;
-`;
-
-const NormalButtonWrapper = styled.div`
-  display: flex;
-  gap: 5px;
-`;
-
-const NormalButton = styled.button`
-  border-radius: 5px;
-  background: #5f5f5f;
-  display: flex;
-  width: 80px;
-  height: 30px;
-  justify-content: center;
-  align-items: center;
-  img {
-    margin-right: 5px;
-  }
-  color: #ececec;
-`;
-
-const KaKaoButton = styled.button`
-  display: flex;
-  width: 140px;
-  height: 30px;
-  align-items: center;
-  background: #fee500;
-  border-radius: 5px;
-`;
-
-function DetailMovieInfo() {
   return (
-    <>
-      <MovieDetailWrapper>
-        <MovieInfoContainer>
-          <MovieTitle>파일럿</MovieTitle> {/**/}
-          <MovieInfoWrapper>
-            <AgeRating>12</AgeRating>
-            <Division>ㆍ</Division>
-            <Rating>
-              <img src={star} />
-              4.1
-            </Rating>
-            <Division>ㆍ</Division>
-            <Year>2024</Year>
-            <Division>ㆍ</Division>
-            <RunningTime>1시간 51분</RunningTime>
-            <Division>ㆍ</Division>
-            <Genre>코미디</Genre>
-          </MovieInfoWrapper>
-          <MoviePlot>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nemo beatae iste tempora tempore, sit, eligendi
-            eaque ullam facere error aliquam nostrum minus asperiores! Cum optio provident voluptate sed fugiat,
-            temporibus est nam, qui tempora, quisquam quidem quibusdam minima amet deleniti.
-          </MoviePlot>
-        </MovieInfoContainer>
-        <ButtonWrapper>
-          <NormalButtonWrapper>
-            <NormalButton>
-              <img src={like} />
-              3,452
-            </NormalButton>
-            <NormalButton>예매하기</NormalButton>
-          </NormalButtonWrapper>
-          <KaKaoButton>
-            <img src={kakaoshare} />
-          </KaKaoButton>
-        </ButtonWrapper>
-      </MovieDetailWrapper>
-      <MovieImageWrapper>
-        <img src={testimg} />
-      </MovieImageWrapper>
-    </>
+    <S.Container>
+      <S.MovieDetailWrapper $backdrop={movie.backdropImg}>
+        <S.MovieInfoContainer>
+          <S.MovieTitle>{movie.title}</S.MovieTitle>
+          <S.MovieInfoWrapper>
+            <S.AgeRating>{movie.ageRating}</S.AgeRating>
+            <S.Division>ㆍ</S.Division>
+            <S.Year>{getYear(movie.releaseDate)}</S.Year>
+            <S.Division>ㆍ</S.Division>
+            <S.RunningTime>
+              {movie.runtime ? `${Math.floor(movie.runtime / 60)}시간 ${movie.runtime % 60}분` : '미정'}
+            </S.RunningTime>
+            <S.Division>ㆍ</S.Division>
+            <S.Genre>{movie.genre[0] ?? '장르 미정'}</S.Genre>
+          </S.MovieInfoWrapper>
+          <S.MoviePlot>{movie.plot}</S.MoviePlot>
+          <S.ReviewSection>
+            <S.Rating>
+              <S.Star>⭐</S.Star>
+              {convertToFiveStarRating(movie.rating)}
+            </S.Rating>
+            <S.ButtonBackground>
+              <S.LikeButton onClick={handleLikeButton}>
+                <S.Heart $clicked={isLiked} />
+                좋아요
+              </S.LikeButton>
+            </S.ButtonBackground>
+            <S.ButtonBackground>
+              <S.ReviewWriteButton>
+                <Pen />
+                리뷰 작성
+              </S.ReviewWriteButton>
+            </S.ButtonBackground>
+          </S.ReviewSection>
+        </S.MovieInfoContainer>
+        <S.RatingDistribution>
+          <BarChart width={300} height={300} data={ratingData}>
+            <XAxis dataKey="rating" tickLine={false} axisLine={false} tick={{ fill: theme.colors.text }} />
+            <YAxis hide />
+            <Tooltip
+              cursor={{ fill: theme.colors.grayDark, opacity: '0.5' }}
+              formatter={(value) => `${value}%`}
+              contentStyle={{
+                backgroundColor: theme.colors.grayDark,
+                border: 'none',
+                borderRadius: '4px',
+                padding: '10px',
+              }}
+              labelStyle={{ color: theme.colors.text }}
+            />
+            <Bar
+              dataKey="비율"
+              activeBar={{ fill: theme.colors.primaryDark }}
+              fill={theme.colors.primary}
+              barSize={45}
+            />
+          </BarChart>
+        </S.RatingDistribution>
+        <S.MovieImageWrapper
+          onMouseMove={(e) => {
+            const rect = e.currentTarget.getBoundingClientRect();
+            setCursorPosition({
+              x: e.clientX - rect.left - 23,
+              y: e.clientY - rect.top - 23,
+            });
+          }}
+          onMouseEnter={() => setIsHovering(true)}
+          onMouseLeave={() => setIsHovering(false)}
+          onClick={handleMusicPlay}
+        >
+          <img src={movie.mainImg} alt={movie.title} />
+          {isHovering && (
+            <S.CustomCursor
+              $isVisible={isHovering}
+              style={{
+                left: `${cursorPosition.x}px`,
+                top: `${cursorPosition.y}px`,
+              }}
+            >
+              <S.StyledHeadphones>
+                <Headphones color="white" />
+              </S.StyledHeadphones>
+            </S.CustomCursor>
+          )}
+        </S.MovieImageWrapper>
+      </S.MovieDetailWrapper>
+      {showPlayer && <MoviePlayer movieTitle={movie.title} onClose={() => setShowPlayer(false)} />}
+    </S.Container>
   );
 }
 

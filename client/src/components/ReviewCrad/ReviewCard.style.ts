@@ -3,6 +3,9 @@ import { theme } from 'styles/theme';
 import Heart from 'assets/heart.svg?react';
 import StarImg from 'assets/star.svg?react';
 import StarHalfImg from 'assets/star-half.svg?react';
+import Alert from 'assets/siren.svg?react';
+
+type RankType = 'Master' | 'Diamond' | 'Gold' | 'Silver' | 'Bronze';
 
 export const Card = styled.div`
   width: 275px;
@@ -13,12 +16,18 @@ export const Card = styled.div`
   border-radius: ${theme.borderRadius.xs};
   padding: 12px;
   color: white;
+  position: relative;
 `;
 
 export const StarsContainer = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 5px;
+  justify-content: space-between;
+`;
+
+export const StarGroup = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 export const Star = styled(StarImg)<{ $filled?: boolean }>`
@@ -33,7 +42,11 @@ export const HalfStar = styled(StarHalfImg)<{ $filled?: boolean }>`
   fill: ${(props) => (props.$filled ? `${theme.colors.primaryDark}` : '#111')};
 `;
 
-export const ReviewText = styled.p`
+export const ReviewContainer = styled.div`
+  position: relative;
+`;
+
+export const ReviewText = styled.p<{ $isBlurred?: boolean }>`
   display: block;
   height: 240px;
   margin-bottom: 15px;
@@ -42,6 +55,58 @@ export const ReviewText = styled.p`
   border-bottom: 0.5px solid ${theme.colors.grayLight};
   overflow: hidden;
   text-overflow: ellipsis;
+  filter: ${(props) => (props.$isBlurred ? 'blur(4px)' : 'none')};
+`;
+
+export const SpoilerOverlay = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 15px;
+  /* background-color: rgba(31, 41, 55, 0.95); */
+  /* backdrop-filter: blur(4px); */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  z-index: 1;
+`;
+
+export const SpoilerText = styled.span`
+  font-size: ${theme.fontSize.sm};
+  color: ${theme.colors.grayLight};
+`;
+
+export const RevealButton = styled.button`
+  background: none;
+  border: 1px solid ${theme.colors.grayLight};
+  border-radius: ${theme.borderRadius.xs};
+  padding: 6px 12px;
+  color: ${theme.colors.grayLight};
+  cursor: pointer;
+  font-size: ${theme.fontSize.sm};
+
+  &:hover {
+    background-color: rgba(156, 163, 175, 0.1);
+  }
+`;
+
+export const ReportButton = styled.button<{ $hasReported: boolean }>`
+  display: flex;
+  align-items: center;
+  background: none;
+  border: none;
+  cursor: ${(props) => (props.$hasReported ? 'default' : 'pointer')};
+  opacity: ${(props) => (props.$hasReported ? 0.5 : 1)};
+  margin-right: 4px;
+`;
+
+export const ReportIcon = styled(Alert)`
+  width: 18px;
+  height: 18px;
+  color: ${theme.colors.grayLight};
 `;
 
 export const UserSection = styled.div`
@@ -70,7 +135,7 @@ export const Nickname = styled.p`
 export const LikeButton = styled.button`
   display: flex;
   align-items: center;
-  gap: 0.25rem;
+  gap: 7px;
   background: none;
   border: none;
   cursor: pointer;
@@ -92,13 +157,7 @@ export const LikeCount = styled.span`
   color: #9ca3af;
 `;
 
-type RankType = 'Master' | 'Diamond' | 'Gold' | 'Silver' | 'Bronze';
-
-interface RankProps {
-  $rank?: RankType;
-}
-
-export const Rank = styled.span<RankProps>`
+export const Rank = styled.span<{ $rank?: RankType }>`
   display: flex;
   width: auto;
   font-size: 0.875rem;

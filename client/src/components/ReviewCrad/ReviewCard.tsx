@@ -1,67 +1,116 @@
-import React from 'react';
-import { toast } from 'react-toastify';
-import { useAuth } from 'hooks/useAuth';
-import Profile from '../Profile';
-import { User } from 'api/auth/auth';
+import { memo, useCallback, useState } from 'react';
 import * as S from './ReviewCard.style';
 
 type RankType = 'Master' | 'Diamond' | 'Gold' | 'Silver' | 'Bronze';
 
-interface ReviewCardProps extends Omit<User, 'rankName'> {
-  reviewid?: number;
-  rating?: number;
-  content?: string;
+interface ReviewCardProps {
+  reviewId?: number;
+  userId?: number; // 리뷰 작성자의 userId
+  currentUserId?: number; // 현재 로그인한 사용자 ID
+  rating: number;
+  content: string;
   likesCount?: number;
   isLiked?: boolean;
+  profile?: string;
+  nickname?: string;
   rank?: RankType;
+  spoilerCount?: number;
+  onSpoilerReport?: (reviewId: number) => void;
 }
 
-function ReviewCard({
+const ReviewCard = ({
+  reviewId = 0,
+  userId,
+  currentUserId,
   rating,
   content,
   likesCount = 0,
   isLiked: initialIsLiked = false,
   profile,
-  nickname = '사용자',
+  nickname,
   rank,
-}: ReviewCardProps) {
-  const { user } = useAuth();
-  const [isLiked, setIsLiked] = React.useState(initialIsLiked);
-  const [likeCount, setLikeCount] = React.useState(likesCount);
+  spoilerCount = 4,
+  onSpoilerReport,
+}: ReviewCardProps) => {
+  const [isLiked, setIsLiked] = useState(initialIsLiked);
+  const [likeCount, setLikeCount] = useState(likesCount);
+  const [isBlurred, setIsBlurred] = useState(spoilerCount >= 5);
+  const [reportCount, setReportCount] = useState(spoilerCount);
+  const [hasReported, setHasReported] = useState(false);
 
-  const renderStars = React.useMemo(() => {
+  const isMyReview = userId === currentUserId;
+
+  const renderStars = () => {
     const stars = [];
-    const fullStars = Math.floor(rating!);
-    const hasHalfStar = rating! % 1 >= 0.5;
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 >= 0.5;
 
     for (let i = 0; i < 5; i++) {
       if (i < fullStars) {
         stars.push(<S.Star key={i} $filled />);
       } else if (i === fullStars && hasHalfStar) {
         stars.push(<S.HalfStar key={i} $filled />);
+      } else {
+        stars.push(<S.Star key={i} />);
       }
     }
     return stars;
-  }, [rating]);
+  };
 
-  const handleLikeClick = React.useCallback(() => {
-    if (!user?.data) {
-      toast.warn('로그인이 필요한 서비스에요.', {
-        autoClose: 2000,
-      });
-      return;
-    }
+  const handleLikeClick = useCallback(() => {
     setIsLiked((prev) => !prev);
     setLikeCount((prev) => (isLiked ? prev - 1 : prev + 1));
-  }, [user, isLiked]);
+  }, [isLiked]);
+
+  const handleSpoilerReport = useCallback(() => {
+    if (!hasReported) {
+      const newCount = reportCount + 1;
+      setReportCount(newCount);
+      setIsBlurred(newCount >= 5);
+      setHasReported(true);
+      onSpoilerReport?.(reviewId);
+    }
+  }, [hasReported, reportCount, reviewId, onSpoilerReport]);
+
+  const handleRevealContent = () => {
+    setIsBlurred(false);
+  };
 
   return (
     <S.Card>
-      <S.StarsContainer>{renderStars}</S.StarsContainer>
-      <S.ReviewText>{content}</S.ReviewText>
+      <S.StarsContainer>
+        <S.StarGroup>{renderStars()}</S.StarGroup>
+        {!isMyReview && (
+          <S.ReportButton
+            onClick={handleSpoilerReport}
+            $hasReported={hasReported}
+            title={hasReported ? '이미 신고하셨습니다' : '스포일러 신고하기'}
+          >
+            <S.ReportIcon />
+          </S.ReportButton>
+        )}
+      </S.StarsContainer>
+      <S.ReviewContainer>
+        {isBlurred && (
+          <S.SpoilerOverlay>
+            <S.SpoilerText>스포일러가 포함된 리뷰에요</S.SpoilerText>
+            <S.RevealButton onClick={handleRevealContent}>리뷰 보기</S.RevealButton>
+          </S.SpoilerOverlay>
+        )}
+        <S.ReviewText $isBlurred={isBlurred}>{content}</S.ReviewText>
+      </S.ReviewContainer>
       <S.UserSection>
         <S.UserInfo>
-          <Profile width="2.5rem" height="2.5rem" rank={rank} src={profile} />
+          <img
+            src={profile}
+            alt={nickname}
+            style={{
+              width: '40px',
+              height: '40px',
+              borderRadius: '50%',
+              objectFit: 'cover',
+            }}
+          />
           <S.UserDetails>
             <S.Nickname>{nickname}</S.Nickname>
             <S.Rank $rank={rank}>{rank}</S.Rank>
@@ -74,6 +123,6 @@ function ReviewCard({
       </S.UserSection>
     </S.Card>
   );
-}
+};
 
-export default React.memo(ReviewCard);
+export default memo(ReviewCard);
