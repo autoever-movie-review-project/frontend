@@ -108,15 +108,15 @@ export const Rank = styled.span<RankProps>`
 
   ${({ $rank }) => {
     switch ($rank) {
-      case 'Master':
+      case '마스터':
         return `background-color: ${theme.colors.master}`;
-      case 'Diamond':
+      case '다이아':
         return `background-color: ${theme.colors.diamond};`;
-      case 'Gold':
+      case '골드':
         return `background-color: ${theme.colors.gold};`;
-      case 'Silver':
+      case '실버':
         return `background-color: ${theme.colors.silver};`;
-      case 'Bronze':
+      case '브론즈':
         return `background-color: ${theme.colors.bronze};`;
       default:
         return `background-color: ${theme.colors.bronze};`;
@@ -241,15 +241,11 @@ export const MenuBarItemText = styled.div`
 `;
 
 export const LikedMovieSection = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-
-  img {
-    width: calc(100% / 1 / 4 - 10px);
-    height: 330px;
-    border-radius: 12px;
-  }
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+  width: 100%;
+  padding: 20px 0;
 `;
 
 export const MyReviewSection = styled.div`
@@ -284,3 +280,19 @@ export const RankInfo = styled.div`
 `;
 
 export const RankInfoModal = styled(Modal)<IModalProps>``;
+
+export const LikedMovieItem = styled.div`
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+`;
+
+export const MovieImage = styled.img`
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 8px;
+`;

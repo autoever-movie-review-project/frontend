@@ -8,16 +8,145 @@ import * as S from './MyPage.style';
 import ReviewCard from 'components/ReviewCrad/ReviewCard';
 import EditProfileModal, { FormInputs } from './EditProfileModal';
 import { toast } from 'react-toastify';
-import { AxiosError } from 'axios';
-import { useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { UpdateUserRequest } from 'api/user/user';
+import { client } from 'api/client';
+import { AxiosError } from 'axios';
+import { fetchMyReviews } from 'api/review/reviewApi';
+import { fetchLikedMovies } from 'api/like/movieLikeApi';
+import { useNavigate } from 'react-router-dom';
+
+interface MyReview {
+  movieId: number;
+  reviewId: number;
+  userId: number;
+  writerNickname: string;
+  content: string;
+  profile: string | null;
+  likesCount: number;
+  rating: number;
+  createdAt: string;
+  liked: boolean;
+}
+
+interface PaginatedResponse<T> {
+  content: T[];
+  pageable: {
+    sort: {
+      empty: boolean;
+      sorted: boolean;
+      unsorted: boolean;
+    };
+    offset: number;
+    pageNumber: number;
+    pageSize: number;
+    paged: boolean;
+    unpaged: boolean;
+  };
+  totalElements: number;
+  totalPages: number;
+  last: boolean;
+  size: number;
+  number: number;
+  numberOfElements: number;
+  first: boolean;
+  empty: boolean;
+}
+
+interface LikedReview {
+  reviewId: number;
+  userId: number;
+  nickname: string;
+  profile: string | null;
+  rankName: string;
+  rankImg: string | null;
+  movieId: number;
+  content: string;
+  likesCount: number;
+  rating: number;
+}
+
+interface LikedMovie {
+  movieId: number;
+  mainImage: string;
+}
+
+interface PaginatedResponse<T> {
+  content: T[];
+  pageable: {
+    sort: {
+      empty: boolean;
+      sorted: boolean;
+      unsorted: boolean;
+    };
+    offset: number;
+    pageSize: number;
+    pageNumber: number;
+    paged: boolean;
+    unpaged: boolean;
+  };
+  totalElements: number;
+  totalPages: number;
+  last: boolean;
+  size: number;
+  number: number;
+  sort: {
+    empty: boolean;
+    sorted: boolean;
+    unsorted: boolean;
+  };
+  first: boolean;
+  numberOfElements: number;
+  empty: boolean;
+}
 
 function MyPage() {
   const queryClient = useQueryClient();
   const { user } = useAuth();
   const { openModal, closeModal, isModalOpen } = useModal();
+  const navigate = useNavigate();
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState<'reviews' | 'movies' | 'likes'>('reviews');
+
+  const getLikedReviews = async () => {
+    const response = await client.get('/like/reviews/?page=0');
+    return response.data;
+  };
+
+  const {
+    data: myReviews = [], // 기본값을 빈 배열로 설정
+    isLoading: isMyReviewsLoading,
+    error: myReviewsError,
+  } = useQuery<MyReview[]>({
+    queryKey: ['myReviews'],
+    queryFn: fetchMyReviews,
+  });
+
+  const {
+    data: likedReviewsData,
+    isLoading: isLikedReviewsLoading,
+    error: likedReviewsError,
+  } = useQuery<PaginatedResponse<LikedReview>>({
+    queryKey: ['likedReviews'],
+    queryFn: getLikedReviews,
+  });
+
+  const {
+    data: likedMoviesData,
+    isLoading: isLikedMoviesLoading,
+    error: likedMoviesError,
+  } = useQuery<PaginatedResponse<LikedMovie>>({
+    queryKey: ['likedMovies'],
+    queryFn: () => fetchLikedMovies(),
+  });
+
+  const likedMovies = likedMoviesData?.content || [];
+  const likedMoviesCount = likedMoviesData?.totalElements || 0;
+
+  const myReviewCount = myReviews?.length || 0;
+
+  const likedReviews = likedReviewsData?.content || [];
+  const likedReviewCount = likedReviewsData?.totalElements || 0;
 
   const handleMenuClick = (menu: 'reviews' | 'movies' | 'likes') => {
     setActiveMenu(menu);
@@ -54,6 +183,8 @@ function MyPage() {
     }
   };
 
+  console.log(likedReviewsData);
+
   return (
     <S.Background>
       <S.Layout>
@@ -77,19 +208,19 @@ function MyPage() {
         <S.MenuBar>
           <S.MenuBarItem $active={activeMenu === 'reviews'} onClick={() => handleMenuClick('reviews')}>
             <S.MenuBarItemText>
-              <p>0</p>내 리뷰
+              <p>{myReviewCount}</p>내 리뷰
             </S.MenuBarItemText>
           </S.MenuBarItem>
           <span>|</span>
           <S.MenuBarItem $active={activeMenu === 'movies'} onClick={() => handleMenuClick('movies')}>
             <S.MenuBarItemText>
-              <p>0</p>찜한 영화
+              <p>{likedMoviesCount}</p>찜한 영화
             </S.MenuBarItemText>
           </S.MenuBarItem>
           <span>|</span>
           <S.MenuBarItem $active={activeMenu === 'likes'} onClick={() => handleMenuClick('likes')}>
             <S.MenuBarItemText>
-              <p>0</p>좋아요한 리뷰
+              <p>{likedReviewCount}</p>좋아요한 리뷰
             </S.MenuBarItemText>
           </S.MenuBarItem>
         </S.MenuBar>
@@ -97,27 +228,27 @@ function MyPage() {
           <>
             <h2>내가 작성한 리뷰</h2>
             <S.MyReviewSection>
-              <ReviewCard
-                content="그럭저럭 볼만해요."
-                nickname={user?.data.nickname}
-                rating={3.5}
-                rank={user?.data.rankName}
-                profile={DefaultProfile}
-              />
-              <ReviewCard
-                content="인생 영화입니다."
-                nickname={user?.data.nickname}
-                rating={5}
-                rank={user?.data.rankName}
-                profile={DefaultProfile}
-              />
-              <ReviewCard
-                content="퉤"
-                nickname={user?.data.nickname}
-                rating={0.5}
-                rank={user?.data.rankName}
-                profile={DefaultProfile}
-              />
+              {isMyReviewsLoading ? (
+                <div>로딩 중...</div>
+              ) : myReviewsError ? (
+                <div>리뷰를 불러오는 중 오류가 발생했어요.</div>
+              ) : myReviews.length > 0 ? (
+                myReviews.map((review) => (
+                  <ReviewCard
+                    key={review.reviewId}
+                    reviewId={review.reviewId}
+                    content={review.content}
+                    nickname={review.writerNickname}
+                    rating={review.rating}
+                    rank={user?.data.rankName}
+                    profile={review.profile || DefaultProfile}
+                    likesCount={review.likesCount}
+                    liked={review.liked}
+                  />
+                ))
+              ) : (
+                <div>작성한 리뷰가 없어요.</div>
+              )}
             </S.MyReviewSection>
           </>
         )}
@@ -125,40 +256,48 @@ function MyPage() {
           <>
             <h2>찜한 영화</h2>
             <S.LikedMovieSection>
-              <img src="https://picsum.photos/seed/1/200/300"></img>
-              <img src="https://picsum.photos/seed/2/200/300"></img>
-              <img src="https://picsum.photos/seed/3/200/300"></img>
+              {isLikedMoviesLoading ? (
+                <div>로딩 중...</div>
+              ) : likedMoviesError ? (
+                <div>찜한 영화를 불러오는 중 오류가 발생했습니다.</div>
+              ) : likedMovies.length > 0 ? (
+                likedMovies.map((movie) => (
+                  <S.LikedMovieItem key={movie.movieId} onClick={() => navigate(`/movies/${movie.movieId}`)}>
+                    <S.MovieImage src={movie.mainImage} alt="영화 포스터" />
+                  </S.LikedMovieItem>
+                ))
+              ) : (
+                <div>찜한 영화가 없어요.</div>
+              )}
             </S.LikedMovieSection>
           </>
         )}
         {activeMenu === 'likes' && (
           <>
             <h2>좋아요한 리뷰</h2>
-            <>
-              <S.MyReviewSection>
-                <ReviewCard
-                  content="그럭저럭 볼만해요."
-                  nickname={'빈빈'}
-                  rating={3.5}
-                  rank={'Silver'}
-                  profile={DefaultProfile}
-                />
-                <ReviewCard
-                  content="인생 영화입니다."
-                  nickname={'한성용'}
-                  rating={5}
-                  rank={'Gold'}
-                  profile={DefaultProfile}
-                />
-                <ReviewCard
-                  content="별로인 거 같아요."
-                  nickname={'대상연'}
-                  rating={0.5}
-                  rank={'Master'}
-                  profile={DefaultProfile}
-                />
-              </S.MyReviewSection>
-            </>
+            <S.MyReviewSection>
+              {isLikedReviewsLoading ? (
+                <div>로딩 중...</div>
+              ) : likedReviewsError ? (
+                <div>리뷰를 불러오는 중 오류가 발생했어요.</div>
+              ) : likedReviews.length > 0 ? (
+                likedReviews.map((review) => (
+                  <ReviewCard
+                    key={review.reviewId}
+                    reviewId={review.reviewId}
+                    content={review.content}
+                    nickname={review.nickname}
+                    rating={review.rating}
+                    rank={review.rankName}
+                    profile={review.profile || DefaultProfile}
+                    likesCount={review.likesCount}
+                    isLiked={true}
+                  />
+                ))
+              ) : (
+                <div>좋아요한 리뷰가 없습니다.</div>
+              )}
+            </S.MyReviewSection>
           </>
         )}
       </S.Layout>
@@ -167,23 +306,23 @@ function MyPage() {
           <S.RankInfoSection>
             <S.RankInfo>
               <S.RankIcon rankImg="bronze.png" />
-              <S.Rank $rank="Bronze">Bronze</S.Rank>0 포인트 이상
+              <S.Rank $rank="브론즈">브론즈</S.Rank>0 포인트 이상
             </S.RankInfo>
             <S.RankInfo>
               <S.RankIcon rankImg="silver.png" />
-              <S.Rank $rank="Silver">Silver</S.Rank>1000 포인트 이상
+              <S.Rank $rank="실버">실버</S.Rank>1000 포인트 이상
             </S.RankInfo>
             <S.RankInfo>
               <S.RankIcon rankImg="gold.png" />
-              <S.Rank $rank="Gold">Gold</S.Rank>2000 포인트 이상
+              <S.Rank $rank="골드">골드</S.Rank>2000 포인트 이상
             </S.RankInfo>
             <S.RankInfo>
               <S.RankIcon rankImg="diamond.png" />
-              <S.Rank $rank="Diamond">Diamond</S.Rank>4000 포인트 이상
+              <S.Rank $rank="다이아">다이아</S.Rank>4000 포인트 이상
             </S.RankInfo>
             <S.RankInfo>
               <S.RankIcon rankImg="master.png" />
-              <S.Rank $rank="Master">Master</S.Rank>7000 포인트 이상
+              <S.Rank $rank="마스터">마스터</S.Rank>7000 포인트 이상
             </S.RankInfo>
           </S.RankInfoSection>
         </S.RankInfoModal>

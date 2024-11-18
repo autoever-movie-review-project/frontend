@@ -11,6 +11,16 @@ export const fetchReviewsByMovieId = async (movieId: number) => {
   }
 };
 
+// 내 리뷰 Get
+export const fetchMyReviews = async () => {
+  try {
+    const response = await client.get('/review/my');
+    return response.data;
+  } catch (error) {
+    console.error('특정 유저 리뷰 데이터 get 실패:', error);
+  }
+};
+
 export const postReview = async ({
   movieId,
   rating,

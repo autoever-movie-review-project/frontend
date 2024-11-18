@@ -26,7 +26,7 @@ function MainPage() {
         const transformedData = [
           { title: '개봉 예정 영화', movies: results[0] },
           { title: '인생 영화', movies: results[1] },
-          { title: `${user ? user.data['nickname'] : '사용자'} 님을 위한 추천 영화`, movies: results[2] },
+          { title: `${user ? user.data['nickname'] : '사용자'}님을 위한 추천 영화`, movies: results[2] },
           { title: '유저들이 주목하는 실시간 인기 영화', movies: results[2] },
         ];
         setSwiperData(transformedData);

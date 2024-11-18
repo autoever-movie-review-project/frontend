@@ -75,12 +75,7 @@ function Header() {
               <>
                 <S.ProfileWrapper>
                   <S.UserProfile onClick={handleUserProfileClick}>
-                    <Profile
-                      width="45px"
-                      height="45px"
-                      rank={user?.data.rankName as 'Master' | 'Diamond' | 'Gold' | 'Silver' | 'Bronze'}
-                      src={DefaultProfile}
-                    ></Profile>
+                    <Profile width="45px" height="45px" rank={user?.data.rankName} src={DefaultProfile}></Profile>
                     <p>{user?.data.nickname}</p>
                   </S.UserProfile>
                 </S.ProfileWrapper>

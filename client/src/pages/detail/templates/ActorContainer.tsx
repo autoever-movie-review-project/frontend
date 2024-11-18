@@ -19,7 +19,7 @@ const Container = styled.div`
 const Title = styled.h1`
   width: 500px;
   height: 20px;
-  font-size: 20px;
+  font-size: 24px;
   font-weight: 600;
   color: ${theme.colors.text};
   margin-bottom: 20px;
@@ -33,12 +33,14 @@ const ActorList = styled.div`
 
 const ActorItem = styled.div`
   display: flex;
+  flex-direction: column;
   align-items: center;
+  width: 100px;
   gap: 20px;
   margin-bottom: 20px;
   padding-bottom: 10px;
   padding: 10px;
-  border-bottom: 2px solid ${theme.colors.grayDark};
+  white-space: nowrap;
 `;
 
 const ActorImage = styled.img`

@@ -16,6 +16,9 @@ import { movieApi } from 'api/movie/movieApi';
 import { youtubeApi } from 'api/youtube/youtubeApi';
 import * as S from './templates/DetailMovieInfo.style';
 import Skeleton from 'components/Skeleton/Skeleton';
+import { addLikeMovie, deleteLikeMovie } from 'api/like/movieLikeApi';
+import { toast } from 'react-toastify';
+import { AxiosError } from 'axios';
 
 const Container = styled.div`
   width: 100vw;
@@ -160,7 +163,30 @@ function DetailPage() {
 
   const queryClient = useQueryClient();
 
-  // 리뷰 작성 mutation
+  const likeMutation = useMutation({
+    mutationFn: async (movieId: number) => {
+      try {
+        await addLikeMovie(movieId);
+        return { isDelete: false };
+      } catch (error) {
+        if (error instanceof AxiosError && error.response?.status === 409) {
+          await deleteLikeMovie(movieId);
+          return { isDelete: true };
+        }
+        throw error;
+      }
+    },
+    onSuccess: (result) => {
+      // 영화 정보 갱신
+      queryClient.invalidateQueries({ queryKey: ['movie', movieId] });
+      toast.success(result.isDelete ? '찜하기가 취소되었어요.' : '영화가 찜되었어요.');
+    },
+    onError: (error) => {
+      console.error('영화 찜하기 실패:', error);
+      toast.error('영화 찜하기에 실패했어요. 다시 시도해주세요.');
+    },
+  });
+
   const reviewMutation = useMutation({
     mutationFn: (reviewData: { movieId: number; rating: number; content: string }) => postReview(reviewData),
     onSuccess: () => {
@@ -174,6 +200,10 @@ function DetailPage() {
       alert('리뷰 작성에 실패했습니다. 다시 시도해주세요.');
     },
   });
+
+  const handleLikeClick = () => {
+    likeMutation.mutate(numericMovieId);
+  };
 
   const submitReview = () => {
     if (reviewContent === '') {
@@ -221,7 +251,13 @@ function DetailPage() {
         </Container>
       )}
       <Wrapper>
-        <DetailMovieInfo openModal={openModal} isLoading={isLoading} movie={movie} />
+        <DetailMovieInfo
+          openModal={openModal}
+          isLoading={isLoading}
+          movie={movie}
+          onLikeClick={handleLikeClick}
+          isLiking={likeMutation.isPending}
+        />
       </Wrapper>
       <Wrapper>
         <MediaContainer trailerId={trailerId} shorts={shorts} />
@@ -248,7 +284,7 @@ function DetailPage() {
               nickname={review.nickname}
               rank={review.rankImg as '마스터' | '다이아' | '골드' | '실버' | '브론즈'}
               profile={review.profile}
-              isLiked={false}
+              liked={review.liked}
             />
           </div>
         ))}

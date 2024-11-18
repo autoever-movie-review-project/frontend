@@ -9,9 +9,11 @@ import { Movie } from 'types/movie';
 import Skeleton from 'components/Skeleton/Skeleton';
 
 interface DetailMovieInfoProps {
-  movie: Movie;
-  isLoading?: boolean;
   openModal: () => void;
+  isLoading: boolean;
+  movie: Movie;
+  onLikeClick: () => void;
+  isLiking: boolean;
 }
 
 const ratingData = [
@@ -22,8 +24,7 @@ const ratingData = [
   { rating: '5점', count: 1245, 비율: 45 },
 ];
 
-function DetailMovieInfo({ movie, isLoading = false, openModal }: DetailMovieInfoProps) {
-  const [isLiked, setIsLiked] = useState(false);
+function DetailMovieInfo({ openModal, isLoading, movie, onLikeClick, isLiking }: DetailMovieInfoProps) {
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
   const [showPlayer, setShowPlayer] = useState(false);
@@ -35,8 +36,9 @@ function DetailMovieInfo({ movie, isLoading = false, openModal }: DetailMovieInf
   const handleMusicPlay = () => setShowPlayer(true);
 
   const handleLikeButton = () => {
-    setIsLiked(!isLiked);
-    // TODO: 영화 찜하기 API 호출
+    if (!isLiking) {
+      onLikeClick();
+    }
   };
 
   if (isLoading)
@@ -83,8 +85,8 @@ function DetailMovieInfo({ movie, isLoading = false, openModal }: DetailMovieInf
             </S.Rating>
             <S.ButtonBackground>
               <S.LikeButton onClick={handleLikeButton}>
-                <S.Heart $clicked={isLiked} />
-                좋아요
+                <S.Heart $clicked={movie.liked} />
+                {isLiking ? '처리 중...' : '좋아요'}
               </S.LikeButton>
             </S.ButtonBackground>
             <S.ButtonBackground>

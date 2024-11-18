@@ -54,7 +54,7 @@ export const MovieDetailWrapper = styled.div<{ $backdrop?: string }>`
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    filter: blur(8px) brightness(0.4);
+    filter: blur(8px) brightness(0.6);
     z-index: -1;
   }
 

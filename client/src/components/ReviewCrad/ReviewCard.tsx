@@ -10,7 +10,7 @@ interface ReviewCardProps {
   rating: number;
   content: string;
   likesCount?: number;
-  isLiked?: boolean;
+  liked?: boolean;
   profile?: string;
   nickname?: string;
   rank?: RankType;
@@ -25,7 +25,7 @@ const ReviewCard = ({
   rating,
   content,
   likesCount = 0,
-  isLiked: initialIsLiked = false,
+  liked: initialIsLiked = false,
   profile,
   nickname,
   rank,
