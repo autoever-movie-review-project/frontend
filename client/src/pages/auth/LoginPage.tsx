@@ -10,6 +10,7 @@ import * as S from './LoginPage.style';
 import Loading from '../../components/Loading';
 import { toast } from 'react-toastify';
 import logo from 'assets/logo.png';
+import { usePointStore } from 'store/point';
 
 const link = getKakaoLoginLink();
 
@@ -25,6 +26,8 @@ function LoginPage() {
     handleSubmit,
     formState: { errors },
   } = useForm<LoginRequest>();
+  const pointInit = usePointStore((state) => state.pointInit);
+  const point = usePointStore((state) => state.point);
 
   /**
    * 로그인 폼 제출을 처리하는 함수입니다.
@@ -35,6 +38,8 @@ function LoginPage() {
     await login(data, {
       onSuccess: (data) => {
         console.log(`로그인 성공: ${data.email}`);
+        pointInit(data.points ? data.points : 0);
+
         navigate('/');
         toast.success(`${data.nickname}님 환영합니다!`);
       },
