@@ -61,7 +61,7 @@ export const fetchUpcomingMovieList = async () => {
 export const fetchSearchMovieList = async (searchData: string) => {
   try {
     const response = await client.get('/movie/search', {
-      params: { title: searchData, genre: searchData },
+      params: { keyword: searchData },
     });
     return response.data;
   } catch (error) {
