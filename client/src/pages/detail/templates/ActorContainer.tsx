@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import testactor from 'assets/testactor.svg';
 
 interface Actor {
   src: string;
