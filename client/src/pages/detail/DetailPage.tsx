@@ -22,6 +22,7 @@ import { AxiosError } from 'axios';
 import { fetchPlusPoint } from 'api/point/pointApi';
 import { usePointStore } from 'store/point';
 import { RankType } from 'types/rank';
+import { useAuth } from 'hooks/useAuth';
 
 const Container = styled.div`
   width: 100vw;
@@ -156,6 +157,7 @@ function DetailPage() {
   const { openModal, closeModal, isModalOpen } = useModal(); // 리뷰모달 hook
   const [rating, setRating] = useState(0); // 리뷰별점 post용
   const [reviewContent, setReviewContent] = useState(''); // 리뷰내용 post용
+  const { user } = useAuth();
 
   const increPoint = usePointStore((state) => state.incrementCount);
 
