@@ -6,16 +6,53 @@ import { useCallback, useEffect, useState, useMemo } from 'react';
 import { Timer } from './Timer';
 import { useNavigate, useParams } from 'react-router-dom';
 import { socket } from 'socket';
-import { IReadyResponse, useExitGameRoom, useGameReadyMutation, useGameRoomDetailQuery } from 'hooks/useGame';
+import {
+  IReadyResponse,
+  useExitGameRoom,
+  useGameReadyMutation,
+  useGameRoomDetailQuery,
+  useGameStartMutation,
+} from 'hooks/useGame';
+import { getGameProblemList, IProblem } from '../movieQuotes';
+
+interface IGameScore {
+  userId: number;
+  score: number;
+}
 
 export const GameRoom = () => {
   const params = useParams();
   const gameId = Number(params.gameId);
-  const { data } = useGameRoomDetailQuery(gameId || -1);
+  const { data, refetch } = useGameRoomDetailQuery(gameId || -1);
   const gameReadyMutation = useGameReadyMutation();
   const [readyList, setReadyList] = useState<IReadyResponse[]>([]);
   const [chatInput, setChatInput] = useState('');
   const [recentChat, setRecentChat] = useState<{ userId: number; message: string }>({ userId: -1, message: '' });
+  const [gameRound, setGameRound] = useState(0);
+  const [gameList, setGameList] = useState<IProblem[]>([
+    { title: '범죄도시2', quote: 'ㄴ ㄴㅊㄷㄱㅇ', answer: '너 납치된거야' },
+    {
+      title: '기생충',
+      quote: 'ㅇㄷㅇ, ㄴㄴ ㄱㅎㅇ ㄷ ㅇㄱㄴ',
+      answer: '아들아, 너는 계획이 다 있구나',
+    },
+    {
+      title: '박하사탕',
+      quote: 'ㄴ ㄷㅅ ㄷㅇㄱㄹ',
+      answer: '나 다시 돌아갈래',
+    },
+    {
+      title: '베테랑',
+      quote: 'ㅇㄹㄱ ㄷㅇ ㅇㅈ ㄱㅇㄱ ㅇㄴ',
+      answer: '우리가 돈이 없지 가오가 없냐',
+    },
+    {
+      title: '베테랑',
+      quote: 'ㅇㅇㄱ ㅇㄴ',
+      answer: '어이가 없네',
+    },
+  ]);
+  const [gameScore, setGameStore] = useState<IGameScore[]>([]);
   const userId = Number(localStorage.getItem('userId'));
   const navigate = useNavigate();
 
@@ -24,6 +61,11 @@ export const GameRoom = () => {
 
     const handleChatMessage = (userId: number, message: string) => {
       setRecentChat({ userId, message });
+
+      if (gameList[gameRound].answer === message) {
+        handleNextGame();
+        // 점수 올리기
+      }
     };
 
     const handleReady = (rList: IReadyResponse[]) => {
@@ -71,7 +113,15 @@ export const GameRoom = () => {
     return myId === hostId;
   }, []);
 
-  const handleGameStartClick = () => {};
+  const handleGameStartClick = () => {
+    useGameStartMutation().mutate(gameId, {
+      onSuccess: () => {
+        socket.emit('gameRoomUpdate');
+        refetch();
+        setGameList(getGameProblemList());
+      },
+    });
+  };
 
   const handleGameReadyClick = useCallback(() => {
     gameReadyMutation.mutate(gameId, {
@@ -82,9 +132,17 @@ export const GameRoom = () => {
   }, [gameId, gameReadyMutation]);
 
   const handleExitClick = () => {
+    socket.emit('gameRoomUpdate');
     useExitGameRoom().mutate(gameId);
     navigate('/game');
   };
+
+  const handleNextGame = useCallback(() => {
+    if (gameRound >= 4) {
+      return;
+    }
+    setGameRound((prevRound) => prevRound + 1);
+  }, []);
 
   const renderedUserList = useMemo(() => {
     return data?.playerInfo.map((player) => (
@@ -99,6 +157,7 @@ export const GameRoom = () => {
     ));
   }, [data, readyList, recentChat]);
 
+  console.log(gameRound, gameList[gameRound]);
   if (data && userId) {
     const { hostId, status, playerCount } = data;
     const roomManager = isRoomManager(hostId, userId);
@@ -120,11 +179,11 @@ export const GameRoom = () => {
           ) : (
             <S.QuizBoardWrapper>
               <S.QuizBoard>
-                <S.QuizNumber>{2}번째 문제</S.QuizNumber>
-                <S.QuizMovieTitle>{`영화 제목 <친구>`}</S.QuizMovieTitle>
-                <S.QuizTitle>{`ㄴㄱ ㅇㅂㅈ ㅁㅎㅅㄴ`}</S.QuizTitle>
+                <S.QuizNumber>{gameRound + 1}번째 문제</S.QuizNumber>
+                <S.QuizMovieTitle>{`영화 제목 <${gameList[gameRound].title}>`}</S.QuizMovieTitle>
+                <S.QuizTitle>{gameList[gameRound].quote}</S.QuizTitle>
               </S.QuizBoard>
-              <Timer />
+              <Timer handleNextGame={handleNextGame} gameRound={gameRound} />
             </S.QuizBoardWrapper>
           )}
           <S.GameRoomUserContainer>{renderedUserList}</S.GameRoomUserContainer>
