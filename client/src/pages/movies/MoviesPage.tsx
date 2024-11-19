@@ -1,12 +1,10 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import styled from 'styled-components';
-import { Movie, MovieArray } from 'types/movie';
+import { Movie } from 'types/movie';
 import { fetchSearchMovieList, fetchUpcomingMovieList } from 'api/movie/movieApi';
 import BoxofficeSlider from 'pages/main/templates/BoxofficeSlider';
 import Skeleton from 'components/Skeleton/Skeleton';
-import ScrollToTop from 'util/ScrollToTop';
 import { theme } from 'styles/theme';
 
 const Container = styled.div`
@@ -132,7 +130,7 @@ const BoxofficeSliderWrapper = styled.div`
 const genreList = ['액션', '드라마', '코미디', '스페셜', '다큐멘터리', '범죄', 'SF', '로맨스', '공포', '판타지'];
 
 interface MoviesState {
-  movies: MovieArray;
+  movies: Movie[];
   page: number;
   hasMore: boolean;
   loading: boolean;
@@ -189,7 +187,7 @@ const MoviesPage: React.FC = () => {
       const fetchedMovies = await fetchSearchMovieList(searchData, page);
 
       const uniqueMovies = fetchedMovies.filter(
-        (movie: Movie, index: number, self: MovieArray) => self.findIndex((m) => m.movieId === movie.movieId) === index
+        (movie: Movie, index: number, self: Movie[]) => self.findIndex((m) => m.movieId === movie.movieId) === index
       );
 
       setState((prev) => ({

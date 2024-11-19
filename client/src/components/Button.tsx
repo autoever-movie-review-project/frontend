@@ -38,6 +38,11 @@ const StyledButton = styled.button<ButtonStyleProps>`
     background-color: ${theme.colors.grayLight};
     cursor: not-allowed;
   }
+
+  &:active {
+    transform: scale(0.95);
+    transition: transform 0.1s ease;
+  }
 `;
 
 const Button = ({ text, width, fontSize, disabled = false, children, ...props }: ButtonProps) => {

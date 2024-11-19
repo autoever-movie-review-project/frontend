@@ -146,7 +146,9 @@ function MovieSwiperSlide(props: MovieSwiperSlideProps) {
     navigate(`/movies/${movieId}`);
   };
 
-  const convertToFiveStarRating = (rating: number) => (rating / 2).toFixed(1);
+  const convertToFiveStarRating = (rating: number) => {
+    return rating === 0 ? '평점 없음' : (rating / 2).toFixed(1);
+  };
 
   return (
     <>
@@ -169,10 +171,12 @@ function MovieSwiperSlide(props: MovieSwiperSlideProps) {
                   <HoverInfo>
                     <MovieTitle>{movie.title}</MovieTitle>
                     <Rating>
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                      </svg>
-                      {convertToFiveStarRating(movie.rating) || '평가 없음'}
+                      {movie.rating !== 0 && (
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                          <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                        </svg>
+                      )}
+                      {convertToFiveStarRating(movie.rating)}
                     </Rating>
                   </HoverInfo>
                 </CardWrapper>
