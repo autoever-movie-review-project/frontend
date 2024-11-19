@@ -210,7 +210,7 @@ function DetailPage() {
     onSuccess: (result) => {
       // 영화 정보 갱신
       queryClient.invalidateQueries({ queryKey: ['movie', movieId] });
-      toast.success(result.isDelete ? '찜하기가 취소되었어요.' : '영화가 찜되었어요.');
+      toast.success(result.isDelete ? '찜하기가 취소되었어요.' : '영화를 찜했어요.');
     },
     onError: (error) => {
       console.error('영화 찜하기 실패:', error);
