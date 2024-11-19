@@ -27,7 +27,7 @@ interface IGameRoomDetailResponse {
   gameId: number;
   hostId: number;
   title: string;
-  status: string;
+  status: 'WAITING' | 'PLAYING';
   maxPlayer: number;
   playerCount: number;
   playerInfo: IPlayerInfo[];
@@ -119,5 +119,5 @@ export const useGameStartMutation = () =>
 // 게임 준비
 export const useGameReadyMutation = () =>
   useMutation({
-    mutationFn: (gameId: number) => client.post<IReadyResponse[]>(`/game/${gameId}/readylist`),
+    mutationFn: (gameId: number) => client.post<IReadyResponse[]>(`/game/${gameId}/ready`),
   });
