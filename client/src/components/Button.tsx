@@ -4,6 +4,7 @@ import { theme } from 'styles/theme';
 
 interface ButtonStyleProps {
   width?: string;
+  height?: string;
   fontSize?: string;
   disabled?: boolean;
 }
@@ -18,7 +19,7 @@ const StyledButton = styled.button<ButtonStyleProps>`
   justify-content: center;
   align-items: center;
   width: ${({ width }) => width || '270px'};
-  height: 36px;
+  height: ${({ height }) => height || '36px'};
   /* border: 1px solid ${theme.colors.text}; */
   border-radius: 8px;
   padding: 12px;
@@ -45,9 +46,9 @@ const StyledButton = styled.button<ButtonStyleProps>`
   }
 `;
 
-const Button = ({ text, width, fontSize, disabled = false, children, ...props }: ButtonProps) => {
+const Button = ({ text, width, height, fontSize, disabled = false, children, ...props }: ButtonProps) => {
   return (
-    <StyledButton type="button" width={width} fontSize={fontSize} disabled={disabled} {...props}>
+    <StyledButton type="button" width={width} height={height} fontSize={fontSize} disabled={disabled} {...props}>
       {text}
       {children}
     </StyledButton>
