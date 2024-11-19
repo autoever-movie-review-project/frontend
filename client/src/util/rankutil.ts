@@ -16,7 +16,7 @@ export const calculateRankProgress = (points: number) => {
       : 100;
 
   return {
-    currentRank: currentRank?.name || 'Bronse',
+    currentRank: currentRank?.name || 'Bronze',
     nextRank: nextRank?.name || null,
     pointsToNextRank: nextRank ? nextRankMinPoints - points : 0,
     progress: Math.min(progress, 100),
