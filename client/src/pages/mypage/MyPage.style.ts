@@ -50,6 +50,12 @@ export const UserInfoContainer = styled.div`
   display: flex;
   gap: 20px;
   margin-bottom: 30px;
+  flex-wrap: wrap;
+
+  @media screen and (max-width: 768px) {
+    gap: 10px;
+    width: 180px;
+  }
 `;
 
 export const UserDatails = styled.div`
@@ -63,13 +69,13 @@ export const UserDatails = styled.div`
 export const RankSection = styled.div`
   display: flex;
   align-items: center;
-
   gap: 5px;
 `;
 
 export const RankBarContainer = styled.div`
   display: flex;
   align-items: center;
+  margin-bottom: 15px;
 `;
 
 const rankImages = {
@@ -214,12 +220,12 @@ export const MenuBarItem = styled.li<MenuBarItemProps>`
   }
 
   @media screen and (max-width: 768px) {
-    font-size: 16px;
-    padding: 20px;
+    font-size: 14px;
+    padding: 0px;
   }
   @media screen and (max-width: 480px) {
     font-size: 14px;
-    padding: 15px 10px;
+    /* padding: 15px 10px; */
     white-space: nowrap;
   }
 `;
@@ -276,10 +282,9 @@ export const QuestionIcon = styled(Question)`
 export const RankInfoSection = styled.div`
   color: #fff;
   display: flex;
-  align-items: start;
+  align-items: center;
   flex-direction: column;
   gap: 10px;
-  margin-top: 55px;
 `;
 
 export const RankInfo = styled.div`
@@ -289,7 +294,9 @@ export const RankInfo = styled.div`
   gap: 5px;
 `;
 
-export const RankInfoModal = styled(Modal)<IModalProps>``;
+export const RankInfoModal = styled(Modal)<IModalProps>`
+  display: flex;
+`;
 
 export const LikedMovieItem = styled.div`
   cursor: pointer;
@@ -305,4 +312,84 @@ export const MovieImage = styled.img`
   height: 300px;
   object-fit: cover;
   border-radius: 8px;
+`;
+
+export const PointHistorySection = styled.div`
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+`;
+
+export const TotalPoints = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 1rem;
+  border-radius: 8px;
+`;
+
+export const PointHistoryList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  overflow-y: auto;
+  max-height: 150px;
+`;
+
+export const PointHistoryItem = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  border-bottom: 1px solid #eee;
+
+  &:last-child {
+    border-bottom: none;
+  }
+`;
+
+export const HistoryInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+`;
+
+export const Description = styled.span`
+  font-size: 0.9rem;
+  color: ${theme.colors.text};
+`;
+
+export const CreatedAt = styled.span`
+  font-size: 0.8rem;
+  color: #666;
+`;
+
+export const Points = styled.span<{ $isPositive: boolean }>`
+  font-weight: bold;
+  color: ${({ $isPositive }) => ($isPositive ? '#2ecc71' : '#e74c3c')};
+`;
+
+export const PointInfo = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+
+  span {
+    color: ${theme.colors.text};
+    font-size: 1.2rem;
+  }
+`;
+
+export const RankPercentage = styled.div`
+  text-align: center;
+  font-size: 0.9rem;
+  color: ${theme.colors.text};
+
+  span {
+    color: ${theme.colors.primary};
+    font-weight: bold;
+    font-size: 1.1rem;
+  }
 `;

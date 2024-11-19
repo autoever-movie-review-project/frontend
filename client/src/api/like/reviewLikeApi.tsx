@@ -32,3 +32,14 @@ export const fetchLikeReviewList = async (page: number) => {
     throw error;
   }
 };
+
+// 리뷰 스포일러 신고
+export const fetchSpoilerReview = async (reviewId: number) => {
+  try {
+    const response = await client.post(`/spoiler/${reviewId}`);
+    return response.data;
+  } catch (error) {
+    console.error('리뷰 스포일러 신고 에러 : ', error);
+    throw error;
+  }
+};

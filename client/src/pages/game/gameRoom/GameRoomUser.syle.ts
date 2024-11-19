@@ -4,9 +4,11 @@ export const GameRoomUserWrapper = styled.div`
   display: flex;
   position: relative;
   flex-direction: column;
-  height: 300px;
+  height: 320px;
   border-radius: 10px;
+  align-content: flex-end;
   gap: 20px;
+  justify-content: flex-end;
 `;
 
 export const ChatDisplayBox = styled.div`
@@ -16,13 +18,15 @@ export const ChatDisplayBox = styled.div`
   text-align: center;
   position: relative;
   width: 135px;
-  height: 60px;
+  height: fit-content;
+  min-height: 40px;
   padding: 0px 4px;
   background: #ffffff;
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
   border-radius: 10px;
-  word-break: keep-all;
+  word-break: break-all;
+  box-sizing: border-box;
 
   &::after {
     content: '';
@@ -36,6 +40,12 @@ export const ChatDisplayBox = styled.div`
     bottom: -10px;
     left: 57px;
   }
+`;
+
+export const Blank = styled.div`
+  width: 135px;
+  height: 60px;
+  box-sizing: border-box;
 `;
 
 export const UserInfoBox = styled.div`
@@ -79,4 +89,21 @@ export const Score = styled.span`
   font-size: 24px;
   color: #f2f2f2;
   letter-spacing: 2.2px;
+`;
+
+export const Ready = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 40px;
+  font-family: Galmuri11;
+  font-size: 24px;
+  font-weight: 700;
+  color: black;
+`;
+
+export const CrownBlank = styled.div`
+  width: 32px;
+  height: 32px;
 `;
