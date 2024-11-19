@@ -13,18 +13,21 @@ export const userApi = {
     });
     return response.data;
   },
+
   updateProfile: async (data: UpdateUserRequest) => {
     const response = await client.put('/user/update-profile', {
       profile: data.profile,
     });
     return response.data;
   },
+
   updateUser: async (data: UpdateUserRequest) => {
     const response = await client.put('/user/update', {
       nickname: data.nickname,
     });
     return response.data;
   },
+
   updatePassword: async (data: UpdateUserRequest) => {
     const response = await client.put('/user/password', {
       password: data.newPassword,
