@@ -163,7 +163,16 @@ const ReviewCard = ({
             <S.RevealButton onClick={handleRevealContent}>리뷰 보기</S.RevealButton>
           </S.SpoilerOverlay>
         )}
-        <S.Poster src={mainImg} onClick={() => navigate(`/movies/${movieId}`)} />
+        <S.Poster
+          src={mainImg}
+          onClick={() => {
+            window.scrollTo({
+              top: 0,
+              behavior: 'smooth',
+            });
+            navigate(`/movies/${movieId}`);
+          }}
+        />
         <S.ReviewText $isBlurred={isBlurred}>{content}</S.ReviewText>
       </S.ReviewContainer>
       <S.UserSection>

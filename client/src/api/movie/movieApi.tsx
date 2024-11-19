@@ -36,9 +36,9 @@ export const fetchBoxOfficeMovieList = async () => {
 };
 
 //인기 영화리스트 Get
-export const fetchPopularMovieList = async () => {
+export const fetchPopularMovieList = async (page: number = 0) => {
   try {
-    const response = await client.get('/movie/popular');
+    const response = await client.get(`/movie/popular?page=${page}`);
     return response.data;
   } catch (error) {
     console.error('인기 영화 리스트 호출 실패:', error);
@@ -75,4 +75,15 @@ export const fetchSearchMovieList = async (keyword: string, page: number) => {
     params: { keyword: keyword, page: page },
   });
   return response.data; // data에는 movies 목록만 반환됨
+};
+
+//선호 영화 3가지 보내기
+export const fetchPostPreferencesMovieList = async (requestBody: { movieId: number }[]) => {
+  try {
+    const response = await client.post('/movie', requestBody);
+    return response.data;
+  } catch (e) {
+    console.error('선호 영화 보내기 실패: ', e);
+    throw e;
+  }
 };

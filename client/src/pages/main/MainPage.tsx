@@ -19,7 +19,7 @@ function MainPage() {
           fetchUpcomingMovieList(),
           fetchPopularMovieList(),
           fetchUpcomingMovieList(),
-          // fetchBoxOfficeMovieList(),
+          fetchBoxOfficeMovieList(),
         ]);
 
         const transformedData = [
@@ -31,7 +31,7 @@ function MainPage() {
         setSwiperData(transformedData);
 
         //박스오피스용
-        setBoxOfficeMovies(results[2]);
+        setBoxOfficeMovies(results[3]);
       } catch (error) {
         console.error('데이터를 불러오는 데 실패했습니다:', error);
       }

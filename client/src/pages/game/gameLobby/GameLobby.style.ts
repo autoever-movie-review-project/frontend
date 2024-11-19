@@ -49,7 +49,7 @@ export const QuickJoinButton = styled.button`
   font-size: 32px;
 `;
 
-export const MakeRoomButton = styled(QuickJoinButton)`
+export const CreateRoomButton = styled(QuickJoinButton)`
   width: 175px;
   height: 52px;
   font-size: 20px;

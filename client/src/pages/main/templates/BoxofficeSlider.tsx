@@ -114,7 +114,7 @@ function BoxofficeSlider({ title, movies }: MovieSwiperSlideProps) {
       <h1>{title}</h1>
       <SwiperContainer>
         <Swiper
-          slidesPerView={6}
+          slidesPerView={5}
           spaceBetween={0}
           loop={false}
           navigation
@@ -122,10 +122,10 @@ function BoxofficeSlider({ title, movies }: MovieSwiperSlideProps) {
           onSwiper={handleSwiper}
         >
           {movies.map((movie, index) => (
-            <SwiperSlide key={index} style={{ minWidth: '270px' }}>
+            <SwiperSlide key={index} style={{ minWidth: 'calc(100% / 6)' }}>
               <SlideContent>
                 <Ranking>{index + 1}</Ranking>
-                <Image src={testImg} alt={`${index}번째 영화`} onClick={() => handleCardClick(movie.movieId)} />
+                <Image src={movie.mainImg} alt={`${index}번째 영화`} onClick={() => handleCardClick(movie.movieId)} />
               </SlideContent>
             </SwiperSlide>
           ))}
