@@ -3,15 +3,21 @@ import { UpdateUserRequest } from './user';
 
 export const userApi = {
   uploadProfileImage: async (file: File) => {
-    const formData = new FormData();
-    formData.append('images', file);
+    try {
+      const formData = new FormData();
+      formData.append('images', file);
 
-    const response = await client.post<{ url: string }>('/upload', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
-    return response.data;
+      const response = await client.post('/upload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      return response.data; // { url: string }
+    } catch (error) {
+      console.error('프로필 이미지 업로드 실패:', error);
+      throw error;
+    }
   },
 
   updateProfile: async (data: UpdateUserRequest) => {
