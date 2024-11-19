@@ -29,7 +29,7 @@ export const GameRoomUser = ({ nickName, profile, roomManager, message, isReady 
     <S.GameRoomUserWrapper>
       {chatMessage ? <S.ChatDisplayBox>{chatMessage}</S.ChatDisplayBox> : <S.Blank />}
       <S.UserInfoBox>
-        {roomManager ? <img src={crown} alt="room manager" /> : null}
+        {roomManager ? <img src={crown} alt="room manager" /> : <S.CrownBlank></S.CrownBlank>}
         <S.UserImageWrapper>
           <S.UserImage src={profile || bazzi} alt="user" />
         </S.UserImageWrapper>
