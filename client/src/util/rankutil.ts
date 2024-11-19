@@ -10,9 +10,10 @@ export const calculateRankProgress = (points: number) => {
   const currentRankMinPoints = currentRank ? currentRank.minPoints : 0;
   const nextRankMinPoints = nextRank ? nextRank.minPoints : currentRankMinPoints;
 
+  // 진행률 계산 후 소수점 처리
   const progress =
     nextRankMinPoints - currentRankMinPoints > 0
-      ? ((points - currentRankMinPoints) / (nextRankMinPoints - currentRankMinPoints)) * 100
+      ? Number((((points - currentRankMinPoints) / (nextRankMinPoints - currentRankMinPoints)) * 100).toFixed(1))
       : 100;
 
   return {
