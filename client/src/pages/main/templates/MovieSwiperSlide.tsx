@@ -161,6 +161,8 @@ function MovieSwiperSlide(props: MovieSwiperSlideProps) {
           modules={[Pagination, Navigation, Autoplay]}
           style={{ width: '100%', height: '160px' }}
           onSwiper={handleSwiper}
+          observer={true}
+          observeParents={true}
         >
           {movies.map((movie, index) => (
             <StyledSwiperSlide key={index}>
