@@ -7,6 +7,7 @@ import { fetchSearchMovieList, fetchUpcomingMovieList } from 'api/movie/movieApi
 import BoxofficeSlider from 'pages/main/templates/BoxofficeSlider';
 import Skeleton from 'components/Skeleton/Skeleton';
 import ScrollToTop from 'util/ScrollToTop';
+import { theme } from 'styles/theme';
 
 const Container = styled.div`
   width: 100%;
@@ -21,12 +22,13 @@ const Container = styled.div`
 
 const TextWrapper = styled.div`
   padding-top: 40px;
-  width: calc(100% - 100px);
+  width: calc(100% - 160px);
   height: 60px;
   display: flex;
   /* margin-bottom: 50px; */
   gap: 20px;
 `;
+
 const SubTextWrapper = styled.div`
   padding-top: 40px;
   width: 100%;
@@ -43,14 +45,15 @@ const Text = styled.h1`
 `;
 
 const SubText = styled.p`
-  font-size: 24px;
+  font-size: 30px;
+  font-weight: ${theme.fontWeight.semibold};
 `;
 
 const ContentsContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 30px;
-  width: 95%;
+  gap: 35px;
+  width: 90%;
   height: 100%;
   padding: 20px;
 `;
@@ -72,6 +75,11 @@ const CardImage = styled.img`
   width: 100%;
   height: 100%;
   object-fit: fill;
+
+  &:hover {
+    transform: scale(1.05);
+    transition: 0.3s ease-in-out;
+  }
 `;
 
 const TagButtonContainer = styled.div`
@@ -232,7 +240,7 @@ const MoviesPage: React.FC = () => {
       {searchData ? (
         <>
           <TextWrapper>
-            <Text>"{searchData}" 에 대한 검색 결과 입니다</Text>
+            <Text>"{searchData}"에 대한 검색 결과에요</Text>
           </TextWrapper>
           <ContentsContainer>
             {state.movies.map((movie: Movie, index: number) => {
@@ -260,7 +268,7 @@ const MoviesPage: React.FC = () => {
       ) : (
         <>
           <SubTextWrapper>
-            <SubText>이런 장르는 어떠신가요?</SubText>
+            <SubText>이런 장르는 어떠세요?</SubText>
           </SubTextWrapper>
           <TagButtonContainer>
             {genreList.map((item: string, index) => (

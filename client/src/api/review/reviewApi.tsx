@@ -38,3 +38,8 @@ export const postReview = async ({
   });
   return response.data;
 };
+
+// 리뷰 Delete
+export const deleteReview = async (reviewId: number) => {
+  return await client.delete(`/review/${reviewId}`);
+};

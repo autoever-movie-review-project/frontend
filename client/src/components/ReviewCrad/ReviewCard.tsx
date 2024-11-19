@@ -2,12 +2,17 @@ import { memo, useCallback, useState } from 'react';
 import * as S from './ReviewCard.style';
 import { RankType } from 'types/rank';
 import Profile from 'components/Profile';
+import { deleteReview } from 'api/review/reviewApi';
+import { toast } from 'react-toastify';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { fetchDeleteReviewLike, fetchPostReviewLike } from 'api/like/reviewLikeApi';
 
 interface ReviewCardProps {
   reviewId?: number;
   userId?: number; // 리뷰 작성자의 userId
   currentUserId?: number; // 현재 로그인한 사용자 ID
+  movieId?: number;
+  mainImg?: string;
   rating: number;
   content: string;
   likesCount?: number;
@@ -21,6 +26,8 @@ interface ReviewCardProps {
 
 const ReviewCard = ({
   reviewId = 0,
+  movieId,
+  mainImg,
   userId,
   currentUserId,
   rating,
@@ -30,7 +37,7 @@ const ReviewCard = ({
   profile,
   nickname,
   rank,
-  spoilerCount = 4,
+  spoilerCount = 0,
   onSpoilerReport,
 }: ReviewCardProps) => {
   const [isLiked, setIsLiked] = useState(initialIsLiked);
@@ -93,18 +100,42 @@ const ReviewCard = ({
     setIsBlurred(false);
   };
 
+  const queryClient = useQueryClient();
+
+  const deleteMutation = useMutation({
+    mutationFn: deleteReview,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['reviews', movieId] });
+      queryClient.invalidateQueries({ queryKey: ['myReviews'] }); // 삭제 시 내 리뷰도 같이 갱신
+      toast.success('리뷰를 삭제했어요.');
+    },
+    onError: () => {
+      toast.error('리뷰를 삭제하지 못했어요.');
+    },
+  });
+
+  const handleReviewDelete = (reviewId: number) => {
+    if (window.confirm('정말 삭제하실 건가요?')) {
+      deleteMutation.mutate(reviewId);
+    } else {
+      return;
+    }
+  };
+
   return (
     <S.Card>
       <S.StarsContainer>
         <S.StarGroup>{renderStars()}</S.StarGroup>
-        {!isMyReview && (
+        {!isMyReview ? (
           <S.ReportButton
             onClick={handleSpoilerReport}
             $hasReported={hasReported}
-            title={hasReported ? '이미 신고하셨습니다' : '스포일러 신고하기'}
+            title={hasReported ? '이미 신고한 리뷰에요.' : '스포일러 신고하기'}
           >
             <S.ReportIcon />
           </S.ReportButton>
+        ) : (
+          <S.XIcon onClick={() => handleReviewDelete(reviewId)}></S.XIcon>
         )}
       </S.StarsContainer>
       <S.ReviewContainer>
@@ -114,6 +145,7 @@ const ReviewCard = ({
             <S.RevealButton onClick={handleRevealContent}>리뷰 보기</S.RevealButton>
           </S.SpoilerOverlay>
         )}
+        <S.Poster src={mainImg} />
         <S.ReviewText $isBlurred={isBlurred}>{content}</S.ReviewText>
       </S.ReviewContainer>
       <S.UserSection>
