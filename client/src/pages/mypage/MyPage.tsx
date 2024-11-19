@@ -343,6 +343,8 @@ function MyPage() {
                     liked={true}
                     movieId={review.movieId}
                     mainImg={review.mainImg}
+                    userId={review.userId}
+                    currentUserId={user?.data.userId}
                   />
                 ))
               ) : (
