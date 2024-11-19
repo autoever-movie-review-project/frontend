@@ -2,6 +2,9 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { LoginRequest, LoginSuccessResponse, User } from 'api/auth/auth';
 import { authApi } from 'api/auth/authApi';
 import { client } from 'api/client';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { getCookie } from 'util/cookieUtil';
 
 /**
@@ -9,6 +12,7 @@ import { getCookie } from 'util/cookieUtil';
  */
 export const useAuth = () => {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const { data: user, isLoading: isUserLoading } = useQuery({
     queryKey: ['user'],
@@ -27,6 +31,23 @@ export const useAuth = () => {
     },
     staleTime: 5 * 60 * 1000,
   });
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const userDataStr = searchParams.get('user');
+
+    if (userDataStr) {
+      try {
+        const userData = JSON.parse(decodeURIComponent(userDataStr));
+        queryClient.setQueryData(['user'], userData);
+        navigate('/');
+        toast.success(`${userData.nickname}님 환영합니다!`);
+      } catch (error) {
+        console.error('Failed to parse user data:', error);
+        navigate('/login');
+      }
+    }
+  }, [queryClient, navigate]);
 
   const loginMutation = useMutation<LoginSuccessResponse, Error, LoginRequest>({
     mutationFn: (data: LoginRequest) => authApi.login(data),

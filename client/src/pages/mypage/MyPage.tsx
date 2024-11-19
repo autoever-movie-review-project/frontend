@@ -30,6 +30,7 @@ interface MyReview {
   rating: number;
   createdAt: string;
   liked: boolean;
+  mainImg: string;
 }
 
 interface PaginatedResponse<T> {
@@ -67,6 +68,7 @@ interface LikedReview {
   content: string;
   likesCount: number;
   rating: number;
+  mainImg: string;
 }
 
 interface LikedMovie {
@@ -188,7 +190,9 @@ function MyPage() {
     }
   };
 
-  console.log(likedReviewsData);
+  console.log(user);
+
+  console.log(myReviews);
 
   return (
     <S.Background>
@@ -258,6 +262,10 @@ function MyPage() {
                     profile={review.profile || DefaultProfile}
                     likesCount={review.likesCount}
                     liked={review.liked}
+                    userId={review.userId}
+                    currentUserId={user?.data.userId}
+                    movieId={review.movieId}
+                    mainImg={review.mainImg}
                   />
                 ))
               ) : (
@@ -273,7 +281,7 @@ function MyPage() {
               {isLikedMoviesLoading ? (
                 <div>로딩 중...</div>
               ) : likedMoviesError ? (
-                <div>찜한 영화를 불러오는 중 오류가 발생했습니다.</div>
+                <div>찜한 영화를 불러오는 중 오류가 발생했어요.</div>
               ) : likedMovies.length > 0 ? (
                 likedMovies.map((movie) => (
                   <S.LikedMovieItem key={movie.movieId} onClick={() => navigate(`/movies/${movie.movieId}`)}>
@@ -309,7 +317,7 @@ function MyPage() {
                   />
                 ))
               ) : (
-                <div>좋아요한 리뷰가 없습니다.</div>
+                <div>아직 좋아요한 리뷰가 없어요.</div>
               )}
             </S.MyReviewSection>
           </>

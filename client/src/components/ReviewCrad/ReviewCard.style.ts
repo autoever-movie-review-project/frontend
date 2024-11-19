@@ -4,6 +4,7 @@ import Heart from 'assets/heart.svg?react';
 import StarImg from 'assets/star.svg?react';
 import StarHalfImg from 'assets/star-half.svg?react';
 import Alert from 'assets/siren.svg?react';
+import X from 'assets/x.svg?react';
 import { RankType } from 'types/rank';
 
 export const Card = styled.div`
@@ -22,6 +23,7 @@ export const StarsContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-bottom: 4px;
 `;
 
 export const StarGroup = styled.div`
@@ -42,6 +44,7 @@ export const HalfStar = styled(StarHalfImg)<{ $filled?: boolean }>`
 `;
 
 export const ReviewContainer = styled.div`
+  display: flex;
   position: relative;
 `;
 
@@ -176,4 +179,17 @@ export const Rank = styled.span<{ $rank?: RankType }>`
         return theme.colors.bronze;
     }
   }};
+`;
+
+export const XIcon = styled(X)`
+  &:hover {
+    cursor: pointer;
+    transform: scale(1.05);
+    transition: 0.2s ease-in-out;
+  }
+`;
+
+export const Poster = styled.img`
+  width: 40%;
+  height: 40%;
 `;

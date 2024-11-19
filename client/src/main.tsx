@@ -24,6 +24,7 @@ createRoot(document.getElementById('root')!).render(
           rtl={false}
           draggable
           stacked
+          limit={3}
         />
       </ThemeProvider>
     </QueryClientProvider>

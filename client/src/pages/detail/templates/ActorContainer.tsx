@@ -38,9 +38,10 @@ const ActorItem = styled.div`
   width: 100px;
   gap: 20px;
   margin-bottom: 20px;
-  padding-bottom: 10px;
-  padding: 10px;
+  padding: 22px 10px;
   white-space: nowrap;
+  background-color: ${theme.colors.grayDark};
+  border-radius: 10px;
 `;
 
 const ActorImage = styled.img`

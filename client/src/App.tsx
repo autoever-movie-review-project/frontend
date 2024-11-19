@@ -9,6 +9,7 @@ import { GameLobby } from 'pages/game/gameLobby/GameLobby';
 import { GameRoom } from 'pages/game/gameRoom/GameRoom';
 import { Test } from 'Test';
 import Loading from 'components/Loading';
+import KakaoCallbackPage from 'pages/auth/kakaoCallbackPage';
 
 const loadingComp = <Loading />;
 const Main = lazy(() => import('pages/main/MainPage'));
@@ -84,6 +85,10 @@ function App() {
           {
             path: '/test',
             element: <Test />,
+          },
+          {
+            path: '/kakao',
+            element: <KakaoCallbackPage />,
           },
         ],
       },
