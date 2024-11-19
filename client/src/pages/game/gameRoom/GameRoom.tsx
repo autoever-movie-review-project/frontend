@@ -195,7 +195,7 @@ export const GameRoom = () => {
     return (
       <GameLobbyWrapper $bgImg={bgImg}>
         <GameLobbyContainer>
-          {status === 'PLAYING' ? (
+          {status === 'WAITING' ? (
             <S.GameStartButtonWrapper>
               <S.GameStartButton
                 $isAllReady={isAllReady}
