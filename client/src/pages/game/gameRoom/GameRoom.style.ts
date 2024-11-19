@@ -2,10 +2,12 @@ import styled, { css, keyframes } from 'styled-components';
 
 export const QuizBoardWrapper = styled.div`
   width: 80%;
+  height: 180px;
   display: flex;
   flex-direction: column;
   padding: 4px;
   margin-bottom: 40px;
+  box-sizing: border-box;
 `;
 
 export const QuizBoard = styled.div`
@@ -85,7 +87,7 @@ export const SendButton = styled.button`
 
 export const GameStartButtonWrapper = styled.div`
   width: 80%;
-  height: 196px;
+  height: 220px;
   display: flex;
   justify-content: center;
   gap: 20px;
