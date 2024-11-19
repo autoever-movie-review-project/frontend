@@ -242,7 +242,7 @@ function MyPage() {
           </S.UserInfoContainer>
           <S.RankBarContainer>
             <RankDisplay
-              points={point === Number(localStorage.getItem('point')) ? point : Number(localStorage.getItem('point'))}
+              points={user?.data.points || Number(localStorage.getItem('point'))}
               nickname={user?.data.nickname || '사용자'}
             />
           </S.RankBarContainer>
@@ -362,7 +362,7 @@ function MyPage() {
             <S.TotalPoints>
               <S.PointInfo>
                 <span>현재 포인트</span>
-                <span>{point}P</span>
+                <span>{user?.data.points ? user?.data.points : localStorage.getItem('point')}P</span>
               </S.PointInfo>
               {!isMyRankDataLoading && !myRankDataError && myRankData && (
                 <S.RankPercentage>
