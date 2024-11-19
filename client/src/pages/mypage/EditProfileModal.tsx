@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { toast } from 'react-toastify';
 import { User } from 'api/auth/auth';
@@ -203,20 +203,27 @@ export interface FormInputs {
 }
 
 const EditProfileModal = ({ isOpen, onClose, currentUser, onSubmit }: EditProfileModalProps) => {
-  const [previewImage, setPreviewImage] = useState(currentUser?.data.profile);
+  const [previewImage, setPreviewImage] = useState<string>(currentUser?.data.profile || '');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const {
     register,
     handleSubmit,
-    // watch,
+    setValue,
+    getValues,
     formState: { errors },
   } = useForm<FormInputs>({
     defaultValues: {
       nickname: currentUser?.data.nickname || '',
-      newPassword: '',
     },
   });
+
+  useEffect(() => {
+    if (currentUser?.data) {
+      setValue('nickname', currentUser.data.nickname);
+      setPreviewImage(currentUser.data.profile || '');
+    }
+  }, [currentUser?.data, setValue]);
 
   const handleImageClick = () => {
     fileInputRef.current?.click();
@@ -231,35 +238,36 @@ const EditProfileModal = ({ isOpen, onClose, currentUser, onSubmit }: EditProfil
       return;
     }
 
-    // 미리보기 설정
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setPreviewImage(reader.result as string);
-    };
-    reader.readAsDataURL(file);
-
     try {
-      const response = await userApi.uploadProfileImage(file);
-      setPreviewImage(response.url);
+      toast.loading('이미지 업로드 중...');
+
+      // 이미지 업로드하고 URL 받아오기
+      const { url } = await userApi.uploadProfileImage(file);
+      setPreviewImage(url);
+
+      toast.dismiss();
+      toast.success('이미지가 업로드되었어요.');
     } catch (error) {
-      toast.error('프로필 사진을 변경하지 못했어요.');
+      toast.dismiss();
+      toast.error('이미지 업로드에 실패했어요.');
       console.error('이미지 업로드 실패:', error);
     }
   };
 
   const onSubmitForm = async (data: FormInputs) => {
     try {
-      const submitData: FormInputs = {
-        profile: previewImage || currentUser?.data.profile,
+      // 현재 폼의 nickname과 업로드된 이미지 URL을 합쳐서 전송
+      const updateData = {
         nickname: data.nickname,
-        currentPassword: data.currentPassword,
-        newPassword: data.newPassword,
+        profile: previewImage, // 업로드 후 받은 이미지 URL
       };
 
-      await onSubmit(submitData);
+      await onSubmit(updateData);
+
+      console.log('Submitting update data:', updateData);
       onClose();
     } catch (error) {
-      console.error('프로필 수정 실패: ', error);
+      console.error('프로필 수정 실패:', error);
       toast.error('프로필을 수정하지 못했어요.');
     }
   };

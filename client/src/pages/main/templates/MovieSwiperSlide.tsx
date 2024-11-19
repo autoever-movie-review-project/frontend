@@ -145,7 +145,9 @@ function MovieSwiperSlide(props: MovieSwiperSlideProps) {
     navigate(`/movies/${movieId}`);
   };
 
-  const convertToFiveStarRating = (rating: number) => (rating / 2).toFixed(1);
+  const convertToFiveStarRating = (rating: number) => {
+    return rating === 0.0 ? '평점 없음' : (rating / 2).toFixed(1);
+  };
 
   return (
     <>

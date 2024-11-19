@@ -41,7 +41,7 @@ export interface LoginSuccessResponse {
   userId: number;
   email: string;
   nickname: string;
-  profile?: string;
+  profile: string;
   points?: number;
   rankName?: RankType;
   rankImg?: string;
