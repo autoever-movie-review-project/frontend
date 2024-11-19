@@ -27,9 +27,9 @@ const io = new Server(server, {
 io.on("connection", (socket) => {
   console.log("a user connected");
 
-  socket.on("joinRoom", (gameId, userName) => {
+  socket.on("joinRoom", (gameId, userId) => {
     socket.join(gameId);
-    console.log(`${userName}이 ${gameId}번 방에 참가`);
+    console.log(`${userId}이 ${gameId}번 방에 참가`);
   });
 
   socket.on("gameRoomUpdate", () => {
@@ -37,9 +37,18 @@ io.on("connection", (socket) => {
     io.emit("gameRoomUpdate");
   });
 
-  socket.on("chatMessage", (gameId, message, userName) => {
-    console.log(gameId, message, userName);
-    io.to(gameId).emit(userName, message);
+  socket.on("chatMessage", (gameId, message, userId) => {
+    console.log(gameId, message, userId);
+    io.to(gameId).emit("chatMessage", userId, message);
+  });
+
+  socket.on("leaveRoom", (gameId) => {
+    socket.leave(gameId);
+  });
+
+  socket.on("ready", (gameId, userId) => {
+    console.log(`${gameId}방 ${userId}가 준비완료`);
+    io.to(gameId).emit("ready", "준비완료");
   });
 });
 
