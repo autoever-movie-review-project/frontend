@@ -6,6 +6,7 @@ import { theme } from 'styles/theme';
 import { client } from 'api/client';
 import { useNavigate } from 'react-router-dom';
 import { Movie } from 'types/movie';
+import { fetchPopularMovieList } from 'api/movie/movieApi';
 
 const Layout = styled.div`
   width: 100vw;
@@ -111,77 +112,30 @@ const CompleteButton = styled.button`
   font-size: 20px;
 `;
 
-//더미
-const initialMovies: Movie[] = [
-  {
-    movieId: 1,
-    mainImg: testimg,
-    backdropImg: 'assets/backdrop1.jpg',
-    title: 'Movie Title 1',
-    genre: ['Drama', 'Adventure'],
-    directorName: ['Director 1'],
-    actorName: ['Actor 1', 'Actor 2'],
-    actorImg: ['assets/actor1.jpg', 'assets/actor2.jpg'],
-    releaseDate: '2024-11-11',
-    rating: 8.5,
-    ageRating: 'PG-13',
-    runtime: 120,
-    language: 'en',
-    reviewCount: 100,
-    plot: 'This is the plot for Movie Title 1.',
-    tagline: '코미디',
-  },
-  {
-    movieId: 2,
-    mainImg: testimg,
-    backdropImg: 'assets/backdrop1.jpg',
-    title: 'Movie Title 1',
-    genre: ['Drama', 'Adventure'],
-    directorName: ['Director 1'],
-    actorName: ['Actor 1', 'Actor 2'],
-    actorImg: ['assets/actor1.jpg', 'assets/actor2.jpg'],
-    releaseDate: '2024-11-11',
-    rating: 8.5,
-    ageRating: 'PG-13',
-    runtime: 120,
-    language: 'en',
-    reviewCount: 100,
-    plot: 'This is the plot for Movie Title 1.',
-    tagline: '코미디',
-  },
-  {
-    movieId: 3,
-    mainImg: testimg,
-    backdropImg: 'assets/backdrop1.jpg',
-    title: 'Movie Title 1',
-    genre: ['Drama', 'Adventure'],
-    directorName: ['Director 1'],
-    actorName: ['Actor 1', 'Actor 2'],
-    actorImg: ['assets/actor1.jpg', 'assets/actor2.jpg'],
-    releaseDate: '2024-11-11',
-    rating: 8.5,
-    ageRating: 'PG-13',
-    runtime: 120,
-    language: 'en',
-    reviewCount: 100,
-    plot: 'This is the plot for Movie Title 1.',
-    tagline: '코미디',
-  },
-];
-
 function PreferencesPage() {
-  const [movieList, setMovieList] = useState(initialMovies);
+  const [movieList, setMovieList] = useState<Movie[]>();
   const [selectedMovies, setSelectedMovies] = useState<Movie[]>([]);
   const navigate = useNavigate();
 
   const fetchMovies = async () => {
     try {
-      const response = await client.get<Movie[]>('api url');
-      setMovieList(response.data);
+      const response = await fetchPopularMovieList();
+      const movies = response; // 전체 영화 리스트
+      const randomMovies = selectRandomMovies(movies, 9); // 랜덤으로 9개 추출
+      setMovieList(randomMovies);
     } catch (error) {
       console.error('Failed to fetch movies:', error);
       throw error;
     }
+  };
+
+  // 랜덤 영화 추출 유틸리티 함수
+  const selectRandomMovies = (movies: Movie[], count: number) => {
+    if (!Array.isArray(movies)) throw new Error('Movies must be an array.');
+    if (movies.length <= count) return movies; // 영화 개수가 적으면 전부 반환
+
+    const shuffled = [...movies].sort(() => 0.5 - Math.random()); // 랜덤 셔플
+    return shuffled.slice(0, count); // 상위 `count`개 반환
   };
 
   //초기 랜덤 데이터 fetch
@@ -232,15 +186,16 @@ function PreferencesPage() {
           </ResetButton>
         </Wrapper>
         <PreferencesMovieContainer>
-          {movieList.map((movie, index) => (
-            <PreferencesMovieWrapper
-              key={index}
-              $active={checkMovie(movie.movieId)}
-              onClick={() => handleMovieClick(movie)}
-            >
-              <PreferencesMovie src={movie.mainImg} alt="movie" />
-            </PreferencesMovieWrapper>
-          ))}
+          {movieList &&
+            movieList.map((movie, index) => (
+              <PreferencesMovieWrapper
+                key={index}
+                $active={checkMovie(movie.movieId)}
+                onClick={() => handleMovieClick(movie)}
+              >
+                <PreferencesMovie src={movie.mainImg} alt="movie" />
+              </PreferencesMovieWrapper>
+            ))}
         </PreferencesMovieContainer>
         <CompleteButton onClick={handleCompleteButtonClick}>제출하기</CompleteButton>
       </Container>
