@@ -77,13 +77,38 @@ export const fetchSearchMovieList = async (keyword: string, page: number) => {
   return response.data; // data에는 movies 목록만 반환됨
 };
 
+interface MovieRequestBody {
+  movieIds: number[];
+}
+
 //선호 영화 3가지 보내기
-export const fetchPostPreferencesMovieList = async (requestBody: { movieId: number }[]) => {
+export const fetchPostPreferencesMovieList = async (movieIds: number[]): Promise<any> => {
+  const requestBody: MovieRequestBody = { movieIds };
+
   try {
-    const response = await client.post('/movie', requestBody);
+    const response = await client.post('/recommendation', requestBody);
     return response.data;
   } catch (e) {
     console.error('선호 영화 보내기 실패: ', e);
-    throw e;
+    throw new Error('선호 영화 보내기 실패');
+  }
+};
+
+export const fetchPreferencesMovieList = async () => {
+  try {
+    const response = await client.get('/recommendation');
+    return response.data;
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+//리뷰 많은순 영화
+export const fetchHotMovieList = async () => {
+  try {
+    const response = await client.get('/movie/top-reviewed');
+    return response.data;
+  } catch (e) {
+    console.error(e);
   }
 };
