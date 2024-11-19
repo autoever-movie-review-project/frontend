@@ -101,5 +101,7 @@ export const ErrorMessage = styled.p`
 `;
 
 export const Logo = styled.img`
+  width: 220px;
+  height: 100px;
   margin-bottom: 20px;
 `;

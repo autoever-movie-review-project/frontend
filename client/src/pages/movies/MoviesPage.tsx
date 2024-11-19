@@ -75,17 +75,55 @@ const CardWrapper = styled.div`
   align-items: center;
   gap: 20px;
   border-radius: 5px;
+  position: relative;
+
+  &:hover .movie-info {
+    opacity: 1;
+  }
+`;
+
+const MovieInfo = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 10px 0;
+  color: white;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 9999;
+`;
+
+const MovieTitle = styled.h3`
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 8px;
+  width: 90%;
+  color: #ffffff;
+  padding: 10px;
+`;
+
+const MovieGenre = styled.p`
+  font-size: 14px;
+  color: #cccccc;
+  width: 90%;
+  line-height: 20px;
+  padding: 10px;
 `;
 
 const CardImage = styled.img`
   width: 100%;
   height: 100%;
-  object-fit: fill;
+  object-fit: cover;
+  display: block;
 
-  &:hover {
+  /* &:hover {
     transform: scale(1.05);
     transition: 0.3s ease-in-out;
-  }
+  } */
 `;
 
 const TagButtonContainer = styled.div`
@@ -124,7 +162,7 @@ const TagButton = styled.button`
 `;
 
 const BoxofficeSliderWrapper = styled.div`
-  width: 100%;
+  width: 90%;
   height: 100%;
   h1 {
     font-weight: bold;
@@ -271,6 +309,11 @@ const MoviesPage: React.FC = () => {
                     onClick={() => handleCardClick(movie.movieId)}
                   >
                     <CardImage src={movie.mainImg} alt={movie.title} />
+                    <MovieInfo className="movie-info">
+                      <MovieTitle>{movie.title}</MovieTitle>
+                      <MovieGenre>{movie.genre.join(' / ')}</MovieGenre>
+                      <MovieGenre>{movie.plot || movie.tagline || ''}</MovieGenre>
+                    </MovieInfo>
                   </CardWrapper>
                 );
               }
@@ -278,6 +321,11 @@ const MoviesPage: React.FC = () => {
               return (
                 <CardWrapper key={`${movie.movieId}-${index}`} onClick={() => handleCardClick(movie.movieId)}>
                   <CardImage src={movie.mainImg} alt={movie.title} />
+                  <MovieInfo className="movie-info">
+                    <MovieTitle>{movie.title}</MovieTitle>
+                    <MovieGenre>{movie.genre.join(' / ')}</MovieGenre>
+                    <MovieGenre>{movie.plot || movie.tagline || ''}</MovieGenre>
+                  </MovieInfo>
                 </CardWrapper>
               );
             })}
