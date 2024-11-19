@@ -1,12 +1,26 @@
 import * as S from './GameRoomUser.syle';
 import bazzi from 'assets/bazzi.webp';
 import crown from 'assets/crown.png';
+import { useEffect, useState } from 'react';
 
-export const GameRoomUser = ({ roomManager }: { roomManager: boolean }) => {
-  const chatContent = '느그 아부지 뭐하시노';
+interface IGameRoomUserProps {
+  roomManager: boolean;
+  message: string;
+  isReady: boolean;
+}
+
+export const GameRoomUser = ({ roomManager, message, isReady }: IGameRoomUserProps) => {
+  const [chatMessage, setChatMessage] = useState(message);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setChatMessage('');
+    }, 3000);
+  }, []);
+
   return (
     <S.GameRoomUserWrapper>
-      <S.ChatDisplayBox>{chatContent}</S.ChatDisplayBox>
+      {chatMessage ? <S.ChatDisplayBox>{chatMessage}</S.ChatDisplayBox> : <S.Blank />}
       <S.UserInfoBox>
         {roomManager ? <img src={crown} /> : null}
         <S.UserImageWrapper>
@@ -15,6 +29,7 @@ export const GameRoomUser = ({ roomManager }: { roomManager: boolean }) => {
         <S.UserName>김영화</S.UserName>
         <S.Score>{String(100).padStart(4, '0')}점</S.Score>
       </S.UserInfoBox>
+      <S.Ready>{isReady ? 'Ready' : null}</S.Ready>
     </S.GameRoomUserWrapper>
   );
 };
