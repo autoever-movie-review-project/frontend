@@ -1,4 +1,4 @@
-import { useGameRoomListQuery } from 'hooks/useGame';
+import { useGameRoomListQuery, useJoinGameRoomMutation } from 'hooks/useGame';
 import * as S from './GameRoomList.style';
 import gameconsole from 'assets/bazzi.webp';
 import { socket } from 'socket';
@@ -6,11 +6,17 @@ import { useNavigate } from 'react-router-dom';
 
 export const GameRoomList = () => {
   const { data } = useGameRoomListQuery();
+  const joinGameRoomMutation = useJoinGameRoomMutation();
+
   const navigate = useNavigate();
 
   const handleJoinRoomClick = (gameId: number) => {
-    navigate(`/gameroom/${gameId}`);
-    socket.emit('gameRoomUpdate');
+    joinGameRoomMutation.mutate(gameId, {
+      onSuccess: () => {
+        navigate(`/gameroom/${gameId}`);
+        socket.emit('gameRoomUpdate');
+      },
+    });
   };
 
   if (data) {
