@@ -76,3 +76,14 @@ export const fetchSearchMovieList = async (keyword: string, page: number) => {
   });
   return response.data; // data에는 movies 목록만 반환됨
 };
+
+//선호 영화 3가지 보내기
+export const fetchPostPreferencesMovieList = async (requestBody: { movieId: number }[]) => {
+  try {
+    const response = await client.post('선호영화api', requestBody);
+    return response.data;
+  } catch (e) {
+    console.error('선호 영화 보내기 실패: ', e);
+    throw e;
+  }
+};
