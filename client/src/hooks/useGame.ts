@@ -15,12 +15,17 @@ interface IGameRoomListResponse {
   content: IGameRoomInfo[];
 }
 
-interface IPlayerInfo {
+interface IInGameRankDto {
   rankId: number;
   rankName: string;
   rankImg: string;
+}
+
+interface IPlayerInfo {
+  inGameRankDto: IInGameRankDto;
   profile: string;
   userId: number;
+  nickname: string;
 }
 
 interface IGameRoomDetailResponse {
