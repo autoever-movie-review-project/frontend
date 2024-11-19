@@ -28,7 +28,7 @@ export interface LoginRequest {
 }
 
 export interface User {
-  userId?: number;
+  userId?: number | undefined;
   email?: string;
   nickname?: string;
   profile?: string;
@@ -37,6 +37,13 @@ export interface User {
   rankImg?: string;
 }
 
-export interface LoginSuccessResponse extends User {
+export interface LoginSuccessResponse {
+  userId: number;
+  email: string;
+  nickname: string;
+  profile?: string;
+  points?: number;
+  rankName?: RankType;
+  rankImg?: string;
   userType: 'ROLE_SOCIAL' | 'ROLE_USER';
 }

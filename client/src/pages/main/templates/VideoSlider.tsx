@@ -7,6 +7,7 @@ import video2 from 'assets/videoImpa.webm';
 import video3 from 'assets/videoGladiator.webm';
 import { theme } from 'styles/theme';
 import marvel from 'assets/marvel.svg';
+
 import mission from 'assets/missionimp.png';
 import gladiator from 'assets/gladiator.webp';
 import Button from 'components/Button';
@@ -44,14 +45,12 @@ const StyledSwiper = styled(Swiper)`
   }
 `;
 
-function VideoSlider() {
-  const handleVideoButtonClick = () => {
-    window.scrollTo({
-      top: window.innerHeight - 80,
-      behavior: 'smooth',
-    });
-  };
+const TextWrapper = styled.div`
+  display: flex;
+  text-align: center;
+`;
 
+function VideoSlider() {
   return (
     <StyledSwiper
       centeredSlides={true}
@@ -70,7 +69,6 @@ function VideoSlider() {
         </video>
         <ContentsText>
           <img src={marvel} />
-          <Button text="더보기" width="100px" onClick={() => handleVideoButtonClick()}></Button>
         </ContentsText>
       </SwiperSlide>
       <SwiperSlide style={{ height: '100%', position: 'relative' }}>
@@ -79,7 +77,6 @@ function VideoSlider() {
         </video>
         <ContentsText>
           <img src={mission} />
-          <Button text="더보기" width="100px" onClick={() => handleVideoButtonClick()}></Button>
         </ContentsText>
       </SwiperSlide>
       <SwiperSlide style={{ height: '100%', position: 'relative' }}>
@@ -88,7 +85,6 @@ function VideoSlider() {
         </video>
         <ContentsText>
           <img src={gladiator} />
-          <Button text="더보기" width="100px" onClick={() => handleVideoButtonClick()}></Button>
         </ContentsText>
       </SwiperSlide>
     </StyledSwiper>

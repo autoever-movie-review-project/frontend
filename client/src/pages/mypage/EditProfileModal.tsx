@@ -9,6 +9,7 @@ import { userApi } from 'api/user/userApi';
 import { theme } from 'styles/theme';
 import { useForm } from 'react-hook-form';
 import { ModalPortal } from 'components/Modal/ModalPortal';
+import { RankType } from 'types/rank';
 
 const Overlay = styled.div`
   position: fixed;
@@ -276,7 +277,7 @@ const EditProfileModal = ({ isOpen, onClose, currentUser, onSubmit }: EditProfil
           </CloseButton>
           <ProfileSection>
             <ProfileImageContainer onClick={handleImageClick}>
-              <Profile width="100px" height="100px" rank={currentUser?.data?.rankName} src={previewImage} />
+              <Profile width="100px" height="100px" rank={currentUser?.data?.rankName as RankType} src={previewImage} />
               <ImageOverlay>
                 <span>수정하기</span>
               </ImageOverlay>

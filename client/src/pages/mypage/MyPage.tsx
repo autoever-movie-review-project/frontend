@@ -64,11 +64,11 @@ interface LikedReview {
   profile: string | null;
   rankName: string;
   rankImg: string | null;
-  movieId: number;
   content: string;
   likesCount: number;
   rating: number;
   mainImg: string;
+  movieId: number;
 }
 
 interface LikedMovie {
@@ -119,6 +119,7 @@ function MyPage() {
     const response = await client.get('/like/reviews/?page=0');
     return response.data;
   };
+  console.log(user);
 
   const {
     data: myReviews = [], // 기본값을 빈 배열로 설정
@@ -190,17 +191,13 @@ function MyPage() {
     }
   };
 
-  console.log(user);
-
-  console.log(myReviews);
-
   return (
     <S.Background>
       <S.Layout>
         <h1>마이페이지</h1>
         <S.UserProfileSection>
           <S.UserInfoContainer>
-            <Profile width="110px" height="110px" src={DefaultProfile} rank={user?.data.rankName} />
+            <Profile width="110px" height="110px" src={DefaultProfile} rank={user?.data.rankName as RankType} />
             <S.UserDatails>
               <S.RankSection>
                 <S.RankIcon rankImg={user?.data.rankImg}></S.RankIcon>
@@ -314,6 +311,8 @@ function MyPage() {
                     profile={review.profile || DefaultProfile}
                     likesCount={review.likesCount}
                     liked={true}
+                    movieId={review.movieId}
+                    mainImg={review.mainImg}
                   />
                 ))
               ) : (
