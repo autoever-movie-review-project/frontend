@@ -33,6 +33,10 @@ const SwiperContainer = styled.div`
     background-color: black;
     opacity: 0;
     transition: opacity 0.3s ease;
+
+    visibility: visible !important;
+    display: flex !important;
+    pointer-events: auto;
   }
 
   .swiper-button-prev {
