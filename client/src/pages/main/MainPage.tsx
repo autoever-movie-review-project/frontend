@@ -17,9 +17,8 @@ function MainPage() {
       try {
         const results = await Promise.all([
           fetchUpcomingMovieList(),
+          fetchPopularMovieList(),
           fetchUpcomingMovieList(),
-          fetchUpcomingMovieList(),
-          // fetchPopularMovieList(),
           // fetchBoxOfficeMovieList(),
         ]);
 

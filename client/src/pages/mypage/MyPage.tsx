@@ -15,6 +15,8 @@ import { AxiosError } from 'axios';
 import { fetchMyReviews } from 'api/review/reviewApi';
 import { fetchLikedMovies } from 'api/like/movieLikeApi';
 import { useNavigate } from 'react-router-dom';
+import { RankDisplay } from 'components/point/RankDisplay';
+import { usePointStore } from 'store/point';
 import { RankType } from 'types/rank';
 
 interface MyReview {
@@ -111,6 +113,8 @@ function MyPage() {
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState<'reviews' | 'movies' | 'likes'>('reviews');
 
+  const point = usePointStore((state) => state.point);
+
   const getLikedReviews = async () => {
     const response = await client.get('/like/reviews/?page=0');
     return response.data;
@@ -195,16 +199,25 @@ function MyPage() {
       <S.Layout>
         <h1>마이페이지</h1>
         <S.UserProfileSection>
-          <Profile width="110px" height="110px" src={DefaultProfile} rank={user?.data.rankName} />
-          <S.UserDatails>
-            <S.RankSection>
-              <S.RankIcon rankImg={user?.data.rankImg}></S.RankIcon>
-              <S.Rank $rank={user?.data.rankName}>{user?.data.rankName}</S.Rank>
-              <S.QuestionIcon onClick={openModal} />
-            </S.RankSection>
-            <S.Nickname>{user?.data.nickname}</S.Nickname>
-            <S.Email>{user?.data.email}</S.Email>
-          </S.UserDatails>
+          <S.UserInfoContainer>
+            <Profile width="110px" height="110px" src={DefaultProfile} rank={user?.data.rankName} />
+            <S.UserDatails>
+              <S.RankSection>
+                <S.RankIcon rankImg={user?.data.rankImg}></S.RankIcon>
+                <S.Rank $rank={user?.data.rankName}>{user?.data.rankName}</S.Rank>
+                <S.QuestionIcon onClick={openModal} />
+              </S.RankSection>
+              <S.Nickname>{user?.data.nickname}</S.Nickname>
+              <S.Email>{user?.data.email}</S.Email>
+            </S.UserDatails>
+          </S.UserInfoContainer>
+          <S.RankBarContainer>
+            <RankDisplay
+              points={point === Number(localStorage.getItem('point')) ? point : Number(localStorage.getItem('point'))}
+              nickname={user?.data.nickname || '사용자'}
+            />
+            <S.QuestionIcon onClick={openModal} /> {/*다른 아이콘으로 점수 히스토리 모달열기*/}
+          </S.RankBarContainer>
         </S.UserProfileSection>
         <S.ProfileEditButton onClick={handleProfileButtonClick}>
           <S.EditIcon />
@@ -301,10 +314,6 @@ function MyPage() {
                     profile={review.profile || DefaultProfile}
                     likesCount={review.likesCount}
                     liked={true}
-                    userId={review.userId}
-                    currentUserId={user?.data.userId}
-                    movieId={review.movieId}
-                    mainImg={review.mainImg}
                   />
                 ))
               ) : (

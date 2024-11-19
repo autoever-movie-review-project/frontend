@@ -20,6 +20,8 @@ import { addLikeMovie, deleteLikeMovie } from 'api/like/movieLikeApi';
 import { toast } from 'react-toastify';
 import { AxiosError } from 'axios';
 import { useAuth } from 'hooks/useAuth';
+import { fetchPlusPoint } from 'api/point/pointApi';
+import { usePointStore } from 'store/point';
 
 const Container = styled.div`
   width: 100vw;
@@ -132,6 +134,8 @@ function DetailPage() {
   const [rating, setRating] = useState(0); // 리뷰별점 post용
   const [reviewContent, setReviewContent] = useState(''); // 리뷰내용 post용
   const { user } = useAuth();
+  const increPoint = usePointStore((state) => state.incrementCount);
+
   const {
     data: movie,
     isLoading,
@@ -191,19 +195,31 @@ function DetailPage() {
 
   const reviewMutation = useMutation({
     mutationFn: (reviewData: { movieId: number; rating: number; content: string }) => postReview(reviewData),
-    onSuccess: () => {
-      // 리뷰 목록 갱신
-      queryClient.invalidateQueries({ queryKey: ['reviews', movieId] });
-      toast.success('리뷰가 등록됐어요.');
-      // 모달 닫기
-      close();
+    onSuccess: async () => {
+      try {
+        // 리뷰 목록 갱신
+        queryClient.invalidateQueries({ queryKey: ['reviews', movieId] });
+        toast.success('리뷰가 등록됐어요.');
+
+        // 포인트 100점 추가
+        await fetchPlusPoint({ points: 100, description: '리뷰 달기 성공!' });
+        const beforePoint = localStorage.getItem('point');
+        const newPoint = Number(beforePoint) + 100;
+        localStorage.setItem('point', String(newPoint));
+        increPoint(100);
+
+        // 모달 닫기
+        close();
+      } catch (error) {
+        console.error('포인트 추가 실패:', error);
+        alert('포인트 지급에 실패했습니다. 다시 시도해주세요.');
+      }
     },
     onError: (error) => {
       console.error('리뷰 작성 실패:', error);
       toast.error('리뷰 작성에 실패했어요. 다시 시도해주세요.');
     },
   });
-
   const handleLikeClick = () => {
     likeMutation.mutate(numericMovieId);
   };

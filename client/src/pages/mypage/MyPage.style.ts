@@ -43,6 +43,11 @@ export const Layout = styled.div`
 
 export const UserProfileSection = styled.div`
   display: flex;
+  justify-content: space-between;
+`;
+
+export const UserInfoContainer = styled.div`
+  display: flex;
   gap: 20px;
   margin-bottom: 30px;
 `;
@@ -60,6 +65,11 @@ export const RankSection = styled.div`
   align-items: center;
 
   gap: 5px;
+`;
+
+export const RankBarContainer = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 const rankImages = {
