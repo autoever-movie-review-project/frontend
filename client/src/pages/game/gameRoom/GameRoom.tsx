@@ -14,6 +14,8 @@ import {
   useGameStartMutation,
 } from 'hooks/useGame';
 import { getGameProblemList, IProblem } from '../movieQuotes';
+import { useModal } from 'hooks/useModal';
+import { Modal } from 'components/Modal/Modal';
 
 interface IGameScore {
   [key: number]: number;
@@ -52,6 +54,7 @@ export const GameRoom = () => {
     },
   ]);
   const [gameScore, setGameScore] = useState<IGameScore>({});
+  const { isModalOpen, openModal, closeModal } = useModal();
   const userId = Number(localStorage.getItem('userId'));
   const navigate = useNavigate();
 
@@ -61,7 +64,6 @@ export const GameRoom = () => {
     const handleChatMessage = (userId: number, message: string) => {
       setRecentChat({ userId, message });
 
-      console.log(gameRound, gameList[gameRound].answer, message);
       if (gameList[gameRound].answer === message) {
         setGameScore((prevGameScore) => ({
           ...prevGameScore,
@@ -152,10 +154,25 @@ export const GameRoom = () => {
 
   const handleNextGame = useCallback(() => {
     if (gameRound >= 4) {
+      openModal();
       return;
     }
     setGameRound((prevRound) => prevRound + 1);
   }, [gameRound]);
+
+  const findHighestScorer = () => {
+    let highestUserId: number | null = null;
+    let highestScore = -Infinity;
+
+    for (const [userId, score] of Object.entries(gameScore)) {
+      if (score > highestScore) {
+        highestScore = score;
+        highestUserId = Number(userId);
+      }
+    }
+
+    return data?.playerInfo.find((player) => player.userId === highestUserId)?.nickname;
+  };
 
   const renderedUserList = useMemo(() => {
     return data?.playerInfo.map((player) => (
@@ -206,6 +223,11 @@ export const GameRoom = () => {
             <S.SendButton onClick={handleSendMessageButtonClick}>전송</S.SendButton>
           </S.ChatInputWrapper>
         </GameLobbyContainer>
+        {isModalOpen && (
+          <Modal closeModal={closeModal} modalTitle="우승자">
+            <S.Winner>{findHighestScorer()}</S.Winner>
+          </Modal>
+        )}
       </GameLobbyWrapper>
     );
   }
