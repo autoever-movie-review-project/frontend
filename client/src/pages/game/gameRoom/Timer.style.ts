@@ -15,7 +15,7 @@ export const LeftTimeBar = styled.div`
   align-items: center;
   height: 24px;
   background: gray;
-  animation: ${decrease} 30s linear;
+  animation: ${decrease} 20s linear;
   animation-fill-mode: forwards;
 `;
 

@@ -6,25 +6,71 @@ import { useCallback, useEffect, useState, useMemo } from 'react';
 import { Timer } from './Timer';
 import { useNavigate, useParams } from 'react-router-dom';
 import { socket } from 'socket';
-import { IReadyResponse, useExitGameRoom, useGameReadyMutation, useGameRoomDetailQuery } from 'hooks/useGame';
+import {
+  IReadyResponse,
+  useExitGameRoom,
+  useGameReadyMutation,
+  useGameRoomDetailQuery,
+  useGameStartMutation,
+} from 'hooks/useGame';
+import { getGameProblemList, IProblem } from '../movieQuotes';
+import { useModal } from 'hooks/useModal';
+import { Modal } from 'components/Modal/Modal';
+
+interface IGameScore {
+  [key: number]: number;
+}
 
 export const GameRoom = () => {
   const params = useParams();
   const gameId = Number(params.gameId);
-  const { data } = useGameRoomDetailQuery(gameId || -1);
+  const { data, refetch } = useGameRoomDetailQuery(gameId || -1);
   const gameReadyMutation = useGameReadyMutation();
   const [readyList, setReadyList] = useState<IReadyResponse[]>([]);
   const [chatInput, setChatInput] = useState('');
   const [recentChat, setRecentChat] = useState<{ userId: number; message: string }>({ userId: -1, message: '' });
+  const [gameRound, setGameRound] = useState(0);
+  const [gameList, setGameList] = useState<IProblem[]>([
+    { title: '범죄도시2', quote: 'ㄴ ㄴㅊㄷㄱㅇ', answer: '너 납치된거야' },
+    {
+      title: '기생충',
+      quote: 'ㅇㄷㅇ, ㄴㄴ ㄱㅎㅇ ㄷ ㅇㄱㄴ',
+      answer: '아들아, 너는 계획이 다 있구나',
+    },
+    {
+      title: '박하사탕',
+      quote: 'ㄴ ㄷㅅ ㄷㅇㄱㄹ',
+      answer: '나 다시 돌아갈래',
+    },
+    {
+      title: '베테랑',
+      quote: 'ㅇㄹㄱ ㄷㅇ ㅇㅈ ㄱㅇㄱ ㅇㄴ',
+      answer: '우리가 돈이 없지 가오가 없냐',
+    },
+    {
+      title: '베테랑',
+      quote: 'ㅇㅇㄱ ㅇㄴ',
+      answer: '어이가 없네',
+    },
+  ]);
+  const [gameScore, setGameScore] = useState<IGameScore>({});
+  const { isModalOpen, openModal, closeModal } = useModal();
   const userId = Number(localStorage.getItem('userId'));
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log('123');
     socket.emit('joinRoom', gameId, userId);
 
     const handleChatMessage = (userId: number, message: string) => {
       setRecentChat({ userId, message });
+
+      if (gameList[gameRound].answer === message) {
+        setGameScore((prevGameScore) => ({
+          ...prevGameScore,
+          [userId]: (prevGameScore[userId] || 0) + 100,
+        }));
+        handleNextGame();
+      }
     };
 
     const handleReady = (rList: IReadyResponse[]) => {
@@ -40,7 +86,17 @@ export const GameRoom = () => {
       socket.off('chatMessage', handleChatMessage);
       socket.off('ready', handleReady);
     };
-  }, [gameId]);
+  }, [gameId, gameRound]);
+
+  useEffect(() => {
+    if (data?.playerInfo) {
+      const initialScores = data.playerInfo.reduce((acc: Record<number, number>, player) => {
+        acc[player.userId] = 0;
+        return acc;
+      }, {});
+      setGameScore(initialScores);
+    }
+  }, [data]);
 
   const handleChatInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setChatInput(e.target.value);
@@ -73,7 +129,13 @@ export const GameRoom = () => {
   }, []);
 
   const handleGameStartClick = () => {
-    // TODO: 게임 시작 기능 구현
+    useGameStartMutation().mutate(gameId, {
+      onSuccess: () => {
+        socket.emit('gameRoomUpdate');
+        refetch();
+        setGameList(getGameProblemList());
+      },
+    });
   };
 
   const handleGameReadyClick = useCallback(() => {
@@ -85,12 +147,34 @@ export const GameRoom = () => {
   }, [gameId, gameReadyMutation]);
 
   const handleExitClick = () => {
+    socket.emit('gameRoomUpdate');
     useExitGameRoom().mutate(gameId);
     navigate('/game');
   };
 
+  const handleNextGame = useCallback(() => {
+    if (gameRound >= 4) {
+      openModal();
+      return;
+    }
+    setGameRound((prevRound) => prevRound + 1);
+  }, [gameRound]);
+
+  const findHighestScorer = () => {
+    let highestUserId: number | null = null;
+    let highestScore = -Infinity;
+
+    for (const [userId, score] of Object.entries(gameScore)) {
+      if (score > highestScore) {
+        highestScore = score;
+        highestUserId = Number(userId);
+      }
+    }
+
+    return data?.playerInfo.find((player) => player.userId === highestUserId)?.nickname;
+  };
+
   const renderedUserList = useMemo(() => {
-    console.log(data?.playerInfo);
     return data?.playerInfo.map((player) => (
       <GameRoomUser
         key={player.userId}
@@ -99,9 +183,10 @@ export const GameRoom = () => {
         roomManager={Number(player.userId) === data?.hostId}
         message={recentChat.userId === player.userId ? recentChat.message : ''}
         isReady={readyList.find((item) => item.userId === player.userId)?.isReady ?? false}
+        score={gameScore[player.userId]}
       />
     ));
-  }, [data, readyList, recentChat]);
+  }, [data, readyList, recentChat, gameScore]);
 
   if (data && userId) {
     const { hostId, status, playerCount } = data;
@@ -124,11 +209,11 @@ export const GameRoom = () => {
           ) : (
             <S.QuizBoardWrapper>
               <S.QuizBoard>
-                <S.QuizNumber>{2}번째 문제</S.QuizNumber>
-                <S.QuizMovieTitle>{`영화 제목 <친구>`}</S.QuizMovieTitle>
-                <S.QuizTitle>{`ㄴㄱ ㅇㅂㅈ ㅁㅎㅅㄴ`}</S.QuizTitle>
+                <S.QuizNumber>{gameRound + 1}번째 문제</S.QuizNumber>
+                <S.QuizMovieTitle>{`영화 제목 <${gameList[gameRound].title}>`}</S.QuizMovieTitle>
+                <S.QuizTitle>{gameList[gameRound].quote}</S.QuizTitle>
               </S.QuizBoard>
-              <Timer />
+              <Timer handleNextGame={handleNextGame} gameRound={gameRound} />
             </S.QuizBoardWrapper>
           )}
           <S.GameRoomUserContainer>{renderedUserList}</S.GameRoomUserContainer>
@@ -138,6 +223,11 @@ export const GameRoom = () => {
             <S.SendButton onClick={handleSendMessageButtonClick}>전송</S.SendButton>
           </S.ChatInputWrapper>
         </GameLobbyContainer>
+        {isModalOpen && (
+          <Modal closeModal={closeModal} modalTitle="우승자">
+            <S.Winner>{findHighestScorer()}</S.Winner>
+          </Modal>
+        )}
       </GameLobbyWrapper>
     );
   }

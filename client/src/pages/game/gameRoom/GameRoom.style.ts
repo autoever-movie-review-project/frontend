@@ -140,4 +140,11 @@ export const GameRoomExitButton = styled.button`
   }
 `;
 
-export const GameReadyButton = styled.button``;
+export const Winner = styled.div`
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 38px;
+  color: #f2f2f2;
+`;

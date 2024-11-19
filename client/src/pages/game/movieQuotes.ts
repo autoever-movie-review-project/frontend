@@ -11,8 +11,8 @@ export const movieQuotes = [
   },
   {
     title: '박하사탕',
-    quote: 'ㄴ ㄷㅅ ㄷㅇㄱㄹ!',
-    answer: '나 다시 돌아갈래!',
+    quote: 'ㄴ ㄷㅅ ㄷㅇㄱㄹ',
+    answer: '나 다시 돌아갈래',
   },
   {
     title: '베테랑',
@@ -46,18 +46,13 @@ export const movieQuotes = [
   },
   {
     title: '신세계',
-    quote: 'ㄷㄹㅇ, ㄷㄹㅇ',
-    answer: '드루와, 드루와',
+    quote: 'ㄷㄹㅇ ㄷㄹㅇ',
+    answer: '드루와 드루와',
   },
   {
     title: '친구',
     quote: 'ㄱㅁㅎㄹ ㅁㅇ ㅁㅇㄷ ㅇㅇㄱ',
     answer: '고마해라 마이 묵었다 아이가',
-  },
-  {
-    title: '신세계',
-    quote: 'ㄷㄹㅇ, ㄷㄹㅇ',
-    answer: '드루와, 드루와',
   },
   {
     title: '친절한 금자씨',
@@ -133,8 +128,8 @@ export const movieQuotes = [
   },
   {
     title: '극한직업',
-    quote: 'ㅈㄱㄲㅈ ㅇㄹ ㅁㅇ ㅇㅇㄷ. ㅇㄱㅇ ㄱㅂㅇㄱ, ㅌㄷㅇㄱ',
-    answer: '지금까지 이런 맛은 없었다. 이것은 갈비인가, 통닭인가',
+    quote: 'ㅈㄱㄲㅈ ㅇㄹ ㅁㅇ ㅇㅇㄷ ㅇㄱㅇ ㄱㅂㅇㄱ, ㅌㄷㅇㄱ',
+    answer: '지금까지 이런 맛은 없었다 이것은 갈비인가, 통닭인가',
   },
   {
     title: '김종욱찾기',
@@ -143,13 +138,13 @@ export const movieQuotes = [
   },
   {
     title: '명량',
-    quote: 'ㅅㄱㅈ ㅎㅁ ㅈㅇ ㄱㅇㅇ, ㅈㄱㅈ ㅎㅁ ㅅ ㄱㅇㄷ.',
-    answer: '살고자 하면 죽을 것이요, 죽고자 하면 살 것이다.',
+    quote: 'ㅅㄱㅈ ㅎㅁ ㅈㅇ ㄱㅇㅇ ㅈㄱㅈ ㅎㅁ ㅅ ㄱㅇㄷ.',
+    answer: '살고자 하면 죽을 것이요 죽고자 하면 살 것이다.',
   },
   {
     title: '봄날은 간다',
-    quote: 'ㄹㅁ ㅁㅇㄹㅇ?',
-    answer: '라면 먹을래요?',
+    quote: 'ㄹㅁ ㅁㅇㄹㅇ',
+    answer: '라면 먹을래요',
   },
   {
     title: '아저씨',
@@ -160,11 +155,6 @@ export const movieQuotes = [
     title: '타짜',
     quote: 'ㄷㅈ ㄱㅁ ㅁㅈㅃㄱㄴ',
     answer: '동작 그만 밑장빼기냐',
-  },
-  {
-    title: '범죄도시2',
-    quote: 'ㄴ ㄴㅊㄷㄱㅇ',
-    answer: '너 납치된거야',
   },
   {
     title: '바람',
@@ -207,3 +197,24 @@ export const movieQuotes = [
     answer: '꼭 그렇게 다 가져가야만 속이 후련했냐',
   },
 ];
+
+export interface IProblem {
+  title: string;
+  quote: string;
+  answer: string;
+}
+
+export const getGameProblemList = () => {
+  const problemIndex = new Set<number>();
+
+  while (problemIndex.size < 5) {
+    problemIndex.add(Math.floor(Math.random() * movieQuotes.length));
+  }
+
+  const problemList: IProblem[] = [];
+  for (let idx of problemIndex) {
+    problemList.push(movieQuotes[idx]);
+  }
+
+  return problemList;
+};
