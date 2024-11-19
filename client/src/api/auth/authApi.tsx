@@ -55,6 +55,8 @@ export const authApi = {
           setCookie('accessToken', accessToken, 60);
         }
 
+        localStorage.setItem('userId', response.data.userId.toString());
+
         return response.data;
       }
 
@@ -80,6 +82,7 @@ export const authApi = {
         },
       });
       removeCookie('accessToken', '/');
+      localStorage.removeItem('userId');
       return response.data;
     } catch (error) {
       if (axios.isAxiosError(error)) {
