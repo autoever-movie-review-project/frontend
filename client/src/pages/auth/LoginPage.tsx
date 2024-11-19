@@ -71,7 +71,6 @@ function LoginPage() {
               type="email"
               title="이메일"
               titleSize="13px"
-              defaultValue={'jwy97@naver.com'}
               autoComplete="email"
               {...register('email', {
                 required: '이메일을 입력해주세요.',
@@ -82,7 +81,6 @@ function LoginPage() {
               type="password"
               title="비밀번호"
               titleSize="13px"
-              defaultValue={'test!234'}
               autoComplete="current-password"
               {...register('password', {
                 required: '비밀번호를 입력해주세요.',

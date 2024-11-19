@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAuth } from 'hooks/useAuth';
 import { useModal } from 'hooks/useModal';
 import { userApi } from 'api/user/userApi';
@@ -17,7 +17,8 @@ import { fetchLikedMovies } from 'api/like/movieLikeApi';
 import { useNavigate } from 'react-router-dom';
 import { RankDisplay } from 'components/point/RankDisplay';
 import { usePointStore } from 'store/point';
-import { RankType } from 'types/rank';
+import { RankData, RankType } from 'types/rank';
+import { fetchMyRankInfo, fetchPointHistory } from 'api/point/pointApi';
 
 interface MyReview {
   movieId: number;
@@ -105,6 +106,13 @@ interface PaginatedResponse<T> {
   empty: boolean;
 }
 
+interface PointHistory {
+  id: number;
+  points: number;
+  description: string;
+  createdAt: string | null;
+}
+
 function MyPage() {
   const queryClient = useQueryClient();
   const { user } = useAuth();
@@ -146,6 +154,24 @@ function MyPage() {
   } = useQuery<PaginatedResponse<LikedMovie>>({
     queryKey: ['likedMovies'],
     queryFn: () => fetchLikedMovies(),
+  });
+
+  const {
+    data: pointHistory = [],
+    isLoading: isPointHistoryLoading,
+    error: pointHistoryError,
+  } = useQuery<PointHistory[]>({
+    queryKey: ['pointHistory'],
+    queryFn: fetchPointHistory,
+  });
+
+  const {
+    data: myRankData,
+    isLoading: isMyRankDataLoading,
+    error: myRankDataError,
+  } = useQuery<RankData>({
+    queryKey: ['myRankData'],
+    queryFn: fetchMyRankInfo,
   });
 
   const likedMovies = likedMoviesData?.content || [];
@@ -191,6 +217,11 @@ function MyPage() {
     }
   };
 
+  useEffect(() => {
+    const response = fetchPointHistory();
+    console.log(response);
+  }, []);
+
   return (
     <S.Background>
       <S.Layout>
@@ -213,7 +244,6 @@ function MyPage() {
               points={point === Number(localStorage.getItem('point')) ? point : Number(localStorage.getItem('point'))}
               nickname={user?.data.nickname || '사용자'}
             />
-            <S.QuestionIcon onClick={openModal} /> {/*다른 아이콘으로 점수 히스토리 모달열기*/}
           </S.RankBarContainer>
         </S.UserProfileSection>
         <S.ProfileEditButton onClick={handleProfileButtonClick}>
@@ -235,7 +265,7 @@ function MyPage() {
           <span>|</span>
           <S.MenuBarItem $active={activeMenu === 'likes'} onClick={() => handleMenuClick('likes')}>
             <S.MenuBarItemText>
-              <p>{likedReviewCount}</p>좋아요한 리뷰
+              <p>{likedReviewCount}</p>맘에 든 리뷰
             </S.MenuBarItemText>
           </S.MenuBarItem>
         </S.MenuBar>
@@ -323,7 +353,42 @@ function MyPage() {
         )}
       </S.Layout>
       {isModalOpen && (
-        <S.RankInfoModal closeModal={closeModal} modalTitle="등급 소개" width="300px" height="350px">
+        <S.RankInfoModal closeModal={closeModal} modalTitle="등급 & 포인트" width="300px" height="530px">
+          <S.PointHistorySection>
+            <S.TotalPoints>
+              <S.PointInfo>
+                <span>현재 포인트</span>
+                <span>{point}P</span>
+              </S.PointInfo>
+              {!isMyRankDataLoading && !myRankDataError && myRankData && (
+                <S.RankPercentage>
+                  상위 <span>{myRankData.rankPercent}%</span>
+                </S.RankPercentage>
+              )}
+            </S.TotalPoints>
+            {isPointHistoryLoading ? (
+              <div>로딩 중...</div>
+            ) : pointHistoryError ? (
+              <div>포인트 내역을 불러오는 중 오류가 발생했어요.</div>
+            ) : pointHistory.length > 0 ? (
+              <S.PointHistoryList>
+                {pointHistory.map((history) => (
+                  <S.PointHistoryItem key={history.id}>
+                    <S.HistoryInfo>
+                      <S.Description>{history.description}</S.Description>
+                      <S.CreatedAt>{history.createdAt || '날짜 정보 없음'}</S.CreatedAt>
+                    </S.HistoryInfo>
+                    <S.Points $isPositive={history.points > 0}>
+                      {history.points > 0 ? '+' : ''}
+                      {history.points}P
+                    </S.Points>
+                  </S.PointHistoryItem>
+                ))}
+              </S.PointHistoryList>
+            ) : (
+              <div>포인트 내역이 없어요.</div>
+            )}
+          </S.PointHistorySection>
           <S.RankInfoSection>
             <S.RankInfo>
               <S.RankIcon rankImg="bronze.png" />
