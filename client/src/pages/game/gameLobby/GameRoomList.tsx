@@ -19,8 +19,10 @@ export const GameRoomList = () => {
                 <S.RoomTitle>{roomInfo.title}</S.RoomTitle>
               </S.ButtonTitleWrapper>
               <S.RoomStatusWapper>
-                <S.RoomStatus $isPlaying={roomInfo.status}>대기중</S.RoomStatus>
-                <S.RoomHeadCount>3/8</S.RoomHeadCount>
+                <S.RoomStatus $isPlaying={roomInfo.status}>
+                  {roomInfo.status === 'WAITING' ? '대기중' : '게임중'}
+                </S.RoomStatus>
+                <S.RoomHeadCount>{`${roomInfo.playerCount} / ${roomInfo.maxPlayer}`}</S.RoomHeadCount>
               </S.RoomStatusWapper>
             </S.ButtonContentWarpper>
           </S.GameRoomButton>
