@@ -71,7 +71,7 @@ function App() {
             element: <GameLobby />,
           },
           {
-            path: '/gameroom/:roomId',
+            path: '/gameroom/:gameId',
             element: <GameRoom />,
           },
           {
