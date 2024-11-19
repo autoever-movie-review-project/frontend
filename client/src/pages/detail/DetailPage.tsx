@@ -201,6 +201,9 @@ function DetailPage() {
 
         // 포인트 100점 추가
         await fetchPlusPoint({ points: 100, description: '리뷰 달기 성공!' });
+        const beforePoint = localStorage.getItem('point');
+        const newPoint = Number(beforePoint) + 100;
+        localStorage.setItem('point', String(newPoint));
         increPoint(100);
         // 모달 닫기
         close();

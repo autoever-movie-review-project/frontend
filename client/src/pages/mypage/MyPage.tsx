@@ -208,7 +208,10 @@ function MyPage() {
             </S.UserDatails>
           </S.UserInfoContainer>
           <S.RankBarContainer>
-            <RankDisplay points={point} nickname={user?.data.nickname || '사용자'} />
+            <RankDisplay
+              points={point === Number(localStorage.getItem('point')) ? point : Number(localStorage.getItem('point'))}
+              nickname={user?.data.nickname || '사용자'}
+            />
             <S.QuestionIcon onClick={openModal} /> {/*다른 아이콘으로 점수 히스토리 모달열기*/}
           </S.RankBarContainer>
         </S.UserProfileSection>

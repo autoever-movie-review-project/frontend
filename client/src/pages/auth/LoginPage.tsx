@@ -39,7 +39,9 @@ function LoginPage() {
       onSuccess: (data) => {
         console.log(`로그인 성공: ${data.email}`);
         pointInit(data.points ? data.points : 0);
-
+        if (data.points !== undefined && data.points !== null) {
+          localStorage.setItem('point', String(data.points));
+        } else localStorage.setItem('point', '0');
         navigate('/');
         toast.success(`${data.nickname}님 환영합니다!`);
       },
