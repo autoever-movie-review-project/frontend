@@ -5,6 +5,7 @@ import 'swiper/swiper-bundle.css';
 import test from '../../../assets/capa.webm';
 import { theme } from 'styles/theme';
 import marvel from 'assets/marvel.svg';
+import Button from 'components/Button';
 
 const ContentsText = styled.div`
   position: absolute;
@@ -23,15 +24,6 @@ const ContentsText = styled.div`
   img {
     width: 400px;
     height: 130px;
-  }
-  button {
-    width: 120px;
-    height: 50px;
-    background-color: ${theme.colors.primary};
-    color: #ececec;
-    font-weight: 400;
-    border-radius: 5px;
-    font-size: 18px;
   }
 `;
 
@@ -74,7 +66,7 @@ function VideoSlider() {
         </video>
         <ContentsText>
           <img src={marvel} />
-          <button onClick={() => handleVideoButtonClick()}>More Info</button>
+          <Button text="더보기" width="100px" onClick={() => handleVideoButtonClick()}></Button>
         </ContentsText>
       </SwiperSlide>
       <SwiperSlide style={{ height: '100%', position: 'relative' }}>
@@ -88,7 +80,7 @@ function VideoSlider() {
         ></iframe>
         <ContentsText>
           <img src={marvel} />
-          <button onClick={() => handleVideoButtonClick()}>More Info</button>
+          <Button text="더보기" width="100px" onClick={() => handleVideoButtonClick()}></Button>
         </ContentsText>
       </SwiperSlide>
       <SwiperSlide style={{ height: '100%', position: 'relative' }}>
@@ -102,8 +94,8 @@ function VideoSlider() {
         ></iframe>
         <ContentsText>
           <img src={marvel} />
-          <button onClick={() => handleVideoButtonClick()}>More Info</button>
-        </ContentsText>{' '}
+          <Button text="더보기" width="100px" onClick={() => handleVideoButtonClick()}></Button>
+        </ContentsText>
       </SwiperSlide>
     </StyledSwiper>
   );

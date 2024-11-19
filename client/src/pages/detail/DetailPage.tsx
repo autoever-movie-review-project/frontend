@@ -19,6 +19,7 @@ import Skeleton from 'components/Skeleton/Skeleton';
 import { addLikeMovie, deleteLikeMovie } from 'api/like/movieLikeApi';
 import { toast } from 'react-toastify';
 import { AxiosError } from 'axios';
+import { useAuth } from 'hooks/useAuth';
 
 const Container = styled.div`
   width: 100vw;
@@ -130,6 +131,7 @@ function DetailPage() {
   const { openModal, closeModal, isModalOpen } = useModal(); // 리뷰모달 hook
   const [rating, setRating] = useState(0); // 리뷰별점 post용
   const [reviewContent, setReviewContent] = useState(''); // 리뷰내용 post용
+  const { user } = useAuth();
   const {
     data: movie,
     isLoading,
@@ -179,7 +181,7 @@ function DetailPage() {
     onSuccess: (result) => {
       // 영화 정보 갱신
       queryClient.invalidateQueries({ queryKey: ['movie', movieId] });
-      toast.success(result.isDelete ? '찜하기가 취소되었어요.' : '영화가 찜되었어요.');
+      toast.success(result.isDelete ? '찜하기가 취소되었어요.' : '영화를 찜했어요.');
     },
     onError: (error) => {
       console.error('영화 찜하기 실패:', error);
@@ -192,12 +194,13 @@ function DetailPage() {
     onSuccess: () => {
       // 리뷰 목록 갱신
       queryClient.invalidateQueries({ queryKey: ['reviews', movieId] });
+      toast.success('리뷰가 등록됐어요.');
       // 모달 닫기
       close();
     },
     onError: (error) => {
       console.error('리뷰 작성 실패:', error);
-      alert('리뷰 작성에 실패했습니다. 다시 시도해주세요.');
+      toast.error('리뷰 작성에 실패했어요. 다시 시도해주세요.');
     },
   });
 
@@ -207,11 +210,11 @@ function DetailPage() {
 
   const submitReview = () => {
     if (reviewContent === '') {
-      alert('리뷰를 입력해주세요.');
+      toast.warning('리뷰를 입력해주세요.');
       return;
     }
     if (rating < 1) {
-      alert('별점을 등록해주세요.');
+      toast.warning('별점을 등록해주세요.');
       return;
     }
 
@@ -285,6 +288,10 @@ function DetailPage() {
               rank={review.rankImg as '마스터' | '다이아' | '골드' | '실버' | '브론즈'}
               profile={review.profile}
               liked={review.liked}
+              userId={review.userId}
+              currentUserId={user?.data.userId}
+              movieId={numericMovieId}
+              mainImg={review.mainImg}
             />
           </div>
         ))}

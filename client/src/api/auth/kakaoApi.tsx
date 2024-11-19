@@ -1,63 +1,24 @@
 import axios from 'axios';
 
 const REST_API_KEY: string = `${import.meta.env.VITE_KAKAO_API_KEY}`;
-const REDIRECT_URI: string = `${import.meta.env.VITE_KAKAO_REDIRECT_URI}`;
+export const REDIRECT_URI: string = `${import.meta.env.VITE_KAKAO_REDIRECT_URI}`;
 const AUTH_CODE_PATH: string = 'https://kauth.kakao.com/oauth/authorize';
-const ACCESS_TOKEN_URL: string = 'https://kauth.kakao.com/oauth/token';
 
-interface KakaoTokenResponse {
-  access_token: string;
-  token_type: string;
-  refresh_token: string;
-  expires_in: number;
-  scope: string;
-  refresh_token_expires_in: number;
-}
-
-interface KakaoMemberResponse {
-  id: number;
+interface KakaoLoginResponse {
+  userId: number;
+  email: string;
+  nickname: string;
+  profile: string | null;
+  points: number;
+  rankName: string;
+  rankImg: string | null;
 }
 
 export const getKakaoLoginLink = (): string => {
-  const kakaoURL: string = `${AUTH_CODE_PATH}?client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&response_type=code`;
-  return kakaoURL;
+  return `${AUTH_CODE_PATH}?response_type=code&client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}`;
 };
 
-export const getAccessToken = async (authCode: string): Promise<string> => {
-  const header = {
-    headers: {
-      'Content-type': 'application/x-www-form-urlencoded;charset=utf-8',
-    },
-  };
-
-  const params = {
-    grant_type: 'authorization_code',
-    client_id: REST_API_KEY,
-    redirect_uri: REDIRECT_URI,
-    code: authCode,
-  };
-
-  try {
-    const response = await axios.post<KakaoTokenResponse>(ACCESS_TOKEN_URL, params, header);
-    return response.data.access_token;
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw new Error(`Failed to get access token: ${error.message}`);
-    }
-    throw error;
-  }
-};
-
-export const getMemberWithAccessToken = async (accessToken: string): Promise<KakaoMemberResponse> => {
-  try {
-    const response = await axios.get<KakaoMemberResponse>(
-      `${import.meta.env.VITE_BASE_URL}/api/member/kakao?accessToken=${accessToken}`
-    );
-    return response.data;
-  } catch (error) {
-    if (axios.isAxiosError(error)) {
-      throw new Error(`Failed to get member info: ${error.message}`);
-    }
-    throw error;
-  }
+export const handleKakaoLogin = async (code: string): Promise<KakaoLoginResponse> => {
+  const response = await axios.get<KakaoLoginResponse>(`${REDIRECT_URI}?code=${code}`);
+  return response.data;
 };

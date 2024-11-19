@@ -245,7 +245,7 @@ export const LikedMovieSection = styled.div`
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 20px;
   width: 100%;
-  padding: 20px 0;
+  padding-bottom: 20px;
 `;
 
 export const MyReviewSection = styled.div`

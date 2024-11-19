@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 export const ContentsContainer = styled.div`
   width: 100vm;
-  height: 100%;
+  min-height: 100vh;
   background-color: black;
 `;
 
@@ -25,7 +25,7 @@ export const Container = styled.div`
 export const BoxofficeSliderWrapper = styled.div`
   width: 100%;
   height: 100%;
-  margin-bottom: 40px;
+  padding-bottom: 40px;
   h1 {
     font-weight: bold;
     color: #ececec;

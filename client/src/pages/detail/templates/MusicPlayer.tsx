@@ -377,7 +377,7 @@ function MoviePlayer({ movieTitle, onClose }: MoviePlayerProps) {
 
   // 시간 업데이트 인터벌
   useEffect(() => {
-    let timeUpdateInterval: number;
+    let timeUpdateInterval: number | Timeout;
 
     if (player && playerState.isPlaying) {
       timeUpdateInterval = setInterval(() => {
