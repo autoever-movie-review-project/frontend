@@ -29,7 +29,6 @@ function MainPage() {
           { title: '실시간 핫한 영화', movies: results[2] },
         ];
         setSwiperData(transformedData);
-        console.log(results[0]);
 
         //박스오피스용
         setBoxOfficeMovies(results[2]);

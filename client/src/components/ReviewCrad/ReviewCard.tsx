@@ -5,8 +5,9 @@ import Profile from 'components/Profile';
 import { deleteReview } from 'api/review/reviewApi';
 import { toast } from 'react-toastify';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { fetchDeleteReviewLike, fetchPostReviewLike } from 'api/like/reviewLikeApi.tsx';
+import { fetchDeleteReviewLike, fetchPostReviewLike, fetchSpoilerReview } from 'api/like/reviewLikeApi.tsx';
 import { useNavigate } from 'react-router-dom';
+import { AxiosError } from 'axios';
 
 interface ReviewCardProps {
   reviewId?: number;
@@ -39,7 +40,6 @@ const ReviewCard = ({
   nickname,
   rank,
   spoilerCount = 0,
-  onSpoilerReport,
 }: ReviewCardProps) => {
   const navigate = useNavigate();
   const [isLiked, setIsLiked] = useState(initialIsLiked);
@@ -88,15 +88,31 @@ const ReviewCard = ({
     [isLiked]
   );
 
-  const handleSpoilerReport = useCallback(() => {
-    if (!hasReported) {
-      const newCount = reportCount + 1;
-      setReportCount(newCount);
-      setIsBlurred(newCount >= 5);
+  const spoilerMutation = useMutation({
+    mutationFn: fetchSpoilerReview,
+    onSuccess: () => {
+      setReportCount((prev) => prev + 1);
+      setIsBlurred(reportCount + 1 >= 5);
       setHasReported(true);
-      onSpoilerReport?.(reviewId);
+      toast.success('스포일러 신고가 접수되었어요.');
+    },
+    onError: (error) => {
+      if (error instanceof AxiosError) {
+        if (error.response?.status === 409) {
+          toast.warning('이미 신고한 리뷰예요.');
+        } else {
+          toast.error('스포일러 신고에 실패했어요.');
+        }
+      }
+      console.error('스포일러 신고 실패:', error);
+    },
+  });
+
+  const handleSpoilerReport = useCallback(() => {
+    if (window.confirm('스포일러가 포함된 리뷰인가요?')) {
+      spoilerMutation.mutate(reviewId);
     }
-  }, [hasReported, reportCount, reviewId, onSpoilerReport]);
+  }, [reviewId, spoilerMutation]);
 
   const handleRevealContent = () => {
     setIsBlurred(false);
