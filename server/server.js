@@ -46,9 +46,9 @@ io.on("connection", (socket) => {
     socket.leave(gameId);
   });
 
-  socket.on("ready", (gameId, userId) => {
-    console.log(`${gameId}방 ${userId}가 준비완료`);
-    io.to(gameId).emit("ready", "준비완료");
+  socket.on("ready", (gameId, readylist) => {
+    console.log(`${gameId}방 ${readylist}가 준비완료`);
+    io.to(gameId).emit("ready", readylist);
   });
 });
 
