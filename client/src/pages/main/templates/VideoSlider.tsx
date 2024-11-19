@@ -2,9 +2,13 @@ import styled from 'styled-components';
 import { Pagination, Navigation, Autoplay } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper-bundle.css';
-import test from '../../../assets/capa.webm';
+import test from 'assets/capa.webm';
+import video2 from 'assets/videoImpa.webm';
+import video3 from 'assets/videoGladiator.webm';
 import { theme } from 'styles/theme';
 import marvel from 'assets/marvel.svg';
+import mission from 'assets/missionimp.png';
+import gladiator from 'assets/gladiator.webp';
 import Button from 'components/Button';
 
 const ContentsText = styled.div`
@@ -70,30 +74,20 @@ function VideoSlider() {
         </ContentsText>
       </SwiperSlide>
       <SwiperSlide style={{ height: '100%', position: 'relative' }}>
-        <iframe
-          width="100%"
-          height="100%"
-          src="https://www.youtube.com/embed/lQ2FIaPGVKY?loop=1&mute=1&autoplay=1"
-          frameBorder="0"
-          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        ></iframe>
+        <video width="100%" height="100%" loop muted autoPlay draggable={false}>
+          <source src={video2} type="video/webm" />
+        </video>
         <ContentsText>
-          <img src={marvel} />
+          <img src={mission} />
           <Button text="더보기" width="100px" onClick={() => handleVideoButtonClick()}></Button>
         </ContentsText>
       </SwiperSlide>
       <SwiperSlide style={{ height: '100%', position: 'relative' }}>
-        <iframe
-          width="100%"
-          height="100%"
-          src="https://www.youtube.com/embed/lQ2FIaPGVKY?loop=1&mute=1&autoplay=1"
-          frameBorder="0"
-          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        ></iframe>
+        <video width="100%" height="100%" loop muted autoPlay draggable={false}>
+          <source src={video3} type="video/webm" />
+        </video>
         <ContentsText>
-          <img src={marvel} />
+          <img src={gladiator} />
           <Button text="더보기" width="100px" onClick={() => handleVideoButtonClick()}></Button>
         </ContentsText>
       </SwiperSlide>

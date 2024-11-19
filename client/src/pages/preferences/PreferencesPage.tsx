@@ -6,7 +6,8 @@ import { theme } from 'styles/theme';
 import { client } from 'api/client';
 import { useNavigate } from 'react-router-dom';
 import { Movie } from 'types/movie';
-import { fetchPopularMovieList } from 'api/movie/movieApi';
+import { fetchPopularMovieList, fetchPostPreferencesMovieList } from 'api/movie/movieApi';
+import { toast } from 'react-toastify';
 
 const Layout = styled.div`
   width: 100vw;
@@ -87,16 +88,56 @@ const PreferencesMovieWrapper = styled.div<{ $active: boolean }>`
   cursor: pointer;
   border: 6px solid transparent;
   border-radius: 10px;
+  position: relative;
+  overflow: hidden;
+
   ${({ $active }) =>
     $active &&
     css`
       border-color: ${theme.colors.primary};
     `}
+
+  &:hover .movie-info {
+    opacity: 1;
+  }
+`;
+
+const MovieInfo = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 20px;
+  color: white;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 2;
+`;
+
+const MovieTitle = styled.h3`
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #ffffff;
+  padding: 10px;
+`;
+
+const MovieGenre = styled.p`
+  font-size: 14px;
+  color: #cccccc;
+  width: 250px;
+  line-height: 20px;
+  padding: 10px;
 `;
 
 const PreferencesMovie = styled.img`
   width: 100%;
   height: 100%;
+  object-fit: cover;
+  display: block;
 `;
 
 const CompleteButton = styled.button`
@@ -113,29 +154,31 @@ const CompleteButton = styled.button`
 `;
 
 function PreferencesPage() {
-  const [movieList, setMovieList] = useState<Movie[]>();
+  const [randomMovie, setRandomMovie] = useState<Movie[]>();
   const [selectedMovies, setSelectedMovies] = useState<Movie[]>([]);
   const navigate = useNavigate();
 
   const fetchMovies = async () => {
     try {
-      const response = await fetchPopularMovieList();
+      const getRandomNumber = Math.floor(Math.random() * 7) + 1;
+      const response = await fetchPopularMovieList(getRandomNumber);
       const movies = response; // 전체 영화 리스트
       const randomMovies = selectRandomMovies(movies, 9); // 랜덤으로 9개 추출
-      setMovieList(randomMovies);
+      console.log(randomMovies);
+
+      setRandomMovie(randomMovies);
     } catch (error) {
       console.error('Failed to fetch movies:', error);
       throw error;
     }
   };
 
-  // 랜덤 영화 추출 유틸리티 함수
   const selectRandomMovies = (movies: Movie[], count: number) => {
     if (!Array.isArray(movies)) throw new Error('Movies must be an array.');
     if (movies.length <= count) return movies; // 영화 개수가 적으면 전부 반환
 
     const shuffled = [...movies].sort(() => 0.5 - Math.random()); // 랜덤 셔플
-    return shuffled.slice(0, count); // 상위 `count`개 반환
+    return shuffled.slice(0, count);
   };
 
   //초기 랜덤 데이터 fetch
@@ -149,7 +192,7 @@ function PreferencesPage() {
   }, [selectedMovies]);
 
   const handleResetButtonClick = () => {
-    setSelectedMovies([]);
+    setRandomMovie([]);
     fetchMovies();
   };
 
@@ -168,7 +211,13 @@ function PreferencesPage() {
   }
 
   const handleCompleteButtonClick = async () => {
-    //await post선호영화 3개보내는 axios
+    const requestBody = selectedMovies.map((movie) => ({ movieId: movie.movieId }));
+
+    if (requestBody.length < 3) {
+      toast.error('3개의 영화를 골라주세요!');
+      return;
+    }
+    fetchPostPreferencesMovieList(requestBody);
     navigate('/');
   };
 
@@ -186,14 +235,19 @@ function PreferencesPage() {
           </ResetButton>
         </Wrapper>
         <PreferencesMovieContainer>
-          {movieList &&
-            movieList.map((movie, index) => (
+          {randomMovie &&
+            randomMovie.map((movie, index) => (
               <PreferencesMovieWrapper
                 key={index}
                 $active={checkMovie(movie.movieId)}
                 onClick={() => handleMovieClick(movie)}
               >
-                <PreferencesMovie src={movie.mainImg} alt="movie" />
+                <PreferencesMovie src={movie.mainImg} alt={movie.title} />
+                <MovieInfo className="movie-info">
+                  <MovieTitle>{movie.title}</MovieTitle>
+                  <MovieGenre>{movie.genre.join(' / ')}</MovieGenre>
+                  <MovieGenre>{movie.plot || movie.tagline || ''}</MovieGenre>
+                </MovieInfo>
               </PreferencesMovieWrapper>
             ))}
         </PreferencesMovieContainer>

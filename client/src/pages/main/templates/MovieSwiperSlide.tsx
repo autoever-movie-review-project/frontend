@@ -10,8 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { Movie } from 'types/movie';
 
 const StyledSwiperSlide = styled(SwiperSlide)`
-  display: inline-block;
-  width: 290px !important;
+  width: 300px !important;
 `;
 
 const SwiperContainer = styled.div`
@@ -153,7 +152,7 @@ function MovieSwiperSlide(props: MovieSwiperSlideProps) {
       <h1>{title}</h1>
       <SwiperContainer>
         <Swiper
-          slidesPerView={6}
+          slidesPerView={4.3}
           spaceBetween={20}
           loop={false}
           navigation
