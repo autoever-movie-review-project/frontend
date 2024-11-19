@@ -9,11 +9,11 @@ interface IGameRoomUserProps {
   roomManager: boolean;
   message: string;
   isReady: boolean;
+  score: number;
 }
 
-export const GameRoomUser = ({ nickName, profile, roomManager, message, isReady }: IGameRoomUserProps) => {
+export const GameRoomUser = ({ nickName, profile, roomManager, message, isReady, score }: IGameRoomUserProps) => {
   const [chatMessage, setChatMessage] = useState('');
-
   useEffect(() => {
     if (message) {
       setChatMessage(message);
@@ -34,7 +34,7 @@ export const GameRoomUser = ({ nickName, profile, roomManager, message, isReady 
           <S.UserImage src={profile || bazzi} alt="user" />
         </S.UserImageWrapper>
         <S.UserName>{nickName}</S.UserName>
-        <S.Score>{String(100).padStart(4, '0')}점</S.Score>
+        <S.Score>{String(score).padStart(4, '0')}점</S.Score>
       </S.UserInfoBox>
       <S.Ready>{isReady ? 'Ready' : null}</S.Ready>
     </S.GameRoomUserWrapper>

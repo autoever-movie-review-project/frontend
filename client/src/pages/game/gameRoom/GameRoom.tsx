@@ -16,8 +16,7 @@ import {
 import { getGameProblemList, IProblem } from '../movieQuotes';
 
 interface IGameScore {
-  userId: number;
-  score: number;
+  [key: number]: number;
 }
 
 export const GameRoom = () => {
@@ -52,7 +51,7 @@ export const GameRoom = () => {
       answer: '어이가 없네',
     },
   ]);
-  const [gameScore, setGameStore] = useState<IGameScore[]>([]);
+  const [gameScore, setGameScore] = useState<IGameScore>({});
   const userId = Number(localStorage.getItem('userId'));
   const navigate = useNavigate();
 
@@ -62,9 +61,13 @@ export const GameRoom = () => {
     const handleChatMessage = (userId: number, message: string) => {
       setRecentChat({ userId, message });
 
+      console.log(gameRound, gameList[gameRound].answer, message);
       if (gameList[gameRound].answer === message) {
+        setGameScore((prevGameScore) => ({
+          ...prevGameScore,
+          [userId]: (prevGameScore[userId] || 0) + 100,
+        }));
         handleNextGame();
-        // 점수 올리기
       }
     };
 
@@ -81,7 +84,17 @@ export const GameRoom = () => {
       socket.off('chatMessage', handleChatMessage);
       socket.off('ready', handleReady);
     };
-  }, [gameId]);
+  }, [gameId, gameRound]);
+
+  useEffect(() => {
+    if (data?.playerInfo) {
+      const initialScores = data.playerInfo.reduce((acc: Record<number, number>, player) => {
+        acc[player.userId] = 0;
+        return acc;
+      }, {});
+      setGameScore(initialScores);
+    }
+  }, [data]);
 
   const handleChatInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setChatInput(e.target.value);
@@ -142,7 +155,7 @@ export const GameRoom = () => {
       return;
     }
     setGameRound((prevRound) => prevRound + 1);
-  }, []);
+  }, [gameRound]);
 
   const renderedUserList = useMemo(() => {
     return data?.playerInfo.map((player) => (
@@ -153,11 +166,11 @@ export const GameRoom = () => {
         roomManager={Number(player.userId) === data?.hostId}
         message={recentChat.userId === player.userId ? recentChat.message : ''}
         isReady={readyList.find((item) => item.userId === player.userId)?.isReady ?? false}
+        score={gameScore[player.userId]}
       />
     ));
-  }, [data, readyList, recentChat]);
+  }, [data, readyList, recentChat, gameScore]);
 
-  console.log(gameRound, gameList[gameRound]);
   if (data && userId) {
     const { hostId, status, playerCount } = data;
     const roomManager = isRoomManager(hostId, userId);
