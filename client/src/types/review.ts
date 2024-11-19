@@ -19,6 +19,7 @@ export interface ReviewResponse {
   liked: boolean;
   modifiedAt: string;
   mainImg: string;
+  spoilerCount: number;
 }
 
 export type ReviewResponseArray = ReviewResponse[];

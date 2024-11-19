@@ -1,4 +1,4 @@
-import { memo, useCallback, useState } from 'react';
+import { memo, useCallback, useEffect, useState } from 'react';
 import * as S from './ReviewCard.style';
 import { RankType } from 'types/rank';
 import Profile from 'components/Profile';
@@ -48,6 +48,13 @@ const ReviewCard = ({
   const [reportCount, setReportCount] = useState(spoilerCount);
   const [hasReported, setHasReported] = useState(false);
 
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    setReportCount(spoilerCount);
+    setIsBlurred(spoilerCount >= 5);
+  }, [spoilerCount]);
+
   const isMyReview = userId === currentUserId;
 
   const renderStars = () => {
@@ -91,8 +98,9 @@ const ReviewCard = ({
   const spoilerMutation = useMutation({
     mutationFn: fetchSpoilerReview,
     onSuccess: () => {
-      setReportCount((prev) => prev + 1);
-      setIsBlurred(reportCount + 1 >= 5);
+      const newCount = reportCount + 1;
+      setReportCount(newCount);
+      setIsBlurred(newCount >= 5); // 새로운 카운트로 블러 상태 업데이트
       setHasReported(true);
       toast.success('스포일러 신고가 접수되었어요.');
     },
@@ -100,6 +108,7 @@ const ReviewCard = ({
       if (error instanceof AxiosError) {
         if (error.response?.status === 409) {
           toast.warning('이미 신고한 리뷰예요.');
+          setHasReported(true); // 409 에러 시에도 신고 상태 업데이트
         } else {
           toast.error('스포일러 신고에 실패했어요.');
         }
@@ -117,8 +126,6 @@ const ReviewCard = ({
   const handleRevealContent = () => {
     setIsBlurred(false);
   };
-
-  const queryClient = useQueryClient();
 
   const deleteMutation = useMutation({
     mutationFn: deleteReview,
@@ -156,10 +163,10 @@ const ReviewCard = ({
           <S.XIcon onClick={() => handleReviewDelete(reviewId)}></S.XIcon>
         )}
       </S.StarsContainer>
-      <S.ReviewContainer>
+      <S.ReviewContainer data-blurred={isBlurred}>
         {isBlurred && (
           <S.SpoilerOverlay>
-            <S.SpoilerText>스포일러가 포함된 리뷰에요</S.SpoilerText>
+            <S.SpoilerText>스포일러가 의심되는 리뷰입니다.</S.SpoilerText>
             <S.RevealButton onClick={handleRevealContent}>리뷰 보기</S.RevealButton>
           </S.SpoilerOverlay>
         )}
@@ -173,7 +180,7 @@ const ReviewCard = ({
             navigate(`/movies/${movieId}`);
           }}
         />
-        <S.ReviewText $isBlurred={isBlurred}>{content}</S.ReviewText>
+        <S.ReviewText>{content}</S.ReviewText>
       </S.ReviewContainer>
       <S.UserSection>
         <S.UserInfo>

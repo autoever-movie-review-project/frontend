@@ -70,6 +70,7 @@ interface LikedReview {
   rating: number;
   mainImg: string;
   movieId: number;
+  spoilerCount: number;
 }
 
 interface LikedMovie {
@@ -345,6 +346,7 @@ function MyPage() {
                     mainImg={review.mainImg}
                     userId={review.userId}
                     currentUserId={user?.data.userId}
+                    spoilerCount={review.spoilerCount}
                   />
                 ))
               ) : (
