@@ -71,7 +71,7 @@ function LoginPage() {
               type="email"
               title="이메일"
               titleSize="13px"
-              defaultValue={'jwy97@naver.com'}
+              defaultValue={'016vhsdkdl@naver.com'}
               autoComplete="email"
               {...register('email', {
                 required: '이메일을 입력해주세요.',
