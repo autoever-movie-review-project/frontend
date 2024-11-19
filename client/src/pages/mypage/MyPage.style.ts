@@ -21,7 +21,7 @@ export const Background = styled.div`
 export const Layout = styled.div`
   display: flex;
   flex-direction: column;
-  width: 60%;
+  width: 63%;
   margin-top: 100px;
   margin-bottom: 40px;
   color: #fff;
@@ -266,6 +266,7 @@ export const LikedMovieSection = styled.div`
 
 export const MyReviewSection = styled.div`
   display: flex;
+  justify-content: center;
   flex-wrap: wrap;
   gap: 10px;
 `;

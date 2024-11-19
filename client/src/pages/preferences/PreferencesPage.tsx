@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { Movie } from 'types/movie';
 import { fetchPopularMovieList, fetchPostPreferencesMovieList } from 'api/movie/movieApi';
 import { toast } from 'react-toastify';
+import { firework } from 'components/animation/firework';
 
 const Layout = styled.div`
   width: 100vw;
@@ -220,6 +221,7 @@ function PreferencesPage() {
     }
     try {
       fetchPostPreferencesMovieList(movieIds);
+      firework();
       navigate('/');
     } catch (e) {
       console.error(e);
