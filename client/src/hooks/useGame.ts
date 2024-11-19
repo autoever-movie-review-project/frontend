@@ -20,7 +20,7 @@ interface IPlayerInfo {
   rankName: string;
   rankImg: string;
   profile: string;
-  userId: string;
+  userId: number;
 }
 
 interface IGameRoomDetailResponse {
@@ -45,6 +45,11 @@ interface ICreateGameRoomResponse {
   status: string;
   maxPlayer: number;
   playerCount: number;
+}
+
+export interface IReadyResponse {
+  userId: number;
+  isReady: boolean;
 }
 
 // 게임방 리스트 조회
@@ -94,10 +99,16 @@ export const useJoinRandomRoomMutation = () =>
   });
 
 // 게임방 나가기
-export const useExitGameRoom = () =>
-  useMutation({
+export const useExitGameRoom = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
     mutationFn: (gameId: number) => client.delete(`/game/${gameId}/exit`),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['gameRoomList'] });
+    },
   });
+};
 
 // 게임 시작
 export const useGameStartMutation = () =>
@@ -108,5 +119,5 @@ export const useGameStartMutation = () =>
 // 게임 준비
 export const useGameReadyMutation = () =>
   useMutation({
-    mutationFn: (gameId: number) => client.post(`/game/${gameId}/readylist`),
+    mutationFn: (gameId: number) => client.post<IReadyResponse[]>(`/game/${gameId}/readylist`),
   });
