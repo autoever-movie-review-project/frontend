@@ -17,7 +17,6 @@ export interface ReviewResponse {
   createdAt: string;
   liked: boolean;
   modifiedAt: string;
-  liked: boolean;
 }
 
 export type ReviewResponseArray = ReviewResponse[];
