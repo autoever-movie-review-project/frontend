@@ -1,15 +1,23 @@
 import { useGameRoomListQuery } from 'hooks/useGame';
 import * as S from './GameRoomList.style';
 import gameconsole from 'assets/bazzi.webp';
+import { socket } from 'socket';
+import { useNavigate } from 'react-router-dom';
 
 export const GameRoomList = () => {
   const { data } = useGameRoomListQuery();
+  const navigate = useNavigate();
+
+  const handleJoinRoomClick = (gameId: number) => {
+    navigate(`/gameroom/${gameId}`);
+    socket.emit('gameRoomUpdate');
+  };
 
   if (data) {
     return (
       <S.GameRoomListWrapper>
         {data.content.map((roomInfo) => (
-          <S.GameRoomButton key={roomInfo.id}>
+          <S.GameRoomButton key={roomInfo.id} onClick={() => handleJoinRoomClick(roomInfo.id)}>
             <S.ButtonImageWrapper>
               <S.ButtonImage src={gameconsole} />
             </S.ButtonImageWrapper>
