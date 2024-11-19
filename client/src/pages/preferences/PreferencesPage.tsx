@@ -193,6 +193,7 @@ function PreferencesPage() {
 
   const handleResetButtonClick = () => {
     setRandomMovie([]);
+    setSelectedMovies([]);
     fetchMovies();
   };
 
