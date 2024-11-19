@@ -40,8 +40,6 @@ const ActorItem = styled.div`
   margin-bottom: 20px;
   padding: 22px 10px;
   white-space: nowrap;
-  background-color: ${theme.colors.grayDark};
-  border-radius: 10px;
 `;
 
 const ActorImage = styled.img`

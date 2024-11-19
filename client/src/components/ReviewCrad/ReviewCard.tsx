@@ -5,7 +5,8 @@ import Profile from 'components/Profile';
 import { deleteReview } from 'api/review/reviewApi';
 import { toast } from 'react-toastify';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { fetchDeleteReviewLike, fetchPostReviewLike } from 'api/like/reviewLikeApi';
+import { fetchDeleteReviewLike, fetchPostReviewLike } from 'api/like/reviewLikeApi.tsx';
+import { useNavigate } from 'react-router-dom';
 
 interface ReviewCardProps {
   reviewId?: number;
@@ -40,6 +41,7 @@ const ReviewCard = ({
   spoilerCount = 0,
   onSpoilerReport,
 }: ReviewCardProps) => {
+  const navigate = useNavigate();
   const [isLiked, setIsLiked] = useState(initialIsLiked);
   const [likeCount, setLikeCount] = useState(likesCount);
   const [isBlurred, setIsBlurred] = useState(spoilerCount >= 5);
@@ -145,12 +147,12 @@ const ReviewCard = ({
             <S.RevealButton onClick={handleRevealContent}>리뷰 보기</S.RevealButton>
           </S.SpoilerOverlay>
         )}
-        <S.Poster src={mainImg} />
+        <S.Poster src={mainImg} onClick={() => navigate(`/movies/${movieId}`)} />
         <S.ReviewText $isBlurred={isBlurred}>{content}</S.ReviewText>
       </S.ReviewContainer>
       <S.UserSection>
         <S.UserInfo>
-          <Profile width="45px" height="45px"></Profile>
+          <Profile width="45px" height="45px" src={profile} rank={rank as RankType}></Profile>
           <S.UserDetails>
             <S.Nickname>{nickname}</S.Nickname>
             <S.Rank $rank={rank}>{rank}</S.Rank>

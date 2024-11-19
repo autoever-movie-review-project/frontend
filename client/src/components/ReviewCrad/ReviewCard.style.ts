@@ -54,7 +54,7 @@ export const ReviewContainer = styled.div`
 
 export const ReviewText = styled.p<{ $isBlurred?: boolean }>`
   flex: 1;
-  font-size: ${theme.fontSize.md};
+  font-size: ${theme.fontSize.sm};
   line-height: 22px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -193,4 +193,5 @@ export const Poster = styled.img`
   height: 150px;
   object-fit: cover;
   border-radius: ${theme.borderRadius.xs};
+  cursor: pointer;
 `;

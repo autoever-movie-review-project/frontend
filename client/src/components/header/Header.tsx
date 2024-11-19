@@ -10,6 +10,7 @@ import SearchBar from 'components/searchbar/SearchBar';
 import Button from 'components/Button';
 import { useModal } from 'hooks/useModal';
 import { Modal } from 'components/Modal/Modal';
+import { RankType } from 'types/rank';
 
 function Header() {
   const navigate = useNavigate();
@@ -75,7 +76,12 @@ function Header() {
               <>
                 <S.ProfileWrapper>
                   <S.UserProfile onClick={handleUserProfileClick}>
-                    <Profile width="45px" height="45px" rank={user?.data.rankName} src={DefaultProfile}></Profile>
+                    <Profile
+                      width="45px"
+                      height="45px"
+                      rank={user?.data.rankName as RankType}
+                      src={user?.data.profile}
+                    ></Profile>
                     <p>{user?.data.nickname}</p>
                   </S.UserProfile>
                 </S.ProfileWrapper>

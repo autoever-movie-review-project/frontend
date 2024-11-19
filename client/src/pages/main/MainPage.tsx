@@ -51,7 +51,6 @@ function MainPage() {
           <S.BoxofficeSliderWrapper>
             <BoxofficeSlider title="박스 오피스 순위" movies={boxOfficeMovies} />
           </S.BoxofficeSliderWrapper>
-
           {swiperData.map((item, index) => (
             <S.MovieSwiperWrapper key={index}>
               <MovieSwiperSlide title={item.title} movies={item.movies} />
