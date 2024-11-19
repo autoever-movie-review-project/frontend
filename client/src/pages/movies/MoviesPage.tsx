@@ -56,6 +56,14 @@ const ContentsContainer = styled.div`
   padding: 20px;
 `;
 
+const ContentsContainerSkeleton = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 35px;
+  width: 90%;
+  height: 100%;
+`;
+
 const CardWrapper = styled.div`
   width: calc(100% / 7);
   height: 300px;
@@ -125,6 +133,19 @@ const BoxofficeSliderWrapper = styled.div`
     margin-bottom: 30px;
     margin-left: 50px;
   }
+`;
+
+const MovieCardSkeleton = styled(Skeleton)`
+  width: calc(100% / 7);
+  height: 300px;
+  background-color: #333;
+  overflow: hidden;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* gap: 20px; */
+  border-radius: 5px;
 `;
 
 const genreList = ['액션', '드라마', '코미디', '스페셜', '다큐멘터리', '범죄', 'SF', '로맨스', '공포', '판타지'];
@@ -260,8 +281,14 @@ const MoviesPage: React.FC = () => {
                 </CardWrapper>
               );
             })}
+            {state.loading && (
+              <>
+                {[...Array(12)].map((_, index) => (
+                  <MovieCardSkeleton key={index} animation="wave" />
+                ))}
+              </>
+            )}
           </ContentsContainer>
-          {state.loading && <Skeleton />}
         </>
       ) : (
         <>
