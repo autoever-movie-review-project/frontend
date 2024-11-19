@@ -20,7 +20,6 @@ export const GameRoom = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log('123');
     socket.emit('joinRoom', gameId, userId);
 
     const handleChatMessage = (userId: number, message: string) => {
@@ -72,9 +71,7 @@ export const GameRoom = () => {
     return myId === hostId;
   }, []);
 
-  const handleGameStartClick = () => {
-    // TODO: 게임 시작 기능 구현
-  };
+  const handleGameStartClick = () => {};
 
   const handleGameReadyClick = useCallback(() => {
     gameReadyMutation.mutate(gameId, {
@@ -90,7 +87,6 @@ export const GameRoom = () => {
   };
 
   const renderedUserList = useMemo(() => {
-    console.log(data?.playerInfo);
     return data?.playerInfo.map((player) => (
       <GameRoomUser
         key={player.userId}
