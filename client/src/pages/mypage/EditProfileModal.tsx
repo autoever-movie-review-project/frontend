@@ -227,21 +227,25 @@ const EditProfileModal = ({ isOpen, onClose, currentUser, onSubmit }: EditProfil
     if (!file) return;
 
     if (file.size > 5 * 1024 * 1024) {
+      // 5MB 제한
       toast.error('이미지 크기는 5MB 이하여야 해요.');
       return;
     }
 
-    // 미리보기 설정
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setPreviewImage(reader.result as string);
-    };
-    reader.readAsDataURL(file);
-
     try {
+      // 로딩 상태 표시
+      toast.loading('이미지 업로드 중...');
+
+      // 이미지 업로드 API 호출
       const response = await userApi.uploadProfileImage(file);
+
+      // 성공 시 프리뷰 이미지 업데이트
       setPreviewImage(response.url);
+
+      toast.dismiss();
+      toast.success('프로필 사진이 변경되었어요.');
     } catch (error) {
+      toast.dismiss();
       toast.error('프로필 사진을 변경하지 못했어요.');
       console.error('이미지 업로드 실패:', error);
     }
