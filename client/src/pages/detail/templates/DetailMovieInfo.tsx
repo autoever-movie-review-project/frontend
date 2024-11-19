@@ -31,7 +31,13 @@ function DetailMovieInfo({ openModal, isLoading, movie, onLikeClick, isLiking }:
 
   const getYear = (date: string) => new Date(date).getFullYear();
 
-  const convertToFiveStarRating = (rating: number) => (rating / 2).toFixed(1);
+  const convertToFiveStarRating = (rating: number) => {
+    if (rating === 0.0) {
+      return '평점 없음';
+    } else {
+      return (rating / 2).toFixed(1);
+    }
+  };
 
   const handleMusicPlay = () => setShowPlayer(true);
 
@@ -80,13 +86,13 @@ function DetailMovieInfo({ openModal, isLoading, movie, onLikeClick, isLiking }:
           <S.MoviePlot>{movie.plot}</S.MoviePlot>
           <S.ReviewSection>
             <S.Rating>
-              <S.Star>⭐</S.Star>
+              {movie.rating !== 0.0 && <S.Star>⭐</S.Star>}
               {convertToFiveStarRating(movie.rating)}
             </S.Rating>
             <S.ButtonBackground>
               <S.LikeButton onClick={handleLikeButton}>
                 <S.Heart $clicked={movie.liked} />
-                {isLiking ? '처리 중...' : '좋아요'}
+                좋아요
               </S.LikeButton>
             </S.ButtonBackground>
             <S.ButtonBackground>

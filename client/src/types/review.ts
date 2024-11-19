@@ -11,6 +11,7 @@ export interface ReviewResponse {
   writerNickname: string;
   profile: string;
   rankImg: string;
+  rankName: string;
   content: string;
   likesCount: number;
   rating: number;

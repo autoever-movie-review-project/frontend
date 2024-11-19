@@ -176,8 +176,9 @@ export const Rating = styled.div`
   border-radius: 10000px;
   gap: 5px;
   /* background-color: ${theme.colors.grayDark}; */
-  font-size: 50px;
-  margin-right: 130px;
+  font-size: 35px;
+  margin-right: 120px;
+  white-space: nowrap;
 `;
 
 export const LikeButton = styled.div`

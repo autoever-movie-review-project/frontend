@@ -21,12 +21,14 @@ import { toast } from 'react-toastify';
 import { AxiosError } from 'axios';
 import { fetchPlusPoint } from 'api/point/pointApi';
 import { usePointStore } from 'store/point';
+import { RankType } from 'types/rank';
 
 const Container = styled.div`
   width: 100vw;
   height: 100%;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
   margin-top: 80px;
   background-color: black;
@@ -124,6 +126,28 @@ const ReviewSubmitButton = styled.button`
   &:hover {
     background-color: ${theme.colors.primaryDark};
   }
+`;
+
+const EmptyReviewWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  padding: 2rem;
+  text-align: center;
+`;
+
+const EmptyText = styled.p`
+  font-size: ${theme.fontSize.lg};
+  font-weight: ${theme.fontWeight.medium};
+  color: #fff;
+  margin-bottom: 0.5rem;
+`;
+
+const EmptySubText = styled.p`
+  font-size: ${theme.fontSize.sm};
+  color: ${theme.colors.grayLight};
 `;
 
 function DetailPage() {
@@ -291,20 +315,31 @@ function DetailPage() {
         <Title>리뷰</Title>
       </ReviewTitleWrapper>
       <ReviewWrapper>
-        {reviews.map((review: ReviewResponse) => (
-          <div key={review.reviewId}>
-            <ReviewCard
-              reviewId={review.reviewId}
-              rating={review.rating}
-              content={review.content}
-              likesCount={review.likesCount}
-              nickname={review.writerNickname}
-              rank={review.rankImg as '마스터' | '다이아' | '골드' | '실버' | '브론즈'}
-              profile={review.profile}
-              liked={review.liked}
-            />
-          </div>
-        ))}
+        {reviews && reviews.length > 0 ? (
+          reviews.map((review: ReviewResponse) => (
+            <div key={review.reviewId}>
+              <ReviewCard
+                reviewId={review.reviewId}
+                rating={review.rating}
+                content={review.content}
+                likesCount={review.likesCount}
+                nickname={review.writerNickname}
+                rank={review.rankName as RankType}
+                profile={review.profile}
+                liked={review.liked}
+                userId={review.userId}
+                currentUserId={user?.data.userId}
+                movieId={numericMovieId}
+                mainImg={review.mainImg}
+              />
+            </div>
+          ))
+        ) : (
+          <EmptyReviewWrapper>
+            <EmptyText>아직 작성된 리뷰가 없어요</EmptyText>
+            <EmptySubText>첫 번째 리뷰를 작성해보세요!</EmptySubText>
+          </EmptyReviewWrapper>
+        )}
       </ReviewWrapper>
       {isModalOpen && (
         <Modal modalTitle="리뷰 쓰기" closeModal={close} width="500px" height="600px">
