@@ -19,10 +19,10 @@ import Skeleton from 'components/Skeleton/Skeleton';
 import { addLikeMovie, deleteLikeMovie } from 'api/like/movieLikeApi';
 import { toast } from 'react-toastify';
 import { AxiosError } from 'axios';
-import { useAuth } from 'hooks/useAuth';
 import { fetchPlusPoint } from 'api/point/pointApi';
 import { usePointStore } from 'store/point';
 import { RankType } from 'types/rank';
+import { useAuth } from 'hooks/useAuth';
 
 const Container = styled.div`
   width: 100vw;
@@ -158,6 +158,7 @@ function DetailPage() {
   const [rating, setRating] = useState(0); // 리뷰별점 post용
   const [reviewContent, setReviewContent] = useState(''); // 리뷰내용 post용
   const { user } = useAuth();
+
   const increPoint = usePointStore((state) => state.incrementCount);
 
   const {
@@ -209,7 +210,7 @@ function DetailPage() {
     onSuccess: (result) => {
       // 영화 정보 갱신
       queryClient.invalidateQueries({ queryKey: ['movie', movieId] });
-      toast.success(result.isDelete ? '찜하기가 취소되었어요.' : '영화를 찜했어요.');
+      toast.success(result.isDelete ? '찜하기가 취소되었어요.' : '영화가 찜되었어요.');
     },
     onError: (error) => {
       console.error('영화 찜하기 실패:', error);
@@ -223,7 +224,6 @@ function DetailPage() {
       try {
         // 리뷰 목록 갱신
         queryClient.invalidateQueries({ queryKey: ['reviews', movieId] });
-        toast.success('리뷰가 등록됐어요.');
 
         // 포인트 100점 추가
         await fetchPlusPoint({ points: 100, description: '리뷰 달기 성공!' });
@@ -231,7 +231,7 @@ function DetailPage() {
         const newPoint = Number(beforePoint) + 100;
         localStorage.setItem('point', String(newPoint));
         increPoint(100);
-
+        queryClient.invalidateQueries({ queryKey: ['user'] });
         // 모달 닫기
         close();
       } catch (error) {
@@ -241,7 +241,7 @@ function DetailPage() {
     },
     onError: (error) => {
       console.error('리뷰 작성 실패:', error);
-      toast.error('리뷰 작성에 실패했어요. 다시 시도해주세요.');
+      alert('리뷰 작성에 실패했습니다. 다시 시도해주세요.');
     },
   });
   const handleLikeClick = () => {
@@ -250,11 +250,11 @@ function DetailPage() {
 
   const submitReview = () => {
     if (reviewContent === '') {
-      toast.warning('리뷰를 입력해주세요.');
+      alert('리뷰를 입력해주세요.');
       return;
     }
-    if (rating < 1) {
-      toast.warning('별점을 등록해주세요.');
+    if (rating < 0.5) {
+      alert('별점을 등록해주세요.');
       return;
     }
 

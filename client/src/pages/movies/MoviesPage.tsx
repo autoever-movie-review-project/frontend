@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Movie } from 'types/movie';
-import { fetchSearchMovieList, fetchUpcomingMovieList } from 'api/movie/movieApi';
+import { fetchBoxOfficeMovieList, fetchSearchMovieList, fetchUpcomingMovieList } from 'api/movie/movieApi';
 import BoxofficeSlider from 'pages/main/templates/BoxofficeSlider';
 import Skeleton from 'components/Skeleton/Skeleton';
 import { theme } from 'styles/theme';
@@ -230,7 +230,7 @@ const MoviesPage: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const resData = await fetchUpcomingMovieList();
+        const resData = await fetchBoxOfficeMovieList();
         setSwiperData(resData);
       } catch (e) {
         console.error('인기 영화 리스트 불러오기 실패', e);
