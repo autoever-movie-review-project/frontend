@@ -186,7 +186,7 @@ export const ReviewContainer = styled.div`
 
 export const ReviewText = styled.p`
   flex: 1;
-  font-size: ${theme.fontSize.sm};
+  font-size: 16px;
   line-height: 22px;
   overflow: hidden;
   text-overflow: ellipsis;

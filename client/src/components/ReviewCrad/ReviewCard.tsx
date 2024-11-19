@@ -166,7 +166,7 @@ const ReviewCard = ({
       <S.ReviewContainer data-blurred={isBlurred}>
         {isBlurred && (
           <S.SpoilerOverlay>
-            <S.SpoilerText>스포일러가 의심되는 리뷰입니다.</S.SpoilerText>
+            <S.SpoilerText>스포일러가 의심되는 리뷰에요.</S.SpoilerText>
             <S.RevealButton onClick={handleRevealContent}>리뷰 보기</S.RevealButton>
           </S.SpoilerOverlay>
         )}

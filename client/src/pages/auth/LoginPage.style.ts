@@ -87,6 +87,11 @@ export const KakaoButton = styled.img`
   width: 300px;
   border-radius: 10px;
   cursor: pointer;
+
+  &:active {
+    transition: 0.3s ease;
+    transform: scale(0.95);
+  }
 `;
 
 export const ButtonSection = styled.div`
