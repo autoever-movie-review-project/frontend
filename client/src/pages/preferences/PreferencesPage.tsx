@@ -212,14 +212,18 @@ function PreferencesPage() {
   }
 
   const handleCompleteButtonClick = async () => {
-    const requestBody = selectedMovies.map((movie) => ({ movieId: movie.movieId }));
+    const movieIds = selectedMovies.map((movie) => movie.movieId);
 
-    if (requestBody.length < 3) {
+    if (movieIds.length < 3) {
       toast.error('3개의 영화를 골라주세요!');
       return;
     }
-    fetchPostPreferencesMovieList(requestBody);
-    navigate('/');
+    try {
+      fetchPostPreferencesMovieList(movieIds);
+      navigate('/');
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   return (
