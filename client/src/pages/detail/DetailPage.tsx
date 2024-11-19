@@ -210,7 +210,7 @@ function DetailPage() {
     onSuccess: (result) => {
       // 영화 정보 갱신
       queryClient.invalidateQueries({ queryKey: ['movie', movieId] });
-      toast.success(result.isDelete ? '찜하기가 취소되었어요.' : '영화가 찜되었어요.');
+      toast.success(result.isDelete ? '찜하기가 취소되었어요.' : '영화를 찜했어요.');
     },
     onError: (error) => {
       console.error('영화 찜하기 실패:', error);
@@ -231,17 +231,18 @@ function DetailPage() {
         const newPoint = Number(beforePoint) + 100;
         localStorage.setItem('point', String(newPoint));
         increPoint(100);
+        toast('리뷰를 작성해서 100 포인트가 지급됐어요.');
         queryClient.invalidateQueries({ queryKey: ['user'] });
         // 모달 닫기
         close();
       } catch (error) {
         console.error('포인트 추가 실패:', error);
-        alert('포인트 지급에 실패했습니다. 다시 시도해주세요.');
+        toast.error('포인트 지급에 실패했습니다. 다시 시도해주세요.');
       }
     },
     onError: (error) => {
       console.error('리뷰 작성 실패:', error);
-      alert('리뷰 작성에 실패했습니다. 다시 시도해주세요.');
+      toast.error('리뷰 작성에 실패했습니다. 다시 시도해주세요.');
     },
   });
   const handleLikeClick = () => {
@@ -250,11 +251,11 @@ function DetailPage() {
 
   const submitReview = () => {
     if (reviewContent === '') {
-      alert('리뷰를 입력해주세요.');
+      toast.warning('리뷰를 입력해주세요.');
       return;
     }
     if (rating < 0.5) {
-      alert('별점을 등록해주세요.');
+      toast.warning('별점을 등록해주세요.');
       return;
     }
 
@@ -272,6 +273,8 @@ function DetailPage() {
 
   if (error) return <div>오류가 발생했습니다. </div>;
   if (!movie) return <div>영화 정보를 찾을 수 없습니다.</div>;
+
+  console.log(reviews);
 
   return (
     <Container>
@@ -333,6 +336,7 @@ function DetailPage() {
                 currentUserId={user?.data.userId}
                 movieId={numericMovieId}
                 mainImg={review.mainImg}
+                spoilerCount={review.spoilerCount}
               />
             </div>
           ))
@@ -350,7 +354,7 @@ function DetailPage() {
               <h2>별점을 매겨주세요</h2>
               <ReviewRating count={5} value={rating} onChange={(value) => setRating(value)} />
               <ReviewTextArea
-                placeholder="리뷰 내용을 작성하세요."
+                placeholder="리뷰 내용을 작성해주세요."
                 value={reviewContent}
                 onChange={(e) => setReviewContent(e.target.value)}
               />

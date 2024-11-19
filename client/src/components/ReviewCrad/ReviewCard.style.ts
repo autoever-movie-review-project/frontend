@@ -43,38 +43,6 @@ export const HalfStar = styled(StarHalfImg)<{ $filled?: boolean }>`
   fill: ${(props) => (props.$filled ? `${theme.colors.primaryDark}` : '#111')};
 `;
 
-export const ReviewContainer = styled.div`
-  display: flex;
-  position: relative;
-  gap: 12px;
-  height: 240px;
-  margin-bottom: 15px;
-  border-bottom: 0.5px solid ${theme.colors.grayLight};
-`;
-
-export const ReviewText = styled.p<{ $isBlurred?: boolean }>`
-  flex: 1;
-  font-size: ${theme.fontSize.sm};
-  line-height: 22px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  filter: ${(props) => (props.$isBlurred ? 'blur(4px)' : 'none')};
-`;
-
-export const SpoilerOverlay = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  z-index: 1;
-`;
-
 export const SpoilerText = styled.span`
   font-size: ${theme.fontSize.sm};
   color: ${theme.colors.grayLight};
@@ -186,6 +154,42 @@ export const XIcon = styled(X)`
     transform: scale(1.05);
     transition: 0.2s ease-in-out;
   }
+`;
+
+export const SpoilerOverlay = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  z-index: 2;
+  background-color: rgba(39, 42, 48, 0.1);
+`;
+
+export const ReviewContainer = styled.div`
+  display: flex;
+  position: relative;
+  gap: 12px;
+  height: 240px;
+  margin-bottom: 15px;
+  border-bottom: 0.5px solid ${theme.colors.grayLight};
+
+  &[data-blurred='true'] > *:not(${SpoilerOverlay}) {
+    filter: blur(4px);
+  }
+`;
+
+export const ReviewText = styled.p`
+  flex: 1;
+  font-size: ${theme.fontSize.sm};
+  line-height: 22px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 export const Poster = styled.img`
