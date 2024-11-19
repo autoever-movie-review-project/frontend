@@ -192,7 +192,7 @@ function MyPage() {
       const updateData: UpdateUserRequest = {
         nickname: data.nickname,
         profile: data.profile || user?.data.profile || '',
-        currentPassword: data.currentPassword,
+        // currentPassword: data.currentPassword,
         newPassword: data.newPassword,
       };
 
@@ -229,7 +229,7 @@ function MyPage() {
         <h1>마이페이지</h1>
         <S.UserProfileSection>
           <S.UserInfoContainer>
-            <Profile width="110px" height="110px" src={DefaultProfile} rank={user?.data.rankName as RankType} />
+            <Profile width="110px" height="110px" src={user?.data.profile} rank={user?.data.rankName as RankType} />
             <S.UserDatails>
               <S.RankSection>
                 <S.RankIcon rankImg={user?.data.rankImg}></S.RankIcon>

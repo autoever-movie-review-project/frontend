@@ -1,36 +1,34 @@
 import { client } from 'api/client';
-import { UpdateUserRequest } from './user';
+
+export interface UpdateUserRequest {
+  nickname?: string;
+  profile?: string;
+  newPassword?: string;
+}
+
+export interface UpdateUserResponse {
+  profile: string;
+  nickname: string;
+}
 
 export const userApi = {
   uploadProfileImage: async (file: File) => {
-    try {
-      const formData = new FormData();
-      formData.append('images', file);
+    const formData = new FormData();
+    formData.append('images', file);
 
-      const response = await client.post('/upload', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+    const response = await client.post('/upload', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
 
-      return response.data; // { url: string }
-    } catch (error) {
-      console.error('프로필 이미지 업로드 실패:', error);
-      throw error;
-    }
+    return {
+      url: response.data, // S3 URL 문자열
+    };
   },
 
-  updateProfile: async (data: UpdateUserRequest) => {
-    const response = await client.put('/user/update-profile', {
-      profile: data.profile,
-    });
-    return response.data;
-  },
-
-  updateUser: async (data: UpdateUserRequest) => {
-    const response = await client.put('/user/update', {
-      nickname: data.nickname,
-    });
+  updateUser: async (updateData: UpdateUserRequest): Promise<UpdateUserResponse> => {
+    const response = await client.put<UpdateUserResponse>('/user/update', updateData);
     return response.data;
   },
 
