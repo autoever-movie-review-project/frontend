@@ -2,7 +2,7 @@ import styled, { keyframes } from 'styled-components';
 import { theme } from 'styles/theme';
 import { calculateRankProgress } from 'util/rankutil';
 
-const fillAnimation = keyframes`
+const fillAnimation = keyframes<{ $progress: number }>`
   from {
     width: 0%;
   }
