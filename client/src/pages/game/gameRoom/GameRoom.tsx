@@ -26,6 +26,7 @@ export const GameRoom = () => {
   const gameId = Number(params.gameId);
   const { data, refetch } = useGameRoomDetailQuery(gameId || -1);
   const gameReadyMutation = useGameReadyMutation();
+  const exitGameRoom = useExitGameRoom();
   const [readyList, setReadyList] = useState<IReadyResponse[]>([]);
   const [chatInput, setChatInput] = useState('');
   const [recentChat, setRecentChat] = useState<{ userId: number; message: string }>({ userId: -1, message: '' });
@@ -148,8 +149,11 @@ export const GameRoom = () => {
 
   const handleExitClick = () => {
     socket.emit('gameRoomUpdate');
-    useExitGameRoom().mutate(gameId);
-    navigate('/game');
+    exitGameRoom.mutate(gameId, {
+      onSuccess: () => {
+        navigate('/game');
+      },
+    });
   };
 
   const handleNextGame = useCallback(() => {
@@ -195,7 +199,7 @@ export const GameRoom = () => {
     return (
       <GameLobbyWrapper $bgImg={bgImg}>
         <GameLobbyContainer>
-          {status === 'PLAYING' ? (
+          {status === 'WAITING' ? (
             <S.GameStartButtonWrapper>
               <S.GameStartButton
                 $isAllReady={isAllReady}
