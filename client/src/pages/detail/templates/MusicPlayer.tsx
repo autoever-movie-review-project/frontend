@@ -220,7 +220,7 @@ const searchOST = async (movieTitle: string) => {
   const response = await fetch(
     `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(
       `${movieTitle} OST main theme`
-    )}&type=video&key=AIzaSyDDeSom_J6ScTlpxdYUzP1Og9xT_lkuxEE`
+    )}&type=video&key=AIzaSyCCxP4bquKJhm9M1JjwVDf9cStUAwTyJ9g`
   );
   const data = await response.json();
   return data.items?.[0]?.id?.videoId;
