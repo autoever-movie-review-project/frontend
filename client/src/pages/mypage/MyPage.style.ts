@@ -143,6 +143,10 @@ export const Rank = styled.span<RankProps>`
 export const Nickname = styled.div`
   font-size: ${theme.fontSize.h2};
   font-weight: ${theme.fontWeight.bold};
+
+  span {
+    color: ${theme.colors.grayLight};
+  }
 `;
 
 export const Email = styled.div`
@@ -165,6 +169,11 @@ export const ProfileEditButton = styled.div`
 
   &:hover {
     background-color: #1f2123;
+  }
+
+  &:active {
+    transform: scale(0.95);
+    transform: 0.3s ease;
   }
 `;
 

@@ -69,6 +69,34 @@ export const authApi = {
     }
   },
 
+  kakaoLogin: async (link: string): Promise<LoginSuccessResponse> => {
+    try {
+      const response = await client.get<LoginSuccessResponse>(link);
+
+      if (response.status === 200) {
+        const authHeader = response.headers['authorization'];
+        const accessToken = authHeader?.replace('Bearer ', '');
+
+        if (accessToken) {
+          setCookie('accessToken', accessToken, 60);
+        }
+
+        if (response.data.userId) {
+          localStorage.setItem('userId', response.data.userId.toString());
+        }
+
+        return response.data;
+      }
+
+      throw new Error('Kakao login failed');
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        throw new Error(error.message);
+      }
+      throw error;
+    }
+  },
+
   /**
    * 이 API를 import해서 사용하지 마시고 useAuth mutation을 사용해서 로그아웃 처리를 진행해주세요.
    *  */

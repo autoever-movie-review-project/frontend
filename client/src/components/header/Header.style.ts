@@ -111,7 +111,7 @@ export const MenuLogin = styled.button`
 export const UserProfile = styled.div`
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 14px;
   color: #fff;
   font-size: ${theme.fontSize.md};
   font-weight: ${theme.fontWeight.semibold};

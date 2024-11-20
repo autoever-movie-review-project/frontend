@@ -123,6 +123,7 @@ function MyPage() {
   const [activeMenu, setActiveMenu] = useState<'reviews' | 'movies' | 'likes'>('reviews');
 
   const point = usePointStore((state) => state.point);
+  const currentPoint = Number(localStorage.getItem('point'));
 
   const getLikedReviews = async () => {
     const response = await client.get('/like/reviews/?page=0');
@@ -236,7 +237,10 @@ function MyPage() {
                 <S.Rank $rank={user?.data.rankName}>{user?.data.rankName}</S.Rank>
                 <S.QuestionIcon onClick={openModal} />
               </S.RankSection>
-              <S.Nickname>{user?.data.nickname}</S.Nickname>
+              <S.Nickname>
+                {user?.data.nickname}
+                <span>#{user?.data.userId}</span>
+              </S.Nickname>
               <S.Email>{user?.data.email}</S.Email>
             </S.UserDatails>
           </S.UserInfoContainer>
@@ -324,7 +328,7 @@ function MyPage() {
         )}
         {activeMenu === 'likes' && (
           <>
-            <h2>좋아요한 리뷰</h2>
+            <h2>맘에 든 리뷰</h2>
             <S.MyReviewSection>
               {isLikedReviewsLoading ? (
                 <div>로딩 중...</div>
@@ -362,7 +366,7 @@ function MyPage() {
             <S.TotalPoints>
               <S.PointInfo>
                 <span>현재 포인트</span>
-                <span>{user?.data.points ? user?.data.points : localStorage.getItem('point')}P</span>
+                <span>{user?.data.points ? user?.data.points : localStorage.getItem('point')} P</span>
               </S.PointInfo>
               {!isMyRankDataLoading && !myRankDataError && myRankData && (
                 <S.RankPercentage>
