@@ -16,6 +16,8 @@ import {
 import { getGameProblemList, IProblem } from '../movieQuotes';
 import { useModal } from 'hooks/useModal';
 import { Modal } from 'components/Modal/Modal';
+import { fetchPlusPoint } from 'api/point/pointApi';
+import { useQueryClient } from 'react-query';
 
 interface IGameScore {
   [key: number]: number;
@@ -31,29 +33,7 @@ export const GameRoom = () => {
   const [chatInput, setChatInput] = useState('');
   const [recentChat, setRecentChat] = useState<{ userId: number; message: string }>({ userId: -1, message: '' });
   const [gameRound, setGameRound] = useState(0);
-  const [gameList, setGameList] = useState<IProblem[]>([
-    { title: '범죄도시2', quote: 'ㄴ ㄴㅊㄷㄱㅇ', answer: '너 납치된거야' },
-    {
-      title: '기생충',
-      quote: 'ㅇㄷㅇ, ㄴㄴ ㄱㅎㅇ ㄷ ㅇㄱㄴ',
-      answer: '아들아, 너는 계획이 다 있구나',
-    },
-    {
-      title: '박하사탕',
-      quote: 'ㄴ ㄷㅅ ㄷㅇㄱㄹ',
-      answer: '나 다시 돌아갈래',
-    },
-    {
-      title: '베테랑',
-      quote: 'ㅇㄹㄱ ㄷㅇ ㅇㅈ ㄱㅇㄱ ㅇㄴ',
-      answer: '우리가 돈이 없지 가오가 없냐',
-    },
-    {
-      title: '베테랑',
-      quote: 'ㅇㅇㄱ ㅇㄴ',
-      answer: '어이가 없네',
-    },
-  ]);
+  const [gameList, setGameList] = useState<IProblem[]>([]);
   const [gameScore, setGameScore] = useState<IGameScore>({});
   const { isModalOpen, openModal, closeModal } = useModal();
   const userId = Number(localStorage.getItem('userId'));
@@ -164,6 +144,12 @@ export const GameRoom = () => {
     setGameRound((prevRound) => prevRound + 1);
   }, [gameRound]);
 
+  const winnerPoint = async (highestScore: number) => {
+    if (highestScore === userId) {
+      await fetchPlusPoint({ points: 500, description: '초성게임 우승!' });
+    }
+  };
+
   const findHighestScorer = () => {
     let highestUserId: number | null = null;
     let highestScore = -Infinity;
@@ -175,7 +161,10 @@ export const GameRoom = () => {
       }
     }
 
-    return data?.playerInfo.find((player) => player.userId === highestUserId)?.nickname;
+    winnerPoint(highestScore);
+    const nickname = data?.playerInfo.find((player) => player.userId === highestUserId)?.nickname;
+
+    return nickname;
   };
 
   const renderedUserList = useMemo(() => {
