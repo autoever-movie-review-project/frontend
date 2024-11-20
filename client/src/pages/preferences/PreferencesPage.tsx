@@ -9,6 +9,7 @@ import { Movie } from 'types/movie';
 import { fetchPopularMovieList, fetchPostPreferencesMovieList } from 'api/movie/movieApi';
 import { toast } from 'react-toastify';
 import { firework } from 'components/animation/firework';
+import { useAuth } from 'hooks/useAuth';
 
 const Layout = styled.div`
   width: 100vw;
@@ -158,6 +159,7 @@ function PreferencesPage() {
   const [randomMovie, setRandomMovie] = useState<Movie[]>();
   const [selectedMovies, setSelectedMovies] = useState<Movie[]>([]);
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const fetchMovies = async () => {
     try {
@@ -186,11 +188,6 @@ function PreferencesPage() {
   useEffect(() => {
     fetchMovies();
   }, []);
-
-  // 잘되나 확인
-  useEffect(() => {
-    console.log('선택된 영화 : ', selectedMovies);
-  }, [selectedMovies]);
 
   const handleResetButtonClick = () => {
     setRandomMovie([]);
@@ -221,7 +218,7 @@ function PreferencesPage() {
     }
     try {
       fetchPostPreferencesMovieList(movieIds);
-      firework();
+      localStorage.setItem('check', String(user?.data.userId));
       navigate('/');
     } catch (e) {
       console.error(e);

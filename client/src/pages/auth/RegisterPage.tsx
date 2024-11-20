@@ -23,6 +23,7 @@ function RegisterPage() {
     mutationFn: authApi.register,
     onSuccess: () => {
       toast('🎉환영합니다!');
+      localStorage.setItem('check', 'false');
       navigate('/login');
     },
     onError: (error: AxiosError<RegisterError>) => {

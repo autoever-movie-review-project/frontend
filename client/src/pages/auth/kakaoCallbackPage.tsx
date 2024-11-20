@@ -14,7 +14,9 @@ function KakaoCallbackPage() {
     if (code) {
       axios.get(`${REDIRECT_URI}?code=${code}`).then((response) => {
         queryClient.setQueryData(['user'], response);
-        navigate('/');
+        if (localStorage.getItem('check') && localStorage.getItem('check') === String(response.data.userId))
+          navigate('/');
+        else navigate('/preferences');
       });
     }
   }, [code]);

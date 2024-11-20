@@ -40,7 +40,8 @@ function LoginPage() {
           localStorage.setItem('point', String(data.points));
           localStorage.setItem('rankName', String(data.rankName));
         } else localStorage.setItem('point', '0');
-        navigate('/');
+        if (localStorage.getItem('check') && localStorage.getItem('check') === String(data.userId)) navigate('/');
+        else navigate('/preferences');
         toast.success(`${data.nickname}님 환영합니다!`);
       },
       onError: (error) => {
