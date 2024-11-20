@@ -30,7 +30,6 @@ export const CreateGameRoom = ({ closeModal }: { closeModal: () => void }) => {
 
   const handleCreateRoomClick = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    closeModal();
     createRoomMutation.mutate(
       { title: roomTitle, maxPlayer },
       {
