@@ -9,7 +9,7 @@ import { GameLobby } from 'pages/game/gameLobby/GameLobby';
 import { GameRoom } from 'pages/game/gameRoom/GameRoom';
 import { Test } from 'Test';
 import Loading from 'components/Loading';
-import KakaoCallbackPage from 'pages/auth/kakaoCallbackPage';
+import { AuthGuard } from 'components/AuthGuard';
 
 const loadingComp = <Loading />;
 const Main = lazy(() => import('pages/main/MainPage'));
@@ -31,64 +31,74 @@ function App() {
         children: [
           {
             path: '/',
-            element: (
-              <>
-                <Main />
-              </>
-            ),
+            element: <Main />,
           },
+          // 비로그인 유저만 접근 가능한 라우트
           {
             path: '/login',
-            element: <LoginPage />,
+            element: (
+              <AuthGuard requireAuth={false}>
+                <LoginPage />
+              </AuthGuard>
+            ),
           },
           {
             path: '/register',
-            element: <RegisterPage />,
+            element: (
+              <AuthGuard requireAuth={false}>
+                <RegisterPage />
+              </AuthGuard>
+            ),
           },
+          // 로그인 필요한 라우트
           {
             path: '/mypage',
-            element: <MyPage />,
-          },
-          {
-            path: '/movies/:movieId',
-
             element: (
-              <>
-                <Detail />
-              </>
+              <AuthGuard requireAuth={true}>
+                <MyPage />
+              </AuthGuard>
             ),
-          },
-          {
-            path: '/movies',
-            element: (
-              <>
-                <Movies />
-              </>
-            ),
-          },
-          {
-            path: '/game',
-            element: <GameLobby />,
-          },
-          {
-            path: '/gameroom/:gameId',
-            element: <GameRoom />,
           },
           {
             path: '/preferences',
             element: (
-              <>
+              <AuthGuard requireAuth={true}>
                 <Preferences />
-              </>
+              </AuthGuard>
             ),
+          },
+          {
+            path: '/game',
+            element: (
+              <AuthGuard requireAuth={true}>
+                <GameLobby />
+              </AuthGuard>
+            ),
+          },
+          {
+            path: '/gameroom/:gameId',
+            element: (
+              <AuthGuard requireAuth={true}>
+                <GameRoom />
+              </AuthGuard>
+            ),
+          },
+          // 모든 유저 접근 가능한 라우트
+          {
+            path: '/movies/:movieId',
+            element: (
+              <AuthGuard requireAuth={true}>
+                <Detail />
+              </AuthGuard>
+            ),
+          },
+          {
+            path: '/movies',
+            element: <Movies />,
           },
           {
             path: '/test',
             element: <Test />,
-          },
-          {
-            path: '/kakao',
-            element: <KakaoCallbackPage />,
           },
         ],
       },
@@ -103,6 +113,7 @@ function App() {
       },
     }
   );
+
   return (
     <RouterProvider
       future={{

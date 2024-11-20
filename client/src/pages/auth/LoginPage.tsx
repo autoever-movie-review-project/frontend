@@ -20,7 +20,7 @@ const link = getKakaoLoginLink();
  */
 function LoginPage() {
   const navigate = useNavigate();
-  const { isLoginLoading, isLoading, login } = useAuth();
+  const { isLoginLoading, isLoading, login, user } = useAuth();
   const {
     register,
     handleSubmit,
@@ -58,43 +58,48 @@ function LoginPage() {
     window.location.href = link;
   };
 
-  return (
-    <S.Background>
-      {/* 로그인 요청 중일 때만 로딩 표시 */}
-      {isLoginLoading && <Loading />}
-      <S.Layout>
-        <S.LoginSection>
-          <S.Logo src={logo}></S.Logo>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <S.LoginInput
-              type="email"
-              title="이메일"
-              titleSize="13px"
-              autoComplete="email"
-              {...register('email', {
-                required: '이메일을 입력해주세요.',
-              })}
-            />
-            {errors.email && <S.ErrorMessage>{errors.email.message}</S.ErrorMessage>}
-            <S.LoginInput
-              type="password"
-              title="비밀번호"
-              titleSize="13px"
-              autoComplete="current-password"
-              {...register('password', {
-                required: '비밀번호를 입력해주세요.',
-              })}
-            />
-            {errors.password && <S.ErrorMessage>{errors.password.message}</S.ErrorMessage>}
-            <S.ButtonSection>
-              <Button
-                type="submit"
-                text={isLoading ? '로그인 중...' : '로그인'}
-                width="300px"
-                fontSize="16px"
-                onClick={handleSubmit(onSubmit)}
+  if (user) {
+    return <S.Background>잘못된 접근입니다.</S.Background>;
+  }
+
+  if (!user)
+    return (
+      <S.Background>
+        {/* 로그인 요청 중일 때만 로딩 표시 */}
+        {isLoginLoading && <Loading />}
+        <S.Layout>
+          <S.LoginSection>
+            <S.Logo src={logo}></S.Logo>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <S.LoginInput
+                type="email"
+                title="이메일"
+                titleSize="13px"
+                autoComplete="email"
+                {...register('email', {
+                  required: '이메일을 입력해주세요.',
+                })}
               />
-              {/* <S.ImageWrapper>
+              {errors.email && <S.ErrorMessage>{errors.email.message}</S.ErrorMessage>}
+              <S.LoginInput
+                type="password"
+                title="비밀번호"
+                titleSize="13px"
+                autoComplete="current-password"
+                {...register('password', {
+                  required: '비밀번호를 입력해주세요.',
+                })}
+              />
+              {errors.password && <S.ErrorMessage>{errors.password.message}</S.ErrorMessage>}
+              <S.ButtonSection>
+                <Button
+                  type="submit"
+                  text={isLoading ? '로그인 중...' : '로그인'}
+                  width="300px"
+                  fontSize="18px"
+                  onClick={handleSubmit(onSubmit)}
+                />
+                {/* <S.ImageWrapper>
                 <S.KakaoButton
                   src={KakaoImg}
                   onClick={handleKakaoLogin}
@@ -102,17 +107,17 @@ function LoginPage() {
                   aria-label="카카오 계정으로 로그인"
                 />
               </S.ImageWrapper> */}
-            </S.ButtonSection>
-          </form>
-          <S.UnableToLoginSection>
-            <S.StyledLink to="/register">회원가입</S.StyledLink>
-            <span> | </span>
-            <p>비밀번호 재설정</p>
-          </S.UnableToLoginSection>
-        </S.LoginSection>
-      </S.Layout>
-    </S.Background>
-  );
+              </S.ButtonSection>
+            </form>
+            <S.UnableToLoginSection>
+              <S.StyledLink to="/register">회원가입</S.StyledLink>
+              <span> | </span>
+              <p>비밀번호 재설정</p>
+            </S.UnableToLoginSection>
+          </S.LoginSection>
+        </S.Layout>
+      </S.Background>
+    );
 }
 
 export default LoginPage;
