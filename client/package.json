@@ -10,6 +10,12 @@
     "preview": "vite preview",
     "prepare": "husky"
   },
+  "sideEffects": [
+    "swiper/css",
+    "swiper/swiper-bundle.css",
+    "*.css",
+    "swiper/css/*"
+  ],
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
       "eslint --fix"
