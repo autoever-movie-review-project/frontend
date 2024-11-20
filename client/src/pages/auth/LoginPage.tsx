@@ -26,8 +26,6 @@ function LoginPage() {
     handleSubmit,
     formState: { errors },
   } = useForm<LoginRequest>();
-  const pointInit = usePointStore((state) => state.pointInit);
-  const point = usePointStore((state) => state.point);
 
   /**
    * 로그인 폼 제출을 처리하는 함수입니다.
@@ -38,11 +36,12 @@ function LoginPage() {
     await login(data, {
       onSuccess: (data) => {
         console.log(`로그인 성공: ${data.email}`);
-        pointInit(data.points ? data.points : 0);
         if (data.points !== undefined && data.points !== null) {
           localStorage.setItem('point', String(data.points));
+          localStorage.setItem('rankName', String(data.rankName));
         } else localStorage.setItem('point', '0');
-        navigate('/');
+        if (localStorage.getItem('check') && localStorage.getItem('check') === String(data.userId)) navigate('/');
+        else navigate('/preferences');
         toast.success(`${data.nickname}님 환영합니다!`);
       },
       onError: (error) => {

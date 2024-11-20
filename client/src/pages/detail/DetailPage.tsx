@@ -23,6 +23,7 @@ import { fetchPlusPoint } from 'api/point/pointApi';
 import { usePointStore } from 'store/point';
 import { RankType } from 'types/rank';
 import { useAuth } from 'hooks/useAuth';
+import { firework } from 'components/animation/firework';
 
 const Container = styled.div`
   width: 100vw;
@@ -227,12 +228,13 @@ function DetailPage() {
 
         // 포인트 100점 추가
         await fetchPlusPoint({ points: 100, description: '리뷰 달기 성공!' });
-        const beforePoint = localStorage.getItem('point');
-        const newPoint = Number(beforePoint) + 100;
-        localStorage.setItem('point', String(newPoint));
-        increPoint(100);
         toast('리뷰를 작성해서 100 포인트가 지급됐어요.');
         queryClient.invalidateQueries({ queryKey: ['user'] });
+        if (user?.data.rankName !== localStorage.getItem('rankName')) {
+          firework();
+          localStorage.setItem('rankName', String(user?.data.rankName));
+          localStorage.setItem('point', String(user?.data.points));
+        }
         // 모달 닫기
         close();
       } catch (error) {

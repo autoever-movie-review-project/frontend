@@ -33,6 +33,10 @@ const SwiperContainer = styled.div`
     background-color: black;
     opacity: 0;
     transition: opacity 0.3s ease;
+
+    visibility: visible !important;
+    display: flex !important;
+    pointer-events: auto;
   }
 
   .swiper-button-prev {
@@ -161,6 +165,8 @@ function MovieSwiperSlide(props: MovieSwiperSlideProps) {
           modules={[Pagination, Navigation, Autoplay]}
           style={{ width: '100%', height: '160px' }}
           onSwiper={handleSwiper}
+          observer={true}
+          observeParents={true}
         >
           {movies.map((movie, index) => (
             <StyledSwiperSlide key={index}>
