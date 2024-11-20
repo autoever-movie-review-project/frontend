@@ -98,6 +98,7 @@ export const ButtonSection = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
+  margin-top: 20px;
 `;
 
 export const ErrorMessage = styled.p`

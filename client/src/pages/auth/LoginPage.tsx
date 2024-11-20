@@ -94,14 +94,14 @@ function LoginPage() {
                 fontSize="16px"
                 onClick={handleSubmit(onSubmit)}
               />
-              <S.ImageWrapper>
+              {/* <S.ImageWrapper>
                 <S.KakaoButton
                   src={KakaoImg}
                   onClick={handleKakaoLogin}
                   alt="카카오 로그인"
                   aria-label="카카오 계정으로 로그인"
                 />
-              </S.ImageWrapper>
+              </S.ImageWrapper> */}
             </S.ButtonSection>
           </form>
           <S.UnableToLoginSection>

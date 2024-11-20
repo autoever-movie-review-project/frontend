@@ -275,7 +275,6 @@ export const LikedMovieSection = styled.div`
 
 export const MyReviewSection = styled.div`
   display: flex;
-  justify-content: center;
   flex-wrap: wrap;
   gap: 10px;
 `;
