@@ -17,7 +17,6 @@ import { getGameProblemList, IProblem } from '../movieQuotes';
 import { useModal } from 'hooks/useModal';
 import { Modal } from 'components/Modal/Modal';
 import { fetchPlusPoint } from 'api/point/pointApi';
-import { useQueryClient } from 'react-query';
 
 interface IGameScore {
   [key: number]: number;
@@ -184,7 +183,8 @@ export const GameRoom = () => {
   if (data && userId) {
     const { hostId, status, playerCount } = data;
     const roomManager = isRoomManager(hostId, userId);
-    const isAllReady = readyList.reduce((acc, curr) => (curr.isReady ? acc + 1 : acc), 0) - 1 === playerCount;
+    const isAllReady = readyList.reduce((acc, curr) => (curr.isReady ? acc + 1 : acc), 0) === playerCount - 1;
+    console.log(isAllReady);
     return (
       <GameLobbyWrapper $bgImg={bgImg}>
         <GameLobbyContainer>
