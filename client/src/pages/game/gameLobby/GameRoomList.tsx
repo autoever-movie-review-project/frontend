@@ -15,6 +15,7 @@ export const GameRoomList = () => {
       onSuccess: () => {
         navigate(`/gameroom/${gameId}`);
         socket.emit('gameRoomUpdate');
+        socket.emit('joinGameRoom', gameId);
       },
     });
   };

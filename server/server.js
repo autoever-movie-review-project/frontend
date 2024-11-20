@@ -50,6 +50,16 @@ io.on("connection", (socket) => {
     console.log(`${gameId}방 ${readylist}가 준비완료`);
     io.to(gameId).emit("ready", readylist);
   });
+
+  socket.on("gameStart", (gameId) => {
+    console.log(`${gameId}방 게임 시작`);
+    io.to(gameId).emit("gameStart");
+  });
+
+  socket.on("joinGameRoom", (gameId) => {
+    console.log(`${gameId}방 참가`);
+    io.to(gameId).emit("joinGameRoom");
+  });
 });
 
 server.listen(5000, () => {

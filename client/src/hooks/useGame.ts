@@ -117,10 +117,11 @@ export const useExitGameRoom = () => {
 };
 
 // 게임 시작
-export const useGameStartMutation = () =>
-  useMutation({
+export const useGameStartMutation = () => {
+  return useMutation({
     mutationFn: (gameId: number) => client.post(`/game/${gameId}/start`),
   });
+};
 
 // 게임 준비
 export const useGameReadyMutation = () =>
