@@ -24,6 +24,7 @@ import { usePointStore } from 'store/point';
 import { RankType } from 'types/rank';
 import { useAuth } from 'hooks/useAuth';
 import { firework } from 'components/animation/firework';
+import { showPointIncreaseEffect } from 'components/animation/textAnimation';
 
 const Container = styled.div`
   width: 100vw;
@@ -230,8 +231,9 @@ function DetailPage() {
         await fetchPlusPoint({ points: 100, description: '리뷰 달기 성공!' });
         toast('리뷰를 작성해서 100 포인트가 지급됐어요.');
         queryClient.invalidateQueries({ queryKey: ['user'] });
-        if (user?.data.rankName !== localStorage.getItem('rankName')) {
+        if (user?.data.rankName != localStorage.getItem('rankName')) {
           firework();
+          showPointIncreaseEffect();
           localStorage.setItem('rankName', String(user?.data.rankName));
           localStorage.setItem('point', String(user?.data.points));
         }

@@ -10,6 +10,7 @@ import { fetchPopularMovieList, fetchPostPreferencesMovieList } from 'api/movie/
 import { toast } from 'react-toastify';
 import { firework } from 'components/animation/firework';
 import { useAuth } from 'hooks/useAuth';
+import { showPointIncreaseEffect } from 'components/animation/textAnimation';
 
 const Layout = styled.div`
   width: 100vw;
