@@ -44,12 +44,13 @@ interface ICreateGameRoomInfo {
 }
 
 interface ICreateGameRoomResponse {
-  gameId: number;
+  id: number;
   hostId: number;
   title: string;
   status: string;
   maxPlayer: number;
   playerCount: number;
+  createdAt: string;
 }
 
 export interface IReadyResponse {

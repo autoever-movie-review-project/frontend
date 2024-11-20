@@ -34,7 +34,7 @@ export const CreateGameRoom = ({ closeModal }: { closeModal: () => void }) => {
       { title: roomTitle, maxPlayer },
       {
         onSuccess: (data) => {
-          const gameId = data.data.gameId;
+          const gameId = data.data.id;
           socket.emit('gameRoomUpdate');
           navigate(`/gameroom/${gameId}`);
         },
