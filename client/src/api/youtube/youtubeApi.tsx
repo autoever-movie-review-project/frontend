@@ -19,7 +19,7 @@ interface UseYoutubeResult {
 }
 
 class YoutubeApi {
-  private readonly API_KEY = import.meta.env.VITE_YOUTUBE_API_KEY;
+  private readonly API_KEY = AIzaSyCosbtp7PjdFEK3dEUD78_qph5YcKS8tl4;
   private readonly BASE_URL = 'https://www.googleapis.com/youtube/v3/search';
 
   private async searchVideos(query: string, maxResults: number): Promise<string[]> {
