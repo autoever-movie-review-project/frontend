@@ -103,7 +103,7 @@ function DetailMovieInfo({ openModal, isLoading, movie, onLikeClick, isLiking }:
             </S.ButtonBackground>
           </S.ReviewSection>
         </S.MovieInfoContainer>
-        <S.RatingDistribution>
+        {/* <S.RatingDistribution>
           <BarChart width={300} height={300} data={ratingData}>
             <XAxis dataKey="rating" tickLine={false} axisLine={false} tick={{ fill: theme.colors.text }} />
             <YAxis hide />
@@ -125,7 +125,7 @@ function DetailMovieInfo({ openModal, isLoading, movie, onLikeClick, isLiking }:
               barSize={45}
             />
           </BarChart>
-        </S.RatingDistribution>
+        </S.RatingDistribution> */}
         <S.MovieImageWrapper
           onMouseMove={(e) => {
             const rect = e.currentTarget.getBoundingClientRect();

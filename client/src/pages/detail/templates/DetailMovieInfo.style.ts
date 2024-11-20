@@ -236,7 +236,7 @@ export const MovieImageWrapper = styled.div`
   width: 270px;
   height: 390px;
   margin-top: 90px;
-  margin-left: 30px;
+  /* margin-right: 200px; */
   position: relative;
   cursor: pointer;
 

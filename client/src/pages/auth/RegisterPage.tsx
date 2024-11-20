@@ -195,7 +195,7 @@ function RegisterPage() {
           />
           {errors.nickname && <S.ErrorMessage>{errors.nickname.message}</S.ErrorMessage>}
         </form>
-        <Button text="회원가입" width="300px" fontSize="20px" onClick={handleSubmit(onSubmit)} />
+        <Button text="회원가입" width="300px" fontSize="16px" onClick={handleSubmit(onSubmit)} />
       </S.Layout>
     </S.Background>
   );

@@ -44,7 +44,7 @@ const ReviewCard = ({
   const navigate = useNavigate();
   const [isLiked, setIsLiked] = useState(initialIsLiked);
   const [likeCount, setLikeCount] = useState(likesCount);
-  const [isBlurred, setIsBlurred] = useState(spoilerCount >= 5);
+  const [isBlurred, setIsBlurred] = useState(spoilerCount >= 3);
   const [reportCount, setReportCount] = useState(spoilerCount);
   const [hasReported, setHasReported] = useState(false);
 
@@ -52,7 +52,7 @@ const ReviewCard = ({
 
   useEffect(() => {
     setReportCount(spoilerCount);
-    setIsBlurred(spoilerCount >= 5);
+    setIsBlurred(spoilerCount >= 3);
   }, [spoilerCount]);
 
   const isMyReview = userId === currentUserId;
@@ -100,7 +100,7 @@ const ReviewCard = ({
     onSuccess: () => {
       const newCount = reportCount + 1;
       setReportCount(newCount);
-      setIsBlurred(newCount >= 5); // 새로운 카운트로 블러 상태 업데이트
+      setIsBlurred(newCount >= 3); // 새로운 카운트로 블러 상태 업데이트
       setHasReported(true);
       toast.success('스포일러 신고가 접수되었어요.');
     },
