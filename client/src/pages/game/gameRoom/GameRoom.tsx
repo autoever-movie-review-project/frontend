@@ -17,6 +17,7 @@ import { getGameProblemList, IProblem } from '../movieQuotes';
 import { useModal } from 'hooks/useModal';
 import { Modal } from 'components/Modal/Modal';
 import { fetchPlusPoint } from 'api/point/pointApi';
+const gameStartMutation = useGameStartMutation();
 
 interface IGameScore {
   [key: number]: number;
@@ -109,7 +110,7 @@ export const GameRoom = () => {
   }, []);
 
   const handleGameStartClick = () => {
-    useGameStartMutation().mutate(gameId, {
+    gameStartMutation.mutate(gameId, {
       onSuccess: () => {
         socket.emit('gameRoomUpdate');
         refetch();
@@ -192,7 +193,7 @@ export const GameRoom = () => {
             <S.GameStartButtonWrapper>
               <S.GameStartButton
                 $isAllReady={isAllReady}
-                disabled={isAllReady}
+                disabled={!isAllReady}
                 onClick={roomManager ? handleGameStartClick : handleGameReadyClick}
               >
                 {roomManager ? '게임시작' : '게임준비'}
