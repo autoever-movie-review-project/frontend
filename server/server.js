@@ -60,6 +60,10 @@ io.on("connection", (socket) => {
     console.log(`${gameId}방 참가`);
     io.to(gameId).emit("joinGameRoom");
   });
+
+  socket.on("score", (gameId, gameScore) => {
+    io.to(gameId).emit(gameScore);
+  });
 });
 
 server.listen(5000, () => {

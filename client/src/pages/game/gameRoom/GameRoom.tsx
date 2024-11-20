@@ -68,6 +68,10 @@ export const GameRoom = () => {
   useEffect(() => {
     socket.emit('joinRoom', gameId, userId);
 
+    const handleScore = (gameScore: IGameScore) => {
+      setGameScore(gameScore);
+    };
+
     const handleJoinGameRoom = () => {
       console.log('데이터 새로 고침');
       refetch();
@@ -82,10 +86,16 @@ export const GameRoom = () => {
       setRecentChat({ userId, message });
 
       if (gameList[gameRound].answer === message) {
-        setGameScore((prevGameScore) => ({
-          ...prevGameScore,
-          [userId]: (prevGameScore[userId] || 0) + 100,
-        }));
+        let updatedScore = {};
+        setGameScore((prevGameScore) => {
+          updatedScore = {
+            ...prevGameScore,
+            [userId]: (prevGameScore[userId] || 0) + 100,
+          };
+          return updatedScore;
+        });
+
+        socket.emit('score', gameId, updatedScore);
         handleNextGame();
       }
     };
@@ -98,6 +108,7 @@ export const GameRoom = () => {
     socket.on('ready', handleReady);
     socket.on('gameStart', handleGameStart);
     socket.on('joinGameRoom', handleJoinGameRoom);
+    socket.on('score', handleScore);
 
     return () => {
       socket.emit('leaveRoom', gameId);
@@ -106,6 +117,7 @@ export const GameRoom = () => {
       socket.off('ready', handleReady);
       socket.off('gameStart', handleGameStart);
       socket.off('joinGameRoom', handleJoinGameRoom);
+      socket.off('score', handleScore);
     };
   }, [gameId, gameRound]);
 
