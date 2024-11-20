@@ -27,6 +27,7 @@ interface KeyStatus {
 
 class YoutubeApi {
   private API_KEYS = [
+    'AIzaSyBlz-QT1CLJlnutPJx-qlUhHvtMDd36mwc',
     'AIzaSyB9x5xGwcpavkFmc1YHbxRdWixi3MaLSc8',
     'AIzaSyCosbtp7PjdFEK3dEUD78_qph5YcKS8tl4',
     'AIzaSyCCxP4bquKJhm9M1JjwVDf9cStUAwTyJ9g',
