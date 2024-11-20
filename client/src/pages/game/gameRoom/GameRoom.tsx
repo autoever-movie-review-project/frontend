@@ -13,11 +13,10 @@ import {
   useGameRoomDetailQuery,
   useGameStartMutation,
 } from 'hooks/useGame';
-import { getGameProblemList, IProblem } from '../movieQuotes';
+import { IProblem } from '../movieQuotes';
 import { useModal } from 'hooks/useModal';
 import { Modal } from 'components/Modal/Modal';
 import { fetchPlusPoint } from 'api/point/pointApi';
-const gameStartMutation = useGameStartMutation();
 
 interface IGameScore {
   [key: number]: number;
@@ -28,12 +27,39 @@ export const GameRoom = () => {
   const gameId = Number(params.gameId);
   const { data, refetch } = useGameRoomDetailQuery(gameId || -1);
   const gameReadyMutation = useGameReadyMutation();
+  const gameStartMutation = useGameStartMutation();
   const exitGameRoom = useExitGameRoom();
   const [readyList, setReadyList] = useState<IReadyResponse[]>([]);
   const [chatInput, setChatInput] = useState('');
   const [recentChat, setRecentChat] = useState<{ userId: number; message: string }>({ userId: -1, message: '' });
   const [gameRound, setGameRound] = useState(0);
-  const [gameList, setGameList] = useState<IProblem[]>([]);
+  const [gameList, setGameList] = useState<IProblem[]>([
+    {
+      title: '친구',
+      quote: 'ㄴㄱ ㄱㄹ ㅎㅇㅇ',
+      answer: '니가 가라 하와이',
+    },
+    {
+      title: '기생충',
+      quote: 'ㅇㄷㅇ, ㄴㄴ ㄱㅎㅇ ㄷ ㅇㄱㄴ',
+      answer: '아들아, 너는 계획이 다 있구나',
+    },
+    {
+      title: '박하사탕',
+      quote: 'ㄴ ㄷㅅ ㄷㅇㄱㄹ',
+      answer: '나 다시 돌아갈래',
+    },
+    {
+      title: '베테랑',
+      quote: 'ㅇㄹㄱ ㄷㅇ ㅇㅈ ㄱㅇㄱ ㅇㄴ',
+      answer: '우리가 돈이 없지 가오가 없냐',
+    },
+    {
+      title: '베테랑',
+      quote: 'ㅇㅇㄱ ㅇㄴ',
+      answer: '어이가 없네',
+    },
+  ]);
   const [gameScore, setGameScore] = useState<IGameScore>({});
   const { isModalOpen, openModal, closeModal } = useModal();
   const userId = Number(localStorage.getItem('userId'));
@@ -42,14 +68,34 @@ export const GameRoom = () => {
   useEffect(() => {
     socket.emit('joinRoom', gameId, userId);
 
+    const handleScore = (gameScore: IGameScore) => {
+      setGameScore(gameScore);
+    };
+
+    const handleJoinGameRoom = () => {
+      console.log('데이터 새로 고침');
+      refetch();
+    };
+
+    const handleGameStart = () => {
+      console.log('게임시작 데이터 새로 고침');
+      refetch();
+    };
+
     const handleChatMessage = (userId: number, message: string) => {
       setRecentChat({ userId, message });
 
       if (gameList[gameRound].answer === message) {
-        setGameScore((prevGameScore) => ({
-          ...prevGameScore,
-          [userId]: (prevGameScore[userId] || 0) + 100,
-        }));
+        let updatedScore = {};
+        setGameScore((prevGameScore) => {
+          updatedScore = {
+            ...prevGameScore,
+            [userId]: (prevGameScore[userId] || 0) + 100,
+          };
+          return updatedScore;
+        });
+
+        socket.emit('score', gameId, updatedScore);
         handleNextGame();
       }
     };
@@ -60,12 +106,18 @@ export const GameRoom = () => {
 
     socket.on('chatMessage', handleChatMessage);
     socket.on('ready', handleReady);
+    socket.on('gameStart', handleGameStart);
+    socket.on('joinGameRoom', handleJoinGameRoom);
+    socket.on('score', handleScore);
 
     return () => {
       socket.emit('leaveRoom', gameId);
       socket.off('joinRoom');
       socket.off('chatMessage', handleChatMessage);
       socket.off('ready', handleReady);
+      socket.off('gameStart', handleGameStart);
+      socket.off('joinGameRoom', handleJoinGameRoom);
+      socket.off('score', handleScore);
     };
   }, [gameId, gameRound]);
 
@@ -113,8 +165,10 @@ export const GameRoom = () => {
     gameStartMutation.mutate(gameId, {
       onSuccess: () => {
         socket.emit('gameRoomUpdate');
-        refetch();
-        setGameList(getGameProblemList());
+        socket.emit('gameStart', gameId);
+        // const gamelist = getGameProblemList();
+        // console.log(gamelist);
+        // setGameList(gamelist);
       },
     });
   };
@@ -192,8 +246,8 @@ export const GameRoom = () => {
           {status === 'WAITING' ? (
             <S.GameStartButtonWrapper>
               <S.GameStartButton
-                $isAllReady={isAllReady}
-                disabled={!isAllReady}
+                $isAllReady={roomManager && isAllReady}
+                disabled={(roomManager && !isAllReady) || false}
                 onClick={roomManager ? handleGameStartClick : handleGameReadyClick}
               >
                 {roomManager ? '게임시작' : '게임준비'}

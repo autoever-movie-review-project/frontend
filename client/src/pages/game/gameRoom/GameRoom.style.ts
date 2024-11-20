@@ -101,7 +101,7 @@ export const GameStartButton = styled.button<{ $isAllReady: boolean }>`
   font-family: Galmuri11;
   font-size: 24px;
   background: lightgray;
-  cursor: auto;
+  cursor: pointer;
 
   ${({ $isAllReady }) =>
     $isAllReady &&
